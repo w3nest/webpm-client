@@ -1,12 +1,12 @@
-from youwol.app.environment import YouwolEnvironment
-from youwol.app.routers.projects import (
+from w3nest.app.environment import Environment
+from w3nest.app.projects import (
     IPipelineFactory,
     JsBundle,
     Artifact,
     FileListing,
     Link,
 )
-from youwol.pipelines.pipeline_typescript_weback_npm import (
+from w3nest.ci.ts_frontend import (
     pipeline,
     PipelineConfig,
     TestStepConfig,
@@ -15,7 +15,7 @@ from youwol.pipelines.pipeline_typescript_weback_npm import (
     PublishConfig,
     BuildStep,
 )
-from youwol.utils.context import Context
+from w3nest_client.context import Context
 
 test_html_outputs: Artifact = Artifact(
     id="test-html-outputs",
@@ -32,7 +32,7 @@ class PipelineFactory(IPipelineFactory):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    async def get(self, env: YouwolEnvironment, context: Context):
+    async def get(self, env: Environment, context: Context):
         config = PipelineConfig(
             target=JsBundle(
                 links=[

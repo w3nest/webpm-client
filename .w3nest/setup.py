@@ -1,8 +1,8 @@
-import shutil
+from shutil import copyfile
 from pathlib import Path
 
-from youwol.pipelines.pipeline_typescript_weback_npm import (
-    Template,
+from w3nest.ci.ts_frontend import (
+    ProjectConfig,
     PackageType,
     Dependencies,
     RunTimeDeps,
@@ -11,11 +11,11 @@ from youwol.pipelines.pipeline_typescript_weback_npm import (
     MainModule,
     AuxiliaryModule,
 )
-from youwol.utils import parse_json
+from w3nest.utils import parse_json
 
-folder_path = Path(__file__).parent
+project_folder = Path(__file__).parent.parent
 
-pkg_json = parse_json(folder_path / "package.json")
+pkg_json = parse_json(project_folder / "package.json")
 externals = {
     # `rxjs` is required by the 'workersPool' auxiliary module
     "rxjs": "^7.5.6",
@@ -23,8 +23,8 @@ externals = {
     # have it in their `node_modules`.
     "@youwol/http-primitives": "^0.2.4",
 }
-template = Template(
-    path=folder_path,
+config = ProjectConfig(
+    path=project_folder,
     type=PackageType.LIBRARY,
     name=pkg_json["name"],
     version=pkg_json["version"],
@@ -61,17 +61,16 @@ template = Template(
     ),
 )
 
-generate_template(template)
-shutil.copyfile(
-    src=folder_path / ".template" / "src" / "auto-generated.ts",
-    dst=folder_path / "src" / "auto-generated.ts",
-)
-for file in [
-    # ".npmignore",  added 'webpm-client-doc'
-    "LICENSE",
+template_folder = project_folder / '.w3nest' / '.template'
+
+generate_template(config=config, dst_folder=template_folder)
+
+files = [
+    Path("src") / "auto-generated.ts",
     "README.md",
     "package.json",
-    # "tsconfig.json", added '"exclude": ["./webpm-client-doc"]'
+    # "tsconfig.json",  added '"exclude": ["./webpm-client-doc"]'
     "webpack.config.ts",
-]:
-    shutil.copyfile(src=folder_path / ".template" / file, dst=folder_path / file)
+    ]
+for file in files:
+    copyfile(src=template_folder / file, dst=project_folder / file)

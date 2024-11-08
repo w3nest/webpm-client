@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 const runTimeDependencies = {
     "externals": {
         "@youwol/http-primitives": "^0.2.4",
@@ -83,7 +83,7 @@ export const setup = {
     },
 
     installMainModule: ({cdnClient, installParameters}:{
-        cdnClient:{install:(unknown) => Promise<WindowOrWorkerGlobalScope>},
+        cdnClient:{install:(_:unknown) => Promise<WindowOrWorkerGlobalScope>},
         installParameters?
     }) => {
         const parameters = installParameters || {}
@@ -102,7 +102,7 @@ export const setup = {
     },
     installAuxiliaryModule: ({name, cdnClient, installParameters}:{
         name: string,
-        cdnClient:{install:(unknown) => Promise<WindowOrWorkerGlobalScope>},
+        cdnClient:{install:(_:unknown) => Promise<WindowOrWorkerGlobalScope>},
         installParameters?
     }) => {
         const entry = secondaryEntries[name]
