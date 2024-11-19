@@ -1,4 +1,4 @@
-import { AssetsGateway } from '@youwol/http-clients'
+import { AssetsGateway } from '@w3nest/http-clients'
 import { readFileSync } from 'fs'
 import path from 'path'
 import { mergeMap, take } from 'rxjs/operators'

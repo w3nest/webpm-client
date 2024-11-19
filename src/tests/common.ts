@@ -1,4 +1,4 @@
-import { AssetsGateway, ExplorerBackend } from '@youwol/http-clients'
+import { AssetsGateway, ExplorerBackend } from '@w3nest/http-clients'
 import {
     LocalYouwol,
     raiseHTTPErrors,

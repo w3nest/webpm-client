@@ -19,9 +19,9 @@ pkg_json = parse_json(project_folder / "package.json")
 externals = {
     # `rxjs` is required by the 'workersPool' auxiliary module
     "rxjs": "^7.5.6",
-    # `@youwol/http-primitives` is only used for typing & test, not in dev. dependencies to let consuming packages
+    # `@w3nest/http-primitives` is only used for typing & test, not in dev. dependencies to let consuming packages
     # have it in their `node_modules`.
-    "@youwol/http-primitives": "^0.2.4",
+    "@w3nest/http-clients": "^0.1.0",
 }
 config = ProjectConfig(
     path=project_folder,
@@ -34,7 +34,7 @@ config = ProjectConfig(
         runTime=RunTimeDeps(externals=externals, includedInBundle={"semver": "^7.3.4"}),
         devTime={
             "brotli": "^1.3.2",
-            "@youwol/http-clients": "^3.0.0",
+            "@w3nest/http-clients": "^0.1.0",
             "util": "^0.12.5",
             "@jest/test-sequencer": "^29.5.0",
         },

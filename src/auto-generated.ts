@@ -1,7 +1,7 @@
 /* eslint-disable */
 const runTimeDependencies = {
     "externals": {
-        "@youwol/http-primitives": "^0.2.4",
+        "@w3nest/http-clients": "^0.1.0",
         "rxjs": "^7.5.6"
     },
     "includedInBundle": {
@@ -9,10 +9,10 @@ const runTimeDependencies = {
     }
 }
 const externals = {
-    "@youwol/http-primitives": {
-        "commonjs": "@youwol/http-primitives",
-        "commonjs2": "@youwol/http-primitives",
-        "root": "@youwol/http-primitives_APIv02"
+    "@w3nest/http-clients": {
+        "commonjs": "@w3nest/http-clients",
+        "commonjs2": "@w3nest/http-clients",
+        "root": "@w3nest/http-clients_APIv01"
     },
     "rxjs": {
         "commonjs": "rxjs",
@@ -29,9 +29,9 @@ const externals = {
     }
 }
 const exportedSymbols = {
-    "@youwol/http-primitives": {
-        "apiKey": "02",
-        "exportedSymbol": "@youwol/http-primitives"
+    "@w3nest/http-clients": {
+        "apiKey": "01",
+        "exportedSymbol": "@w3nest/http-clients"
     },
     "rxjs": {
         "apiKey": "7",
