@@ -1,10 +1,10 @@
 {
-    "name": "@youwol/webpm-client",
-    "description": "Library for dynamic npm's libraries installation from YouWol's CDN.",
-    "version": "3.0.8-wip",
-    "author": "greinisch@youwol.com",
-    "homepage": "https://github.com/youwol/webpm-client#README.md",
-    "main": "dist/@youwol/webpm-client.js",
+    "name": "@w3nest/webpm-client",
+    "description": "Library for dynamic npm's libraries installation from W3 Nest ecosystem.",
+    "version": "0.1.0-wip",
+    "author": "reinisch.gui@gmail.com",
+    "homepage": "https://github.com/w3nest/webpm-client#README.md",
+    "main": "dist/@w3nest/webpm-client.js",
     "types": "src/index.ts",
     "scripts": {
         "clean": "del-cli dist",

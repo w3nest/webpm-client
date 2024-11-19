@@ -60,19 +60,19 @@ const secondaryEntries : {[k:string]:{entryFile: string, name: string, loadDepen
 }
 
 const entries = {
-     '@youwol/webpm-client': './index.ts',
-    ...Object.values(secondaryEntries).reduce( (acc,e) => ({...acc, [`@youwol/webpm-client/${e.name}`]:e.entryFile}), {})
+     '@w3nest/webpm-client': './index.ts',
+    ...Object.values(secondaryEntries).reduce( (acc,e) => ({...acc, [`@w3nest/webpm-client/${e.name}`]:e.entryFile}), {})
 }
 export const setup = {
-    name:'@youwol/webpm-client',
-        assetId:'QHlvdXdvbC93ZWJwbS1jbGllbnQ=',
-    version:'3.0.8-wip',
-    shortDescription:"Library for dynamic npm's libraries installation from YouWol's CDN.",
-    developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/webpm-client&tab=doc',
-    npmPackage:'https://www.npmjs.com/package/@youwol/webpm-client',
-    sourceGithub:'https://github.com/youwol/webpm-client',
+    name:'@w3nest/webpm-client',
+        assetId:'QHczbmVzdC93ZWJwbS1jbGllbnQ=',
+    version:'0.1.0-wip',
+    shortDescription:"Library for dynamic npm's libraries installation from W3 Nest ecosystem.",
+    developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc',
+    npmPackage:'https://www.npmjs.com/package/@w3nest/webpm-client',
+    sourceGithub:'https://github.com/w3nest/webpm-client',
     userGuide:'',
-    apiVersion:'3',
+    apiVersion:'01',
     runTimeDependencies,
     externals,
     exportedSymbols,
@@ -97,7 +97,7 @@ export const setup = {
             modules,
             scripts,
         }).then(() => {
-            return window[`@youwol/webpm-client_APIv3`]
+            return window[`@w3nest/webpm-client_APIv01`]
         })
     },
     installAuxiliaryModule: ({name, cdnClient, installParameters}:{
@@ -112,7 +112,7 @@ export const setup = {
         const parameters = installParameters || {}
         const scripts = [
             ...(parameters.scripts || []),
-            `@youwol/webpm-client#3.0.8-wip~dist/@youwol/webpm-client/${entry.name}.js`
+            `@w3nest/webpm-client#0.1.0-wip~dist/@w3nest/webpm-client/${entry.name}.js`
         ]
         const modules = [
             ...(parameters.modules || []),
@@ -123,7 +123,7 @@ export const setup = {
             modules,
             scripts,
         }).then(() => {
-            return window[`@youwol/webpm-client/${entry.name}_APIv3`]
+            return window[`@w3nest/webpm-client/${entry.name}_APIv01`]
         })
     },
     getCdnDependencies(name?: string){

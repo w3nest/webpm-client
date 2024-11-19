@@ -1,6 +1,6 @@
-# @youwol/webpm-client
+# @w3nest/webpm-client
 
-Library for dynamic npm's libraries installation from YouWol's CDN.
+Library for dynamic npm's libraries installation from W3 Nest ecosystem.
 
 This library is part of the hybrid cloud/local ecosystem
 [YouWol](https://platform.youwol.com/applications/@youwol/platform/latest).
@@ -9,11 +9,11 @@ This library is part of the hybrid cloud/local ecosystem
 
 <!-- no user guide provided -->
 
-[Developers documentation](https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/webpm-client&tab=doc)
+[Developers documentation](https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc)
 
-[Package on npm](https://www.npmjs.com/package/@youwol/webpm-client)
+[Package on npm](https://www.npmjs.com/package/@w3nest/webpm-client)
 
-[Source on GitHub](https://github.com/youwol/webpm-client)
+[Source on GitHub](https://github.com/w3nest/webpm-client)
 
 # Installation, Build, Test
 
