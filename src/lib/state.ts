@@ -15,7 +15,7 @@ import { setup } from '../auto-generated'
 import { installBackendClientDeps } from './backends'
 
 import type { Observable } from 'rxjs'
-import type { LocalYouwol } from '@youwol/http-primitives'
+import type { ContextMessage } from '@w3nest/http-clients'
 
 export type LibraryName = string
 export type Version = string
@@ -222,12 +222,10 @@ export class StateImplementation {
     ])
 
     static webSocketsStore: {
-        [k: string]: Promise<Observable<LocalYouwol.ContextMessage>>
+        [k: string]: Promise<Observable<ContextMessage>>
     } = {}
 
-    static getWebSocket(
-        wsUrl: string,
-    ): Promise<Observable<LocalYouwol.ContextMessage>> {
+    static getWebSocket(wsUrl: string): Promise<Observable<ContextMessage>> {
         if (StateImplementation.webSocketsStore[wsUrl]) {
             return StateImplementation.webSocketsStore[wsUrl]
         }

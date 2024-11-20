@@ -1,4 +1,4 @@
-import { AssetsGateway } from '@w3nest/http-clients'
+import { AssetsGateway, Local, raiseHTTPErrors } from '@w3nest/http-clients'
 import { readFileSync } from 'fs'
 import path from 'path'
 import { mergeMap, take } from 'rxjs/operators'
@@ -11,7 +11,6 @@ import {
 } from '../lib'
 import { cleanDocument, installPackages$, saveScreen } from './common'
 import './mock-requests'
-import { LocalYouwol, raiseHTTPErrors } from '@youwol/http-primitives'
 import { StateImplementation } from '../lib/state'
 import { lastValueFrom } from 'rxjs'
 
@@ -27,8 +26,8 @@ beforeAll(async () => {
         './.packages/e.zip',
     ]).pipe(
         mergeMap(() => {
-            const client = new LocalYouwol.Client()
-            return client.admin.environment.login$({
+            const client = new Local.Client()
+            return client.api.environment.login$({
                 body: {
                     authId: 'int_tests_yw-users_bis@test-user',
                     envId: 'prod',

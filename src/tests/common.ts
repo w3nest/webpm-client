@@ -1,9 +1,10 @@
-import { AssetsGateway, ExplorerBackend } from '@w3nest/http-clients'
 import {
-    LocalYouwol,
+    AssetsGateway,
+    ExplorerBackend,
     raiseHTTPErrors,
     RootRouter,
-} from '@youwol/http-primitives'
+    Local,
+} from '@w3nest/http-clients'
 import { readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 import { from } from 'rxjs'
@@ -25,7 +26,7 @@ RootRouter.HostName = getPyYouwolBasePath()
 RootRouter.Headers = { 'py-youwol-local-only': 'true' }
 export const testBackendConfig = backendConfiguration({
     origin: { port: 2001 },
-    pathLoadingGraph: '/api/assets-gateway/cdn-backend/queries/loading-graph',
+    pathLoadingGraph: '/api/assets-gateway/webpm/queries/loading-graph',
     pathResource: '/api/assets-gateway/raw/package',
 })
 Client.BackendConfiguration = testBackendConfig
@@ -37,10 +38,10 @@ Client.Headers = RootRouter.Headers
  */
 export function installPackages$(packages: string[]) {
     const assetsGtw = new AssetsGateway.AssetsGatewayClient()
-    const pyYouwol = new LocalYouwol.Client()
+    const pyYouwol = new Local.Client()
     return resetPyYouwolDbs$().pipe(
         mergeMap(() => {
-            return pyYouwol.admin.environment.login$({
+            return pyYouwol.api.environment.login$({
                 body: {
                     authId: 'int_tests_yw-users@test-user',
                     envId: 'prod',
@@ -81,7 +82,7 @@ export function getPyYouwolBasePath() {
 }
 
 export function resetPyYouwolDbs$() {
-    return new LocalYouwol.Client().admin.customCommands.doGet$({
+    return new Local.Client().api.customCommands.doGet$({
         name: 'reset',
     })
 }

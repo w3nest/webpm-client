@@ -12,7 +12,7 @@ import {
     StartBackendEvent,
 } from './events.models'
 import type * as rxjsModuleType from 'rxjs'
-import type { LocalYouwol } from '@youwol/http-primitives'
+import type { ContextMessage } from '@w3nest/http-clients'
 import { getLocalYouwolCookie } from './backend-configuration'
 
 export type BackendInstallResponse = {
@@ -78,7 +78,7 @@ export async function installBackends({
 
     const all$ = wsData$.pipe(
         rxjs.filter((m) => m.attributes?.[installKey] === installId),
-        rxjs.map((m) => m as LocalYouwol.ContextMessage<Message>),
+        rxjs.map((m) => m as ContextMessage<Message>),
         rxjs.shareReplay({ bufferSize: 1, refCount: true }),
     )
     type EventKind =
@@ -104,7 +104,7 @@ export async function installBackends({
         },
     }
 
-    const isDone = (m: LocalYouwol.ContextMessage<Message>) =>
+    const isDone = (m: ContextMessage<Message>) =>
         (m.labels?.includes('StartBackendEvent') &&
             m.data.event === 'listening') ||
         m.attributes?.event === 'failed'
