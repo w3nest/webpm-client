@@ -13,7 +13,7 @@ import {
 } from './events.models'
 import type * as rxjsModuleType from 'rxjs'
 import type { ContextMessage } from '@w3nest/http-clients'
-import { getLocalYouwolCookie } from './backend-configuration'
+import { getLocalCookie } from './backend-configuration'
 
 export type BackendInstallResponse = {
     clientBundle: string
@@ -56,7 +56,7 @@ export async function installBackends({
     if (isEmpty) {
         return
     }
-    const ywLocalCookie = getLocalYouwolCookie()
+    const ywLocalCookie = getLocalCookie()
     if (!ywLocalCookie || ywLocalCookie.type != 'local') {
         throw new LocalYouwolRequired(
             'Backends installation requires the local youwol server',

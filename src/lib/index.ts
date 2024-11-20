@@ -36,7 +36,7 @@ export {
 export {
     backendConfiguration,
     BackendConfiguration,
-    getLocalYouwolCookie,
+    getLocalCookie,
 } from './backend-configuration'
 export * from './errors.models'
 export * from './events.models'

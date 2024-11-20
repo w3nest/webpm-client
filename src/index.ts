@@ -28,7 +28,7 @@ if (globalThis.document?.currentScript?.getAttribute('src')) {
         'webpm-client.config.json',
     ].join('/')
 
-    const ywCookie = cdnClient.getLocalYouwolCookie()
+    const ywCookie = cdnClient.getLocalCookie()
 
     if (ywCookie) {
         cdnClient.Client.BackendConfiguration = cdnClient.backendConfiguration({

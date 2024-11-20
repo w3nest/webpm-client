@@ -57,7 +57,7 @@ function computeOrigin(
     return `http${secure ? 's' : ''}://${hostname}${port ? ':' : ''}${port}`
 }
 
-export type YwCookie = {
+export type Cookie = {
     type: 'local'
     wsDataUrl: string
     port: number
@@ -71,8 +71,8 @@ export type YwCookie = {
     }
 }
 
-export function getLocalYouwolCookie(): YwCookie | undefined {
-    const name = 'youwol'
+export function getLocalCookie(): Cookie | undefined {
+    const name = 'w3nest'
     const regex = new RegExp(`(^| )${name}=([^;]+)`)
     const match = document.cookie.match(regex)
     if (match) {
@@ -80,7 +80,7 @@ export function getLocalYouwolCookie(): YwCookie | undefined {
             const decoded = decodeURIComponent(match[2]).slice(1, -1)
             return JSON.parse(decoded)
         } catch (error) {
-            console.error('Can not retrieved local youwol cookie', error)
+            console.error('Can not retrieved local cookie', error)
             return undefined
         }
     }
