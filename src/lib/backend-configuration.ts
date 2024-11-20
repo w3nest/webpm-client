@@ -67,6 +67,7 @@ export type YwCookie = {
         pathResource: string
         pathPyodide: string
         pathPypi: string
+        pathBackendInstall: string
     }
 }
 

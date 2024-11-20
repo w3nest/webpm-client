@@ -140,7 +140,7 @@ export async function installBackends({
         backendsConfig,
         partitionId: backendsPartitionId,
     }
-    return await fetch('/admin/system/backends/install', {
+    return await fetch(ywLocalCookie.webpm.pathBackendInstall, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
