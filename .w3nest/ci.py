@@ -12,8 +12,7 @@ from w3nest.ci.ts_frontend import (
     TestStepConfig,
     test_result,
     test_coverage,
-    PublishConfig,
-    BuildStep,
+    PublishConfig
 )
 from w3nest_client.context import Context
 
@@ -24,9 +23,6 @@ test_html_outputs: Artifact = Artifact(
     ),
     links=[Link(name="HTML outputs", url="src/tests/.html-outputs/index.html")],
 )
-
-copy_yw_config_cmd = "cp ./yw-backend.config.json ./dist/@youwol/webpm-client.config.json"
-
 
 class PipelineFactory(IPipelineFactory):
     def __init__(self, **kwargs):
@@ -47,12 +43,5 @@ class PipelineFactory(IPipelineFactory):
             publishConfig=PublishConfig(
                 packagedArtifacts=["dist", "docs", "test-coverage", "test-html-outputs"]
             ),
-            overridenSteps=[
-                BuildStep(
-                    id=f"build-{flow}",
-                    run=f"yarn build:{flow} && {copy_yw_config_cmd}",
-                )
-                for flow in ["dev", "prod"]
-            ],
         )
         return await pipeline(config, context)

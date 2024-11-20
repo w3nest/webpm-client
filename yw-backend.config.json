@@ -1,6 +1,0 @@
-{
-    "id": "standard",
-    "origin": "",
-    "pathLoadingGraph": "/api/assets-gateway/cdn-backend/queries/loading-graph",
-    "pathResource": "/api/assets-gateway/raw/package"
-}
