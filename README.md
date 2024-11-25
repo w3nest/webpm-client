@@ -3,13 +3,13 @@
 Library for dynamic npm's libraries installation from W3 Nest ecosystem.
 
 This library is part of the hybrid cloud/local ecosystem
-[YouWol](https://platform.youwol.com/applications/@youwol/platform/latest).
+[YouWol](https://platform.youwol.com/apps/@youwol/platform/latest).
 
 ## Links
 
 <!-- no user guide provided -->
 
-[Developers documentation](https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc)
+[Developers documentation](https://platform.youwol.com/apps/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc)
 
 [Package on npm](https://www.npmjs.com/package/@w3nest/webpm-client)
 

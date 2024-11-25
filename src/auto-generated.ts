@@ -66,9 +66,9 @@ const entries = {
 export const setup = {
     name:'@w3nest/webpm-client',
         assetId:'QHczbmVzdC93ZWJwbS1jbGllbnQ=',
-    version:'0.1.0-wip',
+    version:'0.1.0',
     shortDescription:"Library for dynamic npm's libraries installation from W3 Nest ecosystem.",
-    developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc',
+    developerDocumentation:'https://platform.youwol.com/apps/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc',
     npmPackage:'https://www.npmjs.com/package/@w3nest/webpm-client',
     sourceGithub:'https://github.com/w3nest/webpm-client',
     userGuide:'',
@@ -112,7 +112,7 @@ export const setup = {
         const parameters = installParameters || {}
         const scripts = [
             ...(parameters.scripts || []),
-            `@w3nest/webpm-client#0.1.0-wip~dist/@w3nest/webpm-client/${entry.name}.js`
+            `@w3nest/webpm-client#0.1.0~dist/@w3nest/webpm-client/${entry.name}.js`
         ]
         const modules = [
             ...(parameters.modules || []),
