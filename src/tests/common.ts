@@ -1,6 +1,6 @@
 import {
     AssetsGateway,
-    ExplorerBackend,
+    Explorer,
     raiseHTTPErrors,
     RootRouter,
     Local,
@@ -50,7 +50,7 @@ export function installPackages$(packages: string[]) {
         }),
         mergeMap(() => assetsGtw.explorer.getDefaultUserDrive$()),
         raiseHTTPErrors(),
-        mergeMap((resp: ExplorerBackend.GetDefaultDriveResponse) => {
+        mergeMap((resp: Explorer.GetDefaultDriveResponse) => {
             return from(
                 packages.map((zipPath) => ({
                     folderId: resp.homeFolderId,
@@ -62,7 +62,7 @@ export function installPackages$(packages: string[]) {
             const buffer = readFileSync(path.resolve(__dirname, zip))
             const arraybuffer = Uint8Array.from(buffer).buffer
 
-            return assetsGtw.cdn
+            return assetsGtw.webpm
                 .upload$({
                     queryParameters: { folderId },
                     body: { fileName: zip, blob: new Blob([arraybuffer]) },

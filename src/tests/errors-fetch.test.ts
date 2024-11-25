@@ -41,7 +41,7 @@ beforeAll(async () => {
             const buffer = readFileSync(path.resolve(__dirname, zip))
             const arraybuffer = Uint8Array.from(buffer).buffer
 
-            return assetsGtw.cdn
+            return assetsGtw.webpm
                 .upload$({
                     queryParameters: { folderId: homeFolderId },
                     body: { fileName: zip, blob: new Blob([arraybuffer]) },
