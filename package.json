@@ -1,7 +1,7 @@
 {
     "name": "@w3nest/webpm-client",
     "description": "Library for dynamic npm's libraries installation from W3 Nest ecosystem.",
-    "version": "0.1.0",
+    "version": "0.1.1-wip",
     "author": "reinisch.gui@gmail.com",
     "homepage": "https://github.com/w3nest/webpm-client#README.md",
     "main": "dist/@w3nest/webpm-client.js",
