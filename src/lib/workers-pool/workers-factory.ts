@@ -1106,7 +1106,7 @@ export class WorkersPool {
     private getIdleWorkerOrCreate$(context: ContextTrait = new NoContext()):
         | Observable<{
               workerId: string
-              worker: Worker
+              worker: WWorkerTrait
               channel$: Observable<Message>
           }>
         | undefined {
@@ -1130,7 +1130,7 @@ export class WorkersPool {
         }) as
             | Observable<{
                   workerId: string
-                  worker: Worker
+                  worker: WWorkerTrait
                   channel$: Observable<Message>
               }>
             | undefined
