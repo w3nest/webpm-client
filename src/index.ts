@@ -21,10 +21,12 @@ import { setup } from './auto-generated'
 //      -> 'globalThis.document?.currentScript' is defined, but not the 'src' attribute
 //      -> it is the responsibility of the parent installer to propagate the configurations (see
 //      {@link applyModuleSideEffects})
-if (globalThis.document?.currentScript?.getAttribute('src')) {
-    const src = document.currentScript.getAttribute('src')
+const scriptSrc = (
+    globalThis as { document?: Document }
+).document?.currentScript?.getAttribute('src')
+if (scriptSrc) {
     const pathConfig = [
-        ...src.split('/').slice(0, -1),
+        ...scriptSrc.split('/').slice(0, -1),
         'webpm-client.config.json',
     ].join('/')
 
@@ -36,6 +38,7 @@ if (globalThis.document?.currentScript?.getAttribute('src')) {
             ...ywCookie.webpm,
         })
     } else {
+        // !!TO REMOVE!!, only cookie mechanism allowed soon to avoid sync request
         // Using a synchronous request here is on purpose: the objective is to provide a module fully initialized.
         // Using a promise over `backendConfiguration` can be tempting, but:
         // *  promise will propagate and make the API more difficult to use for some functions
@@ -45,10 +48,11 @@ if (globalThis.document?.currentScript?.getAttribute('src')) {
         request.open('GET', pathConfig, false) // `false` makes the request synchronous
         request.send(null)
         cdnClient.Client.BackendConfiguration = cdnClient.backendConfiguration(
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             JSON.parse(request.responseText),
         )
     }
-    const crossOrigin = document.currentScript.getAttribute('crossorigin')
+    const crossOrigin = document.currentScript?.getAttribute('crossorigin')
     if (crossOrigin != null) {
         cdnClient.Client.FrontendConfiguration = {
             crossOrigin,
@@ -67,5 +71,6 @@ if (!globalThis['@youwol/webpm-client']) {
      * For the initial install, aliases have to be installed explicitly.
      * They are coming from the file `template.py`, but are for now not available in auto-generated (hence duplication).
      */
-    globalThis['webpm'] = globalThis['@youwol/webpm-client']
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    globalThis.webpm = globalThis['@youwol/webpm-client']
 }

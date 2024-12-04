@@ -17,12 +17,13 @@
         "typeRoots": ["./node_modules/@types"],
         "paths": {
             "@rxVDomConfig": ["./rx-vdom.config"]
-        }
+        },
+        "strictNullChecks": true
     },
     "ts-node": {
         "compilerOptions": {
             "module": "CommonJS"
         }
     },
-    "exclude": ["./webpm-client-doc"]
+    "exclude": ["./webpm-client-doc" ,"./src/tests"]
 }

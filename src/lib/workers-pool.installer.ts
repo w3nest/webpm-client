@@ -10,7 +10,7 @@ function setupWorkersPoolModule(module: WorkersModule) {
     let config = {
         ...webpmClient.Client.BackendConfiguration,
     }
-    if (config.origin == '') {
+    if (config.origin === '') {
         /**
          * In worker, it is not possible to use relative URL for request => we make it explicit here
          * from the window's location.
@@ -20,9 +20,9 @@ function setupWorkersPoolModule(module: WorkersModule) {
             pathLoadingGraph: config.urlLoadingGraph,
             pathResource: config.urlResource,
             origin:
-                window.location.origin != 'null'
-                    ? window.location.origin
-                    : window.location.ancestorOrigins[0],
+                window.location.origin === 'null'
+                    ? window.location.ancestorOrigins[0]
+                    : window.location.origin,
         })
     }
     module.WorkersPool.backendsPartitionId =

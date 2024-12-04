@@ -28,7 +28,7 @@ export type EventStatus = 'Pending' | 'Succeeded' | 'Failed' | 'None'
  *
  * @category Events
  */
-export type CdnEvent = {
+export interface CdnEvent {
     step: EventType
     id: string
     text: string
@@ -137,7 +137,7 @@ export class SourceLoadedEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
-        public readonly progress: ProgressEvent<XMLHttpRequestEventTarget>,
+        public readonly progress?: ProgressEvent<XMLHttpRequestEventTarget>,
     ) {
         this.id = targetName
         this.text = `${targetName}: source fetched`

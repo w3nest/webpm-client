@@ -12,7 +12,7 @@ export interface WWorkerTrait {
 
     /**
      *
-     * @param params.taskId task Id
+     * @param params.taskId task ID
      * @param params.entryPoint function to execute
      * @param params.args arguments to provide to the function     *
      */
@@ -24,10 +24,10 @@ export interface WWorkerTrait {
 
     /**
      * Send to the worker some data in the channel associated to `taskId`
-     * @param params.taskId task Id
+     * @param params.taskId task ID
      * @param params.data arguments to send
      */
-    send<T>(params: { taskId: string; data: T })
+    send(params: { taskId: string; data: unknown })
 
     terminate()
 }
@@ -50,7 +50,7 @@ export interface IWWorkerProxy {
         onMessageMain: (message) => unknown
     }): WWorkerTrait
 
-    serializeFunction(fct?: (...unknown) => unknown)
+    serializeFunction(fct?: (...unknown: unknown[]) => unknown): string
 
     onBeforeWorkerInstall?: InWorkerAction
     onAfterWorkerInstall?: InWorkerAction
@@ -73,7 +73,15 @@ export class WebWorkerBrowser implements WWorkerTrait {
         Object.assign(this, params)
     }
 
-    execute({ taskId, entryPoint, args }: { taskId; entryPoint; args }) {
+    execute<T>({
+        taskId,
+        entryPoint,
+        args,
+    }: {
+        taskId: string
+        entryPoint: (args: EntryPointArguments<T>) => unknown
+        args: T
+    }) {
         const message = {
             type: 'Execute',
             data: {
@@ -86,7 +94,7 @@ export class WebWorkerBrowser implements WWorkerTrait {
         this.worker.postMessage(message)
     }
 
-    send<T>({ taskId, data }: { taskId: string; data: T }) {
+    send({ taskId, data }: { taskId: string; data: unknown }) {
         const messageToWorker = {
             type: 'MainToWorkerMessage',
             data: {
@@ -123,12 +131,12 @@ export class WebWorkersBrowser implements IWWorkerProxy {
 
         worker.onmessage = onMessageMain
         return new WebWorkerBrowser({
-            uid: `w${Math.floor(Math.random() * 1e6)}`,
+            uid: `w${String(Math.floor(Math.random() * Math.pow(10, 6)))}`,
             worker,
         })
     }
 
     serializeFunction(fct?: (...unknown) => unknown) {
-        return fct ? `return ${String(fct)}` : undefined
+        return `return ${String(fct)}`
     }
 }

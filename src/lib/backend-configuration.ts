@@ -22,12 +22,12 @@ export interface BackendConfiguration {
      * Backend's URL to resolve pypi python modules. If not provided, fallback to
      * `https://pypi.org/`.
      */
-    readonly urlPypi?: string
+    readonly urlPypi: string
     /**
      * Backend's URL to resolve pyodide python modules. If not provided, fallback to
      * `https://cdn.jsdelivr.net/pyodide/v$VERSION/full` where $VERSION is the pyodide target version.
      */
-    readonly urlPyodide?: string
+    readonly urlPyodide: string
 
     /**
      * id of the configuration
@@ -54,11 +54,11 @@ function computeOrigin(
 
     const port = origin.port ?? ('hostname' in origin ? '' : 8080)
 
-    return `http${secure ? 's' : ''}://${hostname}${port ? ':' : ''}${port}`
+    return `http${secure ? 's' : ''}://${hostname}${port ? ':' : ''}${String(port)}`
 }
 
-export type Cookie = {
-    type: 'local'
+export interface Cookie {
+    type: 'local' | 'remote'
     wsDataUrl: string
     port: number
     origin: string
@@ -74,11 +74,11 @@ export type Cookie = {
 export function getLocalCookie(): Cookie | undefined {
     const name = 'w3nest'
     const regex = new RegExp(`(^| )${name}=([^;]+)`)
-    const match = document.cookie.match(regex)
+    const match = regex.exec(document.cookie)
     if (match) {
         try {
             const decoded = decodeURIComponent(match[2]).slice(1, -1)
-            return JSON.parse(decoded)
+            return JSON.parse(decoded) as Cookie
         } catch (error) {
             console.error('Can not retrieved local cookie', error)
             return undefined

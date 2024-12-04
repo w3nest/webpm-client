@@ -15,25 +15,29 @@ import type * as rxjsModuleType from 'rxjs'
 import type { ContextMessage } from '@w3nest/http-clients'
 import { getLocalCookie } from './backend-configuration'
 
-export type BackendInstallResponse = {
+import type * as HttpClients from '@w3nest/http-clients'
+
+export interface BackendInstallResponse {
     clientBundle: string
     name: string
     version: string
     exportedClientSymbol: string
 }
 
-export type BackendsGraphInstallResponse = {
+export interface BackendsGraphInstallResponse {
     backends: BackendInstallResponse[]
 }
 
-type Install = {
+interface Install {
     http: { WebSocketClient: (d: unknown) => void }
 }
-export async function installBackendClientDeps(): Promise<Install> {
+export async function installBackendClientDeps(): Promise<{
+    http: typeof HttpClients
+}> {
     const { http } = (await install({
-        modules: ['@youwol/http-primitives#^0.2.3 as http'],
+        modules: ['@w3nest/http-clients#^0.1.1 as http'],
     })) as unknown as Install
-    return { http }
+    return { http } as unknown as { http: typeof HttpClients }
 }
 
 export async function installBackends({
@@ -45,32 +49,32 @@ export async function installBackends({
     executingWindow,
 }: {
     graph: LoadingGraph
-    backendsConfig: { [k: string]: BackendConfig }
+    backendsConfig: Record<string, BackendConfig>
     backendsPartitionId: string
     onEvent: (event: CdnEvent) => void
     webpmClient: Client
     executingWindow: WindowOrWorkerGlobalScope
 }) {
     const isEmpty =
-        graph.definition.filter((layer) => layer.length > 0).length == 0
+        graph.definition.filter((layer) => layer.length > 0).length === 0
     if (isEmpty) {
         return
     }
     const ywLocalCookie = getLocalCookie()
-    if (!ywLocalCookie || ywLocalCookie.type != 'local') {
+    if (!ywLocalCookie || ywLocalCookie.type !== 'local') {
         throw new LocalYouwolRequired(
             'Backends installation requires the local youwol server',
         )
     }
-    const wsUrl = `ws://localhost:${ywLocalCookie.port}/${ywLocalCookie.wsDataUrl}`
+    const wsUrl = `ws://localhost:${String(ywLocalCookie.port)}/${ywLocalCookie.wsDataUrl}`
     const wsData$ = await StateImplementation.getWebSocket(wsUrl)
 
-    const installId = `${Math.floor(Math.random() * 1e9)}`
-    const installKey = `${setup.name}-${setup.version}:installId`
-    let error: BackendErrorEvent
+    const installId = String(Math.floor(Math.random() * Math.pow(10, 9)))
+    const installKey = `${setup.name}-${setup.version}:${installId}`
+    let error: BackendErrorEvent | undefined
 
-    const rxjs: typeof rxjsModuleType = window['rxjs']
-    type Message = {
+    const rxjs = (window as unknown as { rxjs: typeof rxjsModuleType }).rxjs
+    interface Message {
         name: string
         version: string
         event: string
@@ -106,22 +110,23 @@ export async function installBackends({
 
     const isDone = (m: ContextMessage<Message>) =>
         (m.labels?.includes('StartBackendEvent') &&
-            m.data.event === 'listening') ||
+            m.data?.event === 'listening') ??
         m.attributes?.event === 'failed'
 
     const filterEvent = (kind: EventKind) =>
         all$.pipe(
-            rxjs.filter((m) => m.labels?.includes(kind)),
+            rxjs.filter((m) => m.labels?.includes(kind) !== undefined),
             rxjs.tap((m) => {
-                if (m.data.event === 'failed') {
+                if (m.data?.event === 'failed') {
                     const event = new BackendErrorEvent({
                         ...m.data,
                         detail: `error while ${factory[kind].topic}`,
                     })
                     error = event
                     onEvent(event)
+                    return
                 }
-                if (!error) {
+                if (m.data) {
                     onEvent(new factory[kind].constructor(m.data))
                 }
             }),
@@ -140,7 +145,7 @@ export async function installBackends({
         backendsConfig,
         partitionId: backendsPartitionId,
     }
-    return await fetch(ywLocalCookie.webpm.pathBackendInstall, {
+    await fetch(ywLocalCookie.webpm.pathBackendInstall, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -161,11 +166,12 @@ export async function installBackends({
             }
             return Promise.all(
                 backends.map((backend) => {
+                    // eslint-disable-next-line @typescript-eslint/no-implied-eval,@typescript-eslint/no-unsafe-call
                     return new Function(backend.clientBundle)()({
                         window: executingWindow,
                         webpmClient,
                         wsData$,
-                    })
+                    }) as { name: string; version: string }
                 }),
             )
         })
@@ -180,7 +186,7 @@ export async function installBackends({
 /**
  * Backend client.
  */
-export type BackendClient = {
+export interface BackendClient {
     /**
      * Base URL of the service.
      */
@@ -196,7 +202,7 @@ export type BackendClient = {
      */
     config: {
         // Build configuration (command line options).
-        build: { [k: string]: string }
+        build: Record<string, string>
     }
 
     /**

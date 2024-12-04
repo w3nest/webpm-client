@@ -3,7 +3,7 @@ import { addScriptElements } from './utils'
 import { StateImplementation } from './state'
 import { PyodideInputs } from './inputs.models'
 
-export type PythonIndexes = {
+export interface PythonIndexes {
     urlPyodide: string
     urlPypi: string
 }
@@ -12,7 +12,7 @@ export async function installPython(
         onEvent?: (cdnEvent: CdnEvent) => void
     } & PythonIndexes,
 ) {
-    const modulesRequired = pyodideInputs.modules.filter(
+    const modulesRequired = (pyodideInputs.modules ?? []).filter(
         (module) => !StateImplementation.importedPyModules.includes(module),
     )
     if (modulesRequired.length === 0) {
@@ -20,7 +20,7 @@ export async function installPython(
     }
 
     const onEvent =
-        pyodideInputs.onEvent ||
+        pyodideInputs.onEvent ??
         (() => {
             /*no op*/
         })
@@ -32,13 +32,13 @@ export async function installPython(
         ),
     )
 
-    if (!globalThis['pyodide']) {
+    if (!globalThis.pyodide) {
         let pyodideVersion = pyodideInputs.version
         if (!pyodideVersion) {
-            const latest = await fetch(
+            const latest = (await fetch(
                 'https://api.github.com/repos/pyodide/pyodide/releases/latest',
-            ).then((resp) => resp.json())
-            pyodideVersion = latest['tag_name']
+            ).then((resp) => resp.json())) as { tag_name: string }
+            pyodideVersion = latest.tag_name
         }
         const indexURL = pyodideInputs.urlPyodide.replace(
             '$VERSION',
@@ -58,12 +58,18 @@ export async function installPython(
                 progressEvent: undefined,
             },
         ])
-        globalThis['pyodide'] = await globalThis['loadPyodide']({ indexURL })
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+        globalThis.pyodide = await globalThis.loadPyodide({ indexURL })
     }
     if (pyodideInputs.pyodideAlias) {
-        globalThis[pyodideInputs.pyodideAlias] = globalThis['pyodide']
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        globalThis[pyodideInputs.pyodideAlias] = globalThis.pyodide
     }
-    const pyodide = globalThis['pyodide']
+
+    const pyodide = globalThis.pyodide as {
+        loadPackage: (...modules: string[]) => Promise<void>
+        runPythonAsync: (src: string) => Promise<unknown>
+    }
     onEvent(
         new CdnMessageEvent(
             `pyodide runtime`,
@@ -82,11 +88,7 @@ export async function installPython(
 
     modulesRequired.forEach((module) => {
         onEvent(
-            new CdnMessageEvent(
-                `${module}`,
-                `${module} installing ...`,
-                'Pending',
-            ),
+            new CdnMessageEvent(module, `${module} installing ...`, 'Pending'),
         )
     })
 
@@ -105,7 +107,7 @@ await micropip.install(requirements='${module}'${parameters})`,
                     StateImplementation.registerImportedPyModules([module])
                     onEvent(
                         new CdnMessageEvent(
-                            `${module}`,
+                            module,
                             `${module} loaded`,
                             'Succeeded',
                         ),

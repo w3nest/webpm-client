@@ -74,7 +74,7 @@ export type PyModule = string
  *
  * This is the input for the method {@link install}.
  */
-export type InstallInputs = {
+export interface InstallInputs {
     /**
      * Specifies the ESM modules to install, using one of the following:
      * *  {@link LightLibraryWithAliasQueryString} for a simpler specification with limited control.
@@ -125,7 +125,7 @@ export type InstallInputs = {
 /**
  * Specifies the installation of ESM modules.
  */
-export type EsmInputs = {
+export interface EsmInputs {
     /**
      * List of modules to install.
      */
@@ -175,33 +175,31 @@ export type EsmInputs = {
      * of associated side effects.
      *
      */
-    modulesSideEffects?: {
-        [key: string]: ModuleSideEffectCallback
-    }
+    modulesSideEffects?: Record<string, ModuleSideEffectCallback>
 
     /**
      * Provide aliases to exported symbols name of module.
      */
-    aliases?: { [key: string]: string | ((Window) => unknown) }
+    aliases?: Record<string, string | ((Window) => unknown)>
 }
 
 /**
  * Specifies configuration for a backend.
  *
  */
-export type BackendConfig = {
+export interface BackendConfig {
     /**
      * Arguments regarding the build stage provided as key-value pairs.
      *
      * The available keys and values are backend specifics and should be documented by them.
      */
-    buildArgs: { [k: string]: string }
+    buildArgs: Record<string, string>
 }
 
 /**
  * Specifies the installation of backends.
  */
-export type BackendInputs = {
+export interface BackendInputs {
     /**
      * List of modules to install.
      */
@@ -209,7 +207,7 @@ export type BackendInputs = {
     /**
      * Configuration of the backend.
      */
-    configurations?: { [k: string]: BackendConfig }
+    configurations?: Record<string, BackendConfig>
     /**
      * Partition ID in which the backends are installed.
      */
@@ -219,7 +217,7 @@ export type BackendInputs = {
 /**
  * Installer description for the pyodide runtime environment.
  */
-export type PyodideInputs = {
+export interface PyodideInputs {
     /**
      * Pyodide target version (no semver allowed).
      *
@@ -274,7 +272,7 @@ export type ScriptInput =
     | FileLocationString
     | { location: FileLocationString; sideEffects: ScriptSideEffectCallback }
 
-export type InstallStyleSheetsInputs = {
+export interface InstallStyleSheetsInputs {
     /**
      * See {@link InstallInputs.css}
      */
@@ -286,7 +284,7 @@ export type InstallStyleSheetsInputs = {
     renderingWindow?: Window
 }
 
-export type InstallLoadingGraphInputs = {
+export interface InstallLoadingGraphInputs {
     /**
      * Specification of the loading graph, usually retrieved from {@link queryLoadingGraph}.
      */
@@ -295,7 +293,7 @@ export type InstallLoadingGraphInputs = {
     /**
      * Backends configuration, keys are backend names.
      */
-    backendsConfig?: { [k: string]: BackendConfig }
+    backendsConfig?: Record<string, BackendConfig>
 
     /**
      * Partition ID.
@@ -305,7 +303,7 @@ export type InstallLoadingGraphInputs = {
     /**
      * See `modulesSideEffects` of {@link InstallInputs}
      */
-    modulesSideEffects?: { [key: string]: ModuleSideEffectCallback }
+    modulesSideEffects?: Record<string, ModuleSideEffectCallback>
 
     /**
      * See `executingWindow` from {@link InstallInputs}
@@ -315,9 +313,7 @@ export type InstallLoadingGraphInputs = {
     /**
      * See `aliases` from {@link InstallInputs}
      */
-    aliases?: {
-        [key: string]: string | ((WindowOrWorkerGlobalScope) => unknown)
-    }
+    aliases?: Record<string, string | ((WindowOrWorkerGlobalScope) => unknown)>
 
     /**
      * See `onEvent` from {@link InstallInputs}
@@ -325,7 +321,7 @@ export type InstallLoadingGraphInputs = {
     onEvent?: (event: CdnFetchEvent) => void
 }
 
-export type FetchScriptInputs = {
+export interface FetchScriptInputs {
     /**
      * url of the script, see {@link getUrlBase}.
      */
@@ -344,7 +340,7 @@ export type FetchScriptInputs = {
     onEvent?: (event: CdnFetchEvent) => void
 }
 
-export type InstallModulesInputs = {
+export interface InstallModulesInputs {
     /**
      * See {@link InstallInputs.modules}
      */
@@ -353,7 +349,7 @@ export type InstallModulesInputs = {
     /**
      * See {@link InstallInputs.modulesSideEffects}
      */
-    modulesSideEffects?: { [_key: string]: ModuleSideEffectCallback }
+    modulesSideEffects?: Record<string, ModuleSideEffectCallback>
 
     /**
      * See {@link InstallInputs.usingDependencies}
@@ -363,9 +359,9 @@ export type InstallModulesInputs = {
     /**
      * See {@link InstallInputs.aliases}
      */
-    aliases?: { [key: string]: string | ((Window) => unknown) }
+    aliases?: Record<string, string | ((Window) => unknown)>
 
-    backendsConfig: { [k: string]: BackendConfig }
+    backendsConfig: Record<string, BackendConfig>
 
     backendsPartitionId: string
 
@@ -380,7 +376,7 @@ export type InstallModulesInputs = {
     onEvent?: (event: CdnEvent) => void
 }
 
-export type InstallScriptsInputs = {
+export interface InstallScriptsInputs {
     /**
      * See {@link InstallInputs.scripts}
      */
@@ -397,15 +393,13 @@ export type InstallScriptsInputs = {
     /**
      * See {@link InstallInputs.aliases}
      */
-    aliases?: {
-        [key: string]: string | ((WindowOrWorkerGlobalScope) => unknown)
-    }
+    aliases?: Record<string, string | ((WindowOrWorkerGlobalScope) => unknown)>
 }
 
 /**
  * Argument type for {@link ModuleSideEffectCallback}
  */
-export type ModuleSideEffectCallbackArgument = {
+export interface ModuleSideEffectCallbackArgument {
     /**
      * The installed module
      */
@@ -417,7 +411,7 @@ export type ModuleSideEffectCallbackArgument = {
     /**
      * HTML script element added
      */
-    htmlScriptElement: HTMLScriptElement
+    htmlScriptElement?: HTMLScriptElement
     /**
      * Window instance in which the HTML script element has been added
      */
@@ -434,7 +428,7 @@ export type ModuleSideEffectCallback = (
 /**
  * Argument type for {@link CssSideEffectCallback}
  */
-export type CssSideEffectCallbackArgument = {
+export interface CssSideEffectCallbackArgument {
     /**
      * Origin of the style-sheet
      */
@@ -466,7 +460,7 @@ export type CssSideEffectCallback = (
 /**
  * Argument type for {@link CssSideEffectCallback}
  */
-export type ScriptSideEffectCallbackArgument = {
+export interface ScriptSideEffectCallbackArgument {
     /**
      * Origin of the style-sheet
      */
@@ -475,7 +469,7 @@ export type ScriptSideEffectCallbackArgument = {
     /**
      * HTML script element added
      */
-    htmlScriptElement: HTMLScriptElement
+    htmlScriptElement?: HTMLScriptElement
 
     /**
      * Window instance in which the HTML script element has been added
@@ -495,7 +489,7 @@ export type ScriptSideEffectCallback = (
  * Inputs for the method {@link queryLoadingGraph}.
  *
  */
-export type QueryLoadingGraphInputs = {
+export interface QueryLoadingGraphInputs {
     /**
      * See `modules` of {@link InstallInputs}
      */
@@ -507,7 +501,7 @@ export type QueryLoadingGraphInputs = {
     usingDependencies?: LightLibraryQueryString[]
 
     /**
-     * This property allows to resolve loading graph, including some libraries that may not exists
+     * This property allows to resolve loading graph, including some libraries that may not exist
      * in target database.
      *
      * Essentially used within py-youwol to couple loading graphs local/remote.
@@ -516,7 +510,7 @@ export type QueryLoadingGraphInputs = {
     extraIndex?: string
 }
 
-export type Library = {
+export interface Library {
     /**
      * id of the library in the asset store
      */
@@ -533,7 +527,7 @@ export type Library = {
     version: string
 
     /**
-     * Type of the library, e.g. '*library*, *flux-pack*
+     * Type of the library.
      */
     type: 'js/wasm' | 'backend'
 
@@ -568,12 +562,12 @@ export type Library = {
  *
  * @hidden
  */
-export type LoadingGraph = {
+export interface LoadingGraph {
     /**
      *
      * List of javascript libraries to fetch by batch:
      * -    `definition[i]` defines a batch of libraries that can be fetched in any order (or at the same time), provided
-     * that all the libraries for the batches `j<i` have already be fetched
+     * that all the libraries for the batches `j<i` have already been fetched
      * -    `definition[i][j]` defines the j'th library for the batch i:
      * a tuple of [`id`, `cdn-url`] where `id` is the asset id and `cdn-url` the associated URL
      */
@@ -583,7 +577,7 @@ export type LoadingGraph = {
      *
      * Describes the libraries included in the loading graph
      */
-    lock: Array<Library>
+    lock: Library[]
 
     /**
      * Type of the graph (versioning to be able to change the fetching mechanism)
@@ -596,7 +590,7 @@ export type LoadingGraph = {
  *
  * @hidden
  */
-export type FetchedScript = {
+export interface FetchedScript {
     /**
      * name: module name if the script correspond to a module,
      * can be defined by the user when using {@link Client.fetchScript}.
@@ -626,5 +620,5 @@ export type FetchedScript = {
     /**
      * Completed progress event
      */
-    progressEvent: ProgressEvent
+    progressEvent?: ProgressEvent<XMLHttpRequestEventTarget>
 }

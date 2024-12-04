@@ -40,6 +40,7 @@ console.log = () => {
     /*no-op*/
 }
 
+// @ts-expect-error workaround for tests
 WorkersPool.webWorkersProxy = new WebWorkersJest({
     globalEntryPoint: entryPointWorker,
     cdnClient,
@@ -175,7 +176,7 @@ test('schedule', async () => {
         )
         .pipe(
             tap((d) => context.info(`Got message ${d.type} from schedule`)),
-            takeWhile((m) => m.type != 'Exit', true),
+            takeWhile((m) => m.type !== 'Exit', true),
             last(),
             // let the time to subscription (busy$ in particular) to be handled
             delay(1),
@@ -466,6 +467,8 @@ test('view', async () => {
 test('before/after install callback', async () => {
     let beforeDone = false
     let afterDone = false
+
+    // @ts-expect-error workarounds for test
     WorkersPool.webWorkersProxy = new WebWorkersJest({
         globalEntryPoint: entryPointWorker,
         cdnClient,

@@ -3,7 +3,9 @@
  *
  * @category Errors
  */
-export class CdnError extends Error {}
+export class CdnError extends Error {
+    static exceptionType = 'CdnError'
+}
 
 /**
  * Error related to the usage of features requiring the local youwol server while it is not detected.
@@ -40,8 +42,11 @@ export class Unauthorized extends CdnError {
         super()
     }
 
-    static isInstance(resp): resp is Unauthorized {
-        return resp.exceptionType == Unauthorized.exceptionType
+    static isInstance(resp: CdnError): resp is Unauthorized {
+        return (
+            'exceptionType' in resp &&
+            resp.exceptionType === Unauthorized.exceptionType
+        )
     }
 }
 
@@ -57,8 +62,11 @@ export class UrlNotFound extends CdnError {
         super()
     }
 
-    static isInstance(resp): resp is UrlNotFound {
-        return resp.exceptionType == UrlNotFound.exceptionType
+    static isInstance(resp: CdnError): resp is UrlNotFound {
+        return (
+            'exceptionType' in resp &&
+            resp.exceptionType === UrlNotFound.exceptionType
+        )
     }
 }
 
@@ -74,8 +82,11 @@ export class FetchErrors extends CdnError {
         super()
     }
 
-    static isInstance(resp): resp is FetchErrors {
-        return resp.exceptionType == FetchErrors.exceptionType
+    static isInstance(resp: CdnError): resp is FetchErrors {
+        return (
+            'exceptionType' in resp &&
+            resp.exceptionType === FetchErrors.exceptionType
+        )
     }
 }
 
@@ -91,8 +102,11 @@ export class SourceParsingFailed extends CdnError {
         super()
     }
 
-    static isInstance(resp): resp is SourceParsingFailed {
-        return resp.exceptionType == SourceParsingFailed.exceptionType
+    static isInstance(resp: CdnError): resp is SourceParsingFailed {
+        return (
+            'exceptionType' in resp &&
+            resp.exceptionType === SourceParsingFailed.exceptionType
+        )
     }
 }
 
@@ -118,8 +132,11 @@ export class DependenciesError extends LoadingGraphError {
         super()
     }
 
-    static isInstance(resp): resp is DependenciesError {
-        return resp.exceptionType == DependenciesError.exceptionType
+    static isInstance(resp: CdnError): resp is DependenciesError {
+        return (
+            'exceptionType' in resp &&
+            resp.exceptionType === DependenciesError.exceptionType
+        )
     }
 }
 
@@ -135,14 +152,17 @@ export class CircularDependencies extends LoadingGraphError {
     constructor(
         public readonly detail: {
             context: string
-            packages: { [key: string]: { name: string; version: string }[] }
+            packages: Record<string, { name: string; version: string }[]>
         },
     ) {
         super()
     }
 
-    static isInstance(resp): resp is CircularDependencies {
-        return resp.exceptionType == CircularDependencies.exceptionType
+    static isInstance(resp: CdnError): resp is CircularDependencies {
+        return (
+            'exceptionType' in resp &&
+            resp.exceptionType === CircularDependencies.exceptionType
+        )
     }
 }
 
@@ -167,7 +187,7 @@ export class BackendException extends CdnError {
  *
  * @category Errors
  */
-export function errorFactory(error) {
+export function errorFactory(error: CdnError): Error {
     if (CircularDependencies.isInstance(error)) {
         return new CircularDependencies(error.detail)
     }
@@ -177,7 +197,12 @@ export function errorFactory(error) {
     if (Unauthorized.isInstance(error)) {
         return new Unauthorized(error.detail)
     }
-    if (error.exceptionType === 'UpstreamResponseException') {
-        return errorFactory(error.detail)
+    if (
+        'exceptionType' in error &&
+        error.exceptionType === 'UpstreamResponseException'
+    ) {
+        // noinspection TailRecursionJS
+        return errorFactory((error as unknown as { detail: CdnError }).detail)
     }
+    return error
 }

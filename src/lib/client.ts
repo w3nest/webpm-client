@@ -24,7 +24,12 @@ import {
     InstallDoneEvent,
     CdnEvent,
 } from './events.models'
-import { errorFactory, FetchErrors } from './errors.models'
+import {
+    CdnError,
+    errorFactory,
+    FetchErrors,
+    LoadingGraphError,
+} from './errors.models'
 import { Monitoring, StateImplementation } from './state'
 import { LoadingScreenView } from './loader.view'
 import { sanitizeCssId } from './utils.view'
@@ -51,7 +56,8 @@ import { installBackends } from './backends'
 import { installPython } from './python'
 
 export function getBackendsPartitionUID() {
-    const uid = `${Math.floor(Math.random() * 1e6)}`
+    const uid = String(Math.floor(Math.random() * Math.pow(10, 6)))
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!globalThis.document) {
         // This branch is executed within web worker.
         // The initial value returned here will be overridden from the one forwarded from the
@@ -61,11 +67,11 @@ export function getBackendsPartitionUID() {
     }
     const key = 'backendsPartitionID'
     const generateTabId = () => `${document.title}~${uid}`
-
+    const item = generateTabId()
     if (!sessionStorage.getItem(key)) {
-        sessionStorage.setItem(key, generateTabId())
+        sessionStorage.setItem(key, item)
     }
-    return sessionStorage.getItem(key)
+    return item
 }
 
 /**
@@ -124,9 +130,8 @@ export function monitoring() {
  * @hidden
  */
 export class Client {
-    static readonly backendsPartitionId = getBackendsPartitionUID()
+    static backendsPartitionId = getBackendsPartitionUID()
 
-    private static state = StateImplementation
     /**
      * Backend configuration.
      */
@@ -137,7 +142,7 @@ export class Client {
      */
     public static FrontendConfiguration: FrontendConfiguration = {}
 
-    static Headers: { [key: string]: string } = {}
+    static Headers: Record<string, string> = {}
     /**
      * Default static hostname (if none provided at instance construction).
      *
@@ -150,7 +155,7 @@ export class Client {
      *
      * `this.headers =  headers ? {...Client.Headers, ...headers } : Client.Headers`
      */
-    public readonly headers: { [key: string]: string } = {}
+    public readonly headers: Record<string, string> = {}
 
     /**
      * @param params options setting up HTTP requests
@@ -158,13 +163,10 @@ export class Client {
      */
     constructor(
         params: {
-            headers?: { [_key: string]: string }
+            headers?: Record<string, string>
         } = {},
     ) {
-        this.headers = { ...Client.Headers, ...(params.headers || {}) }
-        if (Client.BackendConfiguration === undefined) {
-            throw new Error('Client.BackendConfiguration not configured')
-        }
+        this.headers = { ...Client.Headers, ...(params.headers ?? {}) }
     }
 
     /**
@@ -179,9 +181,10 @@ export class Client {
     ): Promise<LoadingGraph> {
         inputs = normalizeLoadingGraphInputs(inputs)
         const key = JSON.stringify(inputs)
+        const usingDependencies = inputs.usingDependencies ?? []
         const body = {
             libraries: sanitizeModules(inputs.modules),
-            using: inputs.usingDependencies.reduce((acc, dependency) => {
+            using: usingDependencies.reduce((acc, dependency) => {
                 return {
                     ...acc,
                     [dependency.split('#')[0]]: dependency.split('#')[1],
@@ -190,13 +193,14 @@ export class Client {
             extraIndex: inputs.extraIndex,
         }
         const finalize = async () => {
-            const content = await Client.state.fetchedLoadingGraph[key]
-            if (content.lock) {
+            const content =
+                await StateImplementation.fetchedLoadingGraph.get(key)
+            if (content !== undefined && 'lock' in content) {
                 return content
             }
-            throw errorFactory(content)
+            throw errorFactory(content as unknown as CdnError)
         }
-        if (Client.state.fetchedLoadingGraph[key]) {
+        if (key in StateImplementation.fetchedLoadingGraph) {
             return finalize()
         }
         const request = new Request(
@@ -210,15 +214,19 @@ export class Client {
                 },
             },
         )
-        Client.state.fetchedLoadingGraph[key] = fetch(request)
-            .then((resp) => resp.json())
-            .then((resp) => {
-                resp.lock &&
-                    resp.lock.forEach((lock) => {
-                        lock.exportedSymbol = lock.name
-                    })
-                return resp
-            })
+        StateImplementation.fetchedLoadingGraph.set(
+            key,
+            fetch(request)
+                .then((resp) => resp.json())
+                .then((resp: LoadingGraph | CdnError) => {
+                    if ('lock' in resp) {
+                        resp.lock.forEach((lock) => {
+                            lock.exportedSymbol = lock.name
+                        })
+                    }
+                    return resp
+                }),
+        )
         return finalize()
     }
 
@@ -240,17 +248,18 @@ export class Client {
             .split('/')
         const assetId = parts[1]
         const version = parts[2]
-        name = name || parts[parts.length - 1]
-        url = Client.state.getPatchedUrl({
+        name ??= parts[parts.length - 1]
+        url = StateImplementation.getPatchedUrl({
             name,
             version,
             assetId,
             url,
         })
-        if (Client.state.importedScripts[url]) {
-            const { progressEvent } = await Client.state.importedScripts[url]
+        const importedScript = StateImplementation.importedScripts.get(url)
+        if (importedScript) {
+            const { progressEvent } = await importedScript
             onEvent?.(new SourceLoadedEvent(name, assetId, url, progressEvent))
-            return Client.state.importedScripts[url]
+            return importedScript
         }
         if (!isInstanceOfWindow(globalThis)) {
             // In a web-worker the script will be imported using self.importScripts(url).
@@ -260,11 +269,13 @@ export class Client {
                 version,
                 assetId,
                 url,
-                content: undefined,
-                progressEvent: undefined,
+                content: '',
+                progressEvent: new ProgressEvent(
+                    '',
+                ) as ProgressEvent<XMLHttpRequestEventTarget>,
             })
         }
-        Client.state.importedScripts[url] = new Promise((resolve, reject) => {
+        const scriptPromise = new Promise<FetchedScript>((resolve, reject) => {
             const req = new XMLHttpRequest()
             // report progress events
             req.addEventListener(
@@ -294,7 +305,8 @@ export class Client {
             req.send()
             onEvent?.(new StartEvent(name, assetId, url))
         })
-        return Client.state.importedScripts[url]
+        StateImplementation.importedScripts.set(url, scriptPromise)
+        return scriptPromise
     }
 
     /**
@@ -309,20 +321,22 @@ export class Client {
             ? upgradeInstallInputs(inputs)
             : inputs
 
-        const css = inputs.css || []
-        const executingWindow = inputs.executingWindow || globalThis
-        const display = sanitizedInputs.displayLoadingScreen || false
-        let loadingScreen = undefined
+        const css = inputs.css ?? []
+        const executingWindow = inputs.executingWindow ?? globalThis
+        const display = sanitizedInputs.displayLoadingScreen ?? false
+        let loadingScreen: LoadingScreenView | undefined = undefined
         if (display) {
             loadingScreen = new LoadingScreenView()
             loadingScreen.render()
         }
-        const onEvent = (ev) => {
-            loadingScreen?.next(ev)
+        const onEvent = (ev: CdnEvent) => {
+            if (loadingScreen) {
+                loadingScreen.next(ev)
+            }
             sanitizedInputs.onEvent?.(ev)
         }
         const esmInputs = normalizeEsmInputs(sanitizedInputs)
-        const esmInlinedAliases = extractInlinedAliases(esmInputs.modules || [])
+        const esmInlinedAliases = extractInlinedAliases(esmInputs.modules)
         const pyodideInputs = normalizePyodideInputs(sanitizedInputs)
         const backendInputs = normalizeBackendInputs(sanitizedInputs)
 
@@ -335,15 +349,17 @@ export class Client {
               })
             : Promise.resolve()
 
+        const backendPartition =
+            backendInputs.partition ?? Client.backendsPartitionId
         const backendInlinedAliases = extractInlinedAliases(
             backendInputs.modules,
-            `${PARTITION_PREFIX}${backendInputs.partition}`,
+            `${PARTITION_PREFIX}${backendPartition}`,
         )
 
         const modulesPromise = this.installModules({
             modules: [...esmInputs.modules, ...backendInputs.modules],
-            backendsConfig: backendInputs.configurations,
-            backendsPartitionId: backendInputs.partition,
+            backendsConfig: backendInputs.configurations ?? {},
+            backendsPartitionId: backendPartition,
             modulesSideEffects: esmInputs.modulesSideEffects,
             usingDependencies: esmInputs.usingDependencies,
             aliases: {
@@ -364,7 +380,7 @@ export class Client {
 
         const scriptsPromise = modulesPromise.then(() => {
             return this.installScripts({
-                scripts: esmInputs.scripts || [],
+                scripts: esmInputs.scripts ?? [],
                 executingWindow,
                 aliases: esmInputs.aliases,
             })
@@ -372,8 +388,10 @@ export class Client {
 
         return Promise.all([scriptsPromise, cssPromise, pyodidePromise]).then(
             () => {
-                onEvent?.(new InstallDoneEvent())
-                loadingScreen?.done()
+                onEvent(new InstallDoneEvent())
+                if (loadingScreen) {
+                    loadingScreen.done()
+                }
                 return executingWindow
             },
         )
@@ -390,13 +408,11 @@ export class Client {
     async installLoadingGraph(inputs: InstallLoadingGraphInputs) {
         const all = inputs.loadingGraph.lock
             .map((pack) => [pack.id, pack])
-            .reduce(
-                (acc, [k, v]: [string, Library]) => ({ ...acc, [k]: v }),
-                {},
-            )
-        inputs.backendsPartitionId =
-            inputs.backendsPartitionId || Client.backendsPartitionId
-        inputs.backendsConfig = inputs.backendsConfig || {}
+            .reduce<
+                Record<string, Library>
+            >((acc, [k, v]: [string, Library]) => ({ ...acc, [k]: v }), {})
+        inputs.backendsPartitionId ??= Client.backendsPartitionId
+        inputs.backendsConfig ??= {}
 
         const graph_fronts = inputs.loadingGraph.definition.map((layer) =>
             layer.filter((l) => all[l[0]].type !== 'backend'),
@@ -404,9 +420,9 @@ export class Client {
         const graph_backs = inputs.loadingGraph.definition.map((layer) =>
             layer.filter((l) => all[l[0]].type === 'backend'),
         )
-        const executingWindow = inputs.executingWindow || window
+        const executingWindow = inputs.executingWindow ?? window
 
-        Client.state.updateExportedSymbolsDict(
+        StateImplementation.updateExportedSymbolsDict(
             inputs.loadingGraph.lock,
             inputs.backendsPartitionId,
         )
@@ -416,8 +432,14 @@ export class Client {
             .map(([assetId, cdn_url]) => {
                 const version = cdn_url.split('/')[1]
                 const asset = inputs.loadingGraph.lock.find(
-                    (asset) => asset.id == assetId && asset.version == version,
+                    (asset) =>
+                        asset.id === assetId && asset.version === version,
                 )
+                if (!asset) {
+                    throw Error(
+                        `Can not find expected asset ${assetId} in loading graph`,
+                    )
+                }
                 return {
                     assetId,
                     url: `${Client.BackendConfiguration.urlResource}/${cdn_url}`,
@@ -427,18 +449,23 @@ export class Client {
             })
             .filter(
                 ({ name, version }) =>
-                    !Client.state.isCompatibleVersionInstalled(name, version),
+                    !StateImplementation.isCompatibleVersionInstalled(
+                        name,
+                        version,
+                    ),
             )
-        const errors = []
-        const futures = packagesSelected.map(({ name, url }) => {
-            return this.fetchScript({
-                name,
-                url,
-                onEvent: inputs.onEvent,
-            }).catch((error) => {
-                errors.push(error)
-            })
-        })
+        const errors: unknown[] = []
+        const futures = packagesSelected.map(
+            ({ name, url }: { name: string; url: string }) => {
+                return this.fetchScript({
+                    name,
+                    url,
+                    onEvent: inputs.onEvent,
+                }).catch((error: unknown) => {
+                    errors.push(error)
+                })
+            },
+        )
         const sourcesOrErrors = await Promise.all([
             ...futures,
             this.installBackends(
@@ -448,48 +475,53 @@ export class Client {
                 },
                 inputs.backendsConfig,
                 inputs.backendsPartitionId,
-                inputs.onEvent,
-                inputs.executingWindow,
+                inputs.onEvent ??
+                    (() => {
+                        /*No OP*/
+                    }),
+                inputs.executingWindow ?? window,
             ),
         ])
         if (errors.length > 0) {
             throw new FetchErrors({ errors })
         }
         const sources = sourcesOrErrors
-            .filter((d) => d != undefined)
-            .map((d) => d as FetchedScript)
+            .filter((d) => d !== undefined)
+            .map((d) => d)
             .map((origin: FetchedScript) => {
                 const userSideEffects = Object.entries(
-                    inputs.modulesSideEffects || {},
+                    inputs.modulesSideEffects ?? {},
                 )
-                    .filter(([_, val]) => {
-                        return val != undefined
-                    })
-                    .filter(([key, _]) => {
+                    .filter(([key]) => {
                         const query = key.includes('#') ? key : `${key}#*`
-                        if (query.split('#')[0] != origin.name) {
+                        if (query.split('#')[0] !== origin.name) {
                             return false
                         }
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                         return satisfies(
                             origin.version.replace('-wip', ''),
                             query.split('#')[1],
                         )
                     })
-                    .map(([_, value]) => value)
+                    .map(([, value]) => value)
                 return {
                     ...origin,
                     sideEffect: async ({
                         htmlScriptElement,
                     }: {
-                        htmlScriptElement: HTMLScriptElement
+                        htmlScriptElement?: HTMLScriptElement
                     }) => {
-                        await applyModuleSideEffects(
+                        await applyModuleSideEffects({
                             origin,
                             htmlScriptElement,
                             executingWindow,
                             userSideEffects,
-                            inputs.onEvent,
-                        )
+                            onEvent:
+                                inputs.onEvent ??
+                                (() => {
+                                    /*No OP*/
+                                }),
+                        })
                     },
                 }
             })
@@ -502,12 +534,12 @@ export class Client {
 
     private async installBackends(
         graph: LoadingGraph,
-        backendsConfig: { [k: string]: BackendConfig },
+        backendsConfig: Record<string, BackendConfig>,
         backendsPartitionId: string,
         onEvent: (event: CdnEvent) => void,
         executingWindow: WindowOrWorkerGlobalScope,
     ) {
-        return await installBackends({
+        await installBackends({
             graph,
             backendsConfig,
             backendsPartitionId,
@@ -521,38 +553,42 @@ export class Client {
         inputs: InstallModulesInputs,
     ): Promise<LoadingGraph | undefined> {
         const usingDependencies = [
-            ...Client.state.getPinedDependencies(),
-            ...(inputs.usingDependencies || []),
+            ...StateImplementation.getPinedDependencies(),
+            ...(inputs.usingDependencies ?? []),
         ]
-        inputs.modules = inputs.modules || []
+        inputs.modules ??= []
 
         const inputsModules = extractModulesToInstall(inputs.modules)
         const modules = sanitizeModules(inputsModules)
         const alreadyInstalled = modules.every(({ name, version }) => {
             const latestInstalled = StateImplementation.latestVersion.get(name)
             return latestInstalled
-                ? satisfies(latestInstalled.replace('-wip', ''), version)
+                ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                  satisfies(latestInstalled.replace('-wip', ''), version)
                 : false
         })
 
         if (alreadyInstalled) {
-            inputs.aliases &&
-                installAliases(inputs.aliases, inputs.executingWindow)
-            return Promise.resolve(undefined)
+            if (inputs.aliases) {
+                installAliases(inputs.aliases, inputs.executingWindow ?? window)
+            }
+            return undefined
         }
 
         const body = {
             modules: inputsModules,
             usingDependencies,
         }
-        const modulesSideEffects = modules.reduce(
-            (acc, dependency) => ({
+        const modulesSideEffects = modules.reduce((acc, dependency) => {
+            if (dependency.sideEffects === undefined) {
+                return acc
+            }
+            return {
                 ...acc,
                 [`${dependency.name}#${dependency.version}`]:
                     dependency.sideEffects,
-            }),
-            inputs.modulesSideEffects || {},
-        )
+            }
+        }, inputs.modulesSideEffects ?? {})
         try {
             const loadingGraph = await this.queryLoadingGraph(body)
             await this.installLoadingGraph({
@@ -565,17 +601,21 @@ export class Client {
                 aliases: inputs.aliases,
             })
             return loadingGraph
-        } catch (error) {
-            inputs.onEvent?.(new CdnLoadingGraphErrorEvent(error))
+        } catch (error: unknown) {
+            inputs.onEvent?.(
+                new CdnLoadingGraphErrorEvent(error as LoadingGraphError),
+            )
             throw error
         }
     }
 
     private async installScripts(
         inputs: InstallScriptsInputs,
-    ): Promise<{ assetName; assetId; url; src }[]> {
+    ): Promise<
+        { assetName: string; assetId: string; url: string; src: string }[]
+    > {
         const client = new Client()
-        const executingWindow = inputs.executingWindow || window
+        const executingWindow = inputs.executingWindow ?? window
         const scripts = inputs.scripts
             .map((elem) =>
                 typeof elem == 'string'
@@ -612,24 +652,18 @@ export class Client {
 
     private installStyleSheets(
         inputs: InstallStyleSheetsInputs,
-    ): Promise<Array<HTMLLinkElement>> {
+    ): Promise<HTMLLinkElement[]> {
         const css = inputs.css
 
-        const renderingWindow = inputs.renderingWindow || window
+        const renderingWindow = inputs.renderingWindow ?? window
 
-        const getLinkElement = (url) => {
+        const getLinkElement = (url: string) => {
             return Array.from(
                 renderingWindow.document.head.querySelectorAll('link'),
-            ).find((e) => e.href == Client.BackendConfiguration.origin + url)
+            ).find((e) => e.href === Client.BackendConfiguration.origin + url)
         }
         const futures = css
             .map((elem) => {
-                /**
-                 * The following 'hack' is a remaining left over regarding backward compatibility.
-                 */
-                if (elem['resource']) {
-                    elem = elem['resource'] as string
-                }
                 return typeof elem == 'string'
                     ? {
                           location: elem,
@@ -638,7 +672,7 @@ export class Client {
             })
             .map((elem) => ({ ...elem, ...parseResourceId(elem.location) }))
             .map(({ assetId, version, name, url, sideEffects }) => {
-                url = Client.state.getPatchedUrl({
+                url = StateImplementation.getPatchedUrl({
                     name,
                     version,
                     assetId,
@@ -651,7 +685,9 @@ export class Client {
                 return new Promise<HTMLLinkElement>((resolveCb) => {
                     const link = renderingWindow.document.createElement('link')
                     link.id = url
-                    if (Client.FrontendConfiguration.crossOrigin != undefined) {
+                    if (
+                        Client.FrontendConfiguration.crossOrigin !== undefined
+                    ) {
                         link.crossOrigin =
                             Client.FrontendConfiguration.crossOrigin
                     }
@@ -666,7 +702,7 @@ export class Client {
                         .getElementsByTagName('head')[0]
                         .appendChild(link)
                     link.onload = () => {
-                        sideEffects?.({
+                        const se = sideEffects?.({
                             origin: {
                                 moduleName: name,
                                 version,
@@ -676,6 +712,18 @@ export class Client {
                             htmlLinkElement: link,
                             renderingWindow,
                         })
+                        if (se instanceof Promise) {
+                            se.then(
+                                () => {
+                                    /*No OP*/
+                                },
+                                () => {
+                                    throw Error(
+                                        `Failed to apply side effects for ${name}#${version}`,
+                                    )
+                                },
+                            )
+                        }
                         resolveCb(link)
                     }
                 })

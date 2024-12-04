@@ -29,15 +29,25 @@ import {
     upgradeInstallInputs,
 } from './inputs.models.deprecated'
 
+const Status200 = 200
+const Status401 = 401
+const Status403 = 403
+const Status404 = 404
+
 export function onHttpRequestLoad(
     req: XMLHttpRequest,
     event: ProgressEvent<XMLHttpRequestEventTarget>,
-    resolve,
-    reject,
-    { url, name, assetId, version },
-    onEvent?,
+    resolve: (args: unknown) => void,
+    reject: (args: unknown) => void,
+    {
+        url,
+        name,
+        assetId,
+        version,
+    }: { url: string; name: string; assetId: string; version: string },
+    onEvent?: (ev: CdnEvent) => void,
 ) {
-    if (req.status == 200) {
+    if (req.status === Status200) {
         const content =
             req.responseText +
             `\n//# sourceURL=${url.split('/').slice(0, -1).join('/')}/`
@@ -52,12 +62,12 @@ export function onHttpRequestLoad(
             progressEvent: event,
         } as FetchedScript)
     }
-    if (req.status == 401 || req.status == 403) {
+    if (req.status === Status401 || req.status === Status403) {
         const unauthorized = new UnauthorizedEvent(name, assetId, url)
         onEvent?.(unauthorized)
         reject(new Unauthorized({ assetId, name, url }))
     }
-    if (req.status == 404) {
+    if (req.status === Status404) {
         const urlNotFound = new UrlNotFoundEvent(name, assetId, url)
         onEvent?.(urlNotFound)
         reject(new UrlNotFound({ assetId, name, url }))
@@ -65,18 +75,24 @@ export function onHttpRequestLoad(
 }
 
 export function sanitizeModules(
-    modules: ModuleInput[],
+    modules: (ModuleInput | string)[],
 ): { name: string; version: string; sideEffects?: ModuleSideEffectCallback }[] {
-    return modules.reduce((acc, e) => {
-        const elem =
-            typeof e == 'string'
-                ? {
-                      name: e.includes('#') ? e.split('#')[0] : e,
-                      version: e.includes('#') ? e.split('#')[1] : 'latest',
-                  }
-                : e
-
-        return [...acc, elem]
+    interface T {
+        name: string
+        version: string
+        sideEffects?: ModuleSideEffectCallback
+    }
+    return modules.reduce((acc: T[], e: ModuleInput | string) => {
+        if (typeof e !== 'string') {
+            return [...acc, e]
+        }
+        return [
+            ...acc,
+            {
+                name: e.includes('#') ? e.split('#')[0] : e,
+                version: e.includes('#') ? e.split('#')[1] : 'latest',
+            },
+        ]
     }, [])
 }
 
@@ -107,7 +123,7 @@ export function parseResourceId(resourceId: string): {
 export function patchExportedSymbolForBackwardCompatibility(
     origin: FetchedScript,
     executingWindow: WindowOrWorkerGlobalScope,
-) {
+): unknown {
     /**
      * Those symbols can be removed when no applications/libraries are using them anymore.
      * See property 'externals' in the files 'auto-generated.ts'.
@@ -149,16 +165,21 @@ export function patchExportedSymbolForBackwardCompatibility(
         origin.name,
         origin.version,
     )
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const explicitOldExportedName =
         exportedSymbols[origin.name] &&
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         `${exportedSymbols[origin.name]}_APIv${getApiKey(origin.version)}`
 
     if (
         !executingWindow[regularExported] &&
         explicitOldExportedName &&
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         executingWindow[explicitOldExportedName]
     ) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         executingWindow[regularExported] =
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             executingWindow[explicitOldExportedName]
     }
 
@@ -178,9 +199,11 @@ export function patchExportedSymbolForBackwardCompatibility(
         return
     }
     if (executingWindow[regularExported]) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         executingWindow[deprecatedExportedName] =
             executingWindow[regularExported]
         if (explicitOldExportedName) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
             executingWindow[explicitOldExportedName] =
                 executingWindow[regularExported]
         }
@@ -199,12 +222,14 @@ export function patchExportedSymbolForBackwardCompatibility(
                 `Package "${origin.name}#${origin.version}" export symbol "${symbolBase}" with no API version`,
             )
         }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         window[regularExported] =
             executingWindow[deprecatedExportedName] ||
             executingWindow[aliasExportedName] ||
             executingWindow[symbolBase]
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     executingWindow[aliasExportedName] = executingWindow[regularExported]
 
     if (!executingWindow[regularExported]) {
@@ -224,16 +249,23 @@ export function patchExportedSymbolForBackwardCompatibility(
         )
         return
     }
+
     return executingWindow[regularExported]
 }
 
-export async function applyModuleSideEffects(
-    origin: FetchedScript,
-    htmlScriptElement: HTMLScriptElement,
-    executingWindow: WindowOrWorkerGlobalScope,
-    userSideEffects: ModuleSideEffectCallback[],
-    onEvent: (CdnEvent) => void,
-) {
+export async function applyModuleSideEffects({
+    origin,
+    htmlScriptElement,
+    executingWindow,
+    userSideEffects,
+    onEvent,
+}: {
+    origin: FetchedScript
+    htmlScriptElement?: HTMLScriptElement
+    executingWindow: WindowOrWorkerGlobalScope
+    userSideEffects: ModuleSideEffectCallback[]
+    onEvent: (CdnEvent) => void
+}) {
     const module = patchExportedSymbolForBackwardCompatibility(
         origin,
         executingWindow,
@@ -241,15 +273,16 @@ export async function applyModuleSideEffects(
     if (!module) {
         return
     }
-    module['__yw_set_from_version__'] = origin.version
+    // @ts-expect-error To be refactored
+    module.__yw_set_from_version__ = origin.version
 
     StateImplementation.registerImportedModules([origin], executingWindow)
 
     // This is when this instance of webpm-client is installing either @youwol/webpm-client or @youwol/cdn-client
     // => the configuration needs to be propagated
     // The configuration is initially set by the root script of '@youwol/webpm-client'.
-    if (['@youwol/webpm-client', '@youwol/cdn-client'].includes(origin.name)) {
-        const installedClient = module.Client
+    if (['@youwol/webpm-client'].includes(origin.name)) {
+        const installedClient = (module as { Client: typeof Client }).Client
         installedClient.FrontendConfiguration = Client.FrontendConfiguration
         installedClient.BackendConfiguration = Client.BackendConfiguration
     }
@@ -263,9 +296,22 @@ export async function applyModuleSideEffects(
         }
         if (sideEffectFct.constructor.name === 'AsyncFunction') {
             await sideEffectFct(args)
+            // noinspection ContinueStatementJS
             continue
         }
-        sideEffectFct(args)
+        const r = sideEffectFct(args)
+        if (r instanceof Promise) {
+            r.then(
+                () => {
+                    /*No OP*/
+                },
+                () => {
+                    throw Error(
+                        `Error while applying side effects for ${origin.name}#${origin.version} (${origin.url})`,
+                    )
+                },
+            )
+        }
     }
 }
 
@@ -277,11 +323,11 @@ export function importScriptMainWindow({
     content,
     executingWindow,
 }: {
-    url
-    assetId
-    version
-    name
-    content
+    url: string
+    assetId: string
+    version: string
+    name: string
+    content: string
     executingWindow: Window
 }): HTMLScriptElement | ErrorEvent {
     const head = document.getElementsByTagName('head')[0]
@@ -290,13 +336,13 @@ export function importScriptMainWindow({
     }
     const script = document.createElement('script')
     script.id = url
-    if (Client.FrontendConfiguration.crossOrigin != undefined) {
+    if (Client.FrontendConfiguration.crossOrigin !== undefined) {
         script.crossOrigin = Client.FrontendConfiguration.crossOrigin
     }
     const classes = [assetId, name, version].map((key) => sanitizeCssId(key))
     script.classList.add(...classes)
     script.innerHTML = content
-    let error: ErrorEvent
+    let error: ErrorEvent | undefined = undefined
     const onErrorParsing = (d: ErrorEvent) => {
         executingWindow.removeEventListener('error', onErrorParsing)
         error = d
@@ -304,23 +350,31 @@ export function importScriptMainWindow({
     executingWindow.addEventListener('error', onErrorParsing)
     head.appendChild(script)
     executingWindow.removeEventListener('error', onErrorParsing)
-    return error || script
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return error ?? script
 }
 
-export function importScriptWebWorker({ url }): undefined | Error {
+export function importScriptWebWorker({
+    url,
+}: {
+    url: string
+}): undefined | Error {
     const cacheKey = 'cdnClientImportedScriptUrls'
-    const importedScripts = self[cacheKey] || []
+    const importedScripts = (self[cacheKey] || []) as unknown as string[]
     if (importedScripts.includes(url)) {
         return
     }
     try {
         // The way scripts are imported into workers depend on FrontendConfiguration.crossOrigin attribute.
         // It is implemented in the function 'entryPointInstall'
-        self['customImportScripts'](url)
+
+        // @ts-expect-error To be refactored
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        self.customImportScripts(url)
         self[cacheKey] = [...importedScripts, url]
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(`Failed to import script ${url} in WebWorker`, error)
-        return error
+        return new Error(`Failed to import script ${url} in WebWorker`)
     }
 }
 
@@ -329,10 +383,10 @@ export async function addScriptElements(
     executingWindow?: WindowOrWorkerGlobalScope,
     onEvent?: (event: CdnEvent) => void,
 ) {
-    if (sources.length == 0) {
+    if (sources.length === 0) {
         return
     }
-    executingWindow = executingWindow || window
+    executingWindow ??= window
     const sideEffects = sources
         .map(
             ({
@@ -389,7 +443,7 @@ export async function addScriptElements(
                 }
             },
         )
-        .filter((sideEffect) => sideEffect != undefined)
+        .filter((sideEffect) => sideEffect !== undefined)
     await Promise.all(sideEffects)
 }
 
@@ -450,10 +504,15 @@ export function getInstalledFullExportedSymbol(name: string, version: string) {
  * @param version version of the library
  */
 export function getExpectedFullExportedSymbol(name: string, version: string) {
-    const parsed = parse(version)
-    return `${name}_APIv${parsed.major}${
-        parsed.major == 0 ? parsed.minor : ''
-    }${parsed.major == 0 && parsed.minor == 0 ? parsed.patch : ''}`
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const parsed = parse(version) as {
+        major: number
+        minor: number
+        patch: string
+    }
+    return `${name}_APIv${String(parsed.major)}${
+        parsed.major === 0 ? String(parsed.minor) : ''
+    }${parsed.major === 0 && parsed.minor === 0 ? parsed.patch : ''}`
 }
 
 /**
@@ -462,9 +521,14 @@ export function getExpectedFullExportedSymbol(name: string, version: string) {
  * @param version version (conform to semver)
  */
 export function getApiKey(version: string) {
-    const parsed = parse(version)
-    return `${parsed.major}${parsed.major == 0 ? parsed.minor : ''}${
-        parsed.major == 0 && parsed.minor == 0 ? parsed.patch : ''
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const parsed = parse(version) as {
+        major: number
+        minor: number
+        patch: string
+    }
+    return `${String(parsed.major)}${parsed.major === 0 ? String(parsed.minor) : ''}${
+        parsed.major === 0 && parsed.minor === 0 ? parsed.patch : ''
     }`
 }
 
@@ -479,7 +543,7 @@ export function getFullExportedSymbolAlias(name: string, version: string) {
 }
 
 export function installAliases(
-    aliases: { [key: string]: string | ((Window) => unknown) },
+    aliases: Record<string, string | ((Window) => unknown)>,
     executingWindow: WindowOrWorkerGlobalScope,
 ) {
     StateImplementation.installAliases(aliases, executingWindow)
@@ -488,7 +552,7 @@ export function installAliases(
 export function isInstanceOfWindow(
     scope: WindowOrWorkerGlobalScope,
 ): scope is Window {
-    return (scope as Window).document != undefined
+    return (scope as { document?: unknown }).document !== undefined
 }
 
 export function extractModulesToInstall(
@@ -499,7 +563,7 @@ export function extractModulesToInstall(
 
 export function extractInlinedAliases(
     modules: LightLibraryWithAliasQueryString[],
-    suffix: string = '',
+    suffix = '',
 ) {
     const getKey = (module: string) => {
         const key = module.split(' as ')[0].trim()
@@ -507,7 +571,7 @@ export function extractInlinedAliases(
             return key
         }
         let version = key.split('#')[1].trim()
-        if (version == 'x' || version == '*' || version == 'latest') {
+        if (version === 'x' || version === '*' || version === 'latest') {
             return key.split('#')[0].trim()
         }
         if (version.startsWith('~') || version.startsWith('^')) {
@@ -604,7 +668,7 @@ export function normalizeLoadingGraphInputs(
     }
 }
 
-export type InstallInputsNormalized = {
+export interface InstallInputsNormalized {
     esm: EsmInputs
     backends: BackendInputs
     pyodide: PyodideInputs

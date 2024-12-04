@@ -37,11 +37,13 @@ export function insertLoadingGraphError(
 
 export function dependenciesErrorView(error: DependenciesError) {
     const errorDiv = document.createElement('div')
-    const innerHTML = error.detail.errors.map(({ query, fromPackage }) => {
-        return `
+    const innerHTML = error.detail.errors
+        .map(({ query, fromPackage }) => {
+            return `
         <li> <b>${query}</b>: requested by ${fromPackage.name} with version ${fromPackage.version}</li>
         `
-    })
+        })
+        .reduce((acc, e) => acc + e, '')
     errorDiv.innerHTML = `Some dependencies do not exist in the CDN
     ${innerHTML}
     `
@@ -50,8 +52,8 @@ export function dependenciesErrorView(error: DependenciesError) {
 
 export function circularDependenciesView(error: CircularDependencies) {
     const errorDiv = document.createElement('div')
-    const innerHTML = Object.entries(error.detail.packages).map(
-        ([name, dependenciesError]) => {
+    const innerHTML = Object.entries(error.detail.packages)
+        .map(([name, dependenciesError]) => {
             return `
         <li> <b>${name}</b>: problem with following dependencies 
         <ul>
@@ -59,8 +61,8 @@ export function circularDependenciesView(error: CircularDependencies) {
         </ul>
         </li>
         `
-        },
-    )
+        })
+        .reduce((acc, e) => acc + e, '')
     errorDiv.innerHTML = `Circular dependencies found
     ${innerHTML}
     `
@@ -78,15 +80,15 @@ export function updateLibStatusView(
     }
     if (event instanceof SourceLoadingEvent) {
         divLib.style.setProperty('color', 'lightgray')
-        divLib.textContent = `> ${libraryName} ... loading: ${
-            event.progress.loaded / 1000
-        } kB`
+        divLib.textContent = `> ${libraryName} ... loading: ${String(
+            event.progress.loaded / 1000,
+        )} kB`
     }
-    if (event instanceof SourceLoadedEvent) {
+    if (event instanceof SourceLoadedEvent && event.progress) {
         divLib.style.setProperty('color', 'green')
-        divLib.textContent = `> ${libraryName} ${
-            event.progress.loaded / 1000
-        } kB`
+        divLib.textContent = `> ${libraryName} ${String(
+            event.progress.loaded / 1000,
+        )} kB`
     }
     if (event instanceof UnauthorizedEvent) {
         setErrorCssProperties(divLib)
@@ -103,9 +105,11 @@ export function updateLibStatusView(
 }
 
 function listView(list: string[]) {
-    return list.map((path) => {
-        return `<li> ${path}</li>`
-    })
+    return list
+        .map((path) => {
+            return `<li> ${path}</li>`
+        })
+        .reduce((acc, e) => acc + e, '')
 }
 
 /**

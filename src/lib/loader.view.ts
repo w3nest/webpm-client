@@ -36,7 +36,7 @@ export interface LoadingScreenOptions {
     /**
      * style to apply on the loading screen's HTMLDivElement wrapper
      */
-    wrapperStyle?: { [_k: string]: string }
+    wrapperStyle?: Record<string, string>
 
     /**
      * fading timeout
@@ -84,7 +84,7 @@ export class DefaultLoadingScreenOptions implements LoadingScreenOptions {
      * }
      * ```
      */
-    public readonly wrapperStyle: { [_k: string]: string } = {
+    public readonly wrapperStyle: Record<string, string> = {
         position: 'absolute',
         top: '0',
         left: '0',
@@ -118,7 +118,7 @@ export class DefaultLoadingScreenOptions implements LoadingScreenOptions {
  *         loadingScreen.next(ev)
  *     },
  * })
- * // loadingScreen.next(...) can be used latter in the code
+ * // loadingScreen.next(...) can be used later in the code
  * // At some point remove the loading screen
  * loadingScreen.done()
  * ```
@@ -176,17 +176,17 @@ export class LoadingScreenView {
             ...LoadingScreenView.DefaultOptions,
             ...options,
         }
-        this.options.container = this.options.container || document.body
+        this.options.container ??= document.body
         const wrapperStyle = {
             ...this.options.wrapperStyle,
-            ...(options.wrapperStyle || {}),
+            ...(options.wrapperStyle ?? {}),
         }
         this.wrapperDiv = document.createElement('div')
         Object.entries(wrapperStyle).forEach(([k, v]) => {
             this.wrapperDiv.style.setProperty(k, v)
         })
         this.wrapperDiv.innerHTML = `
-        <div id='${this.options.id}' style='display: flex;justify-content: space-around; background-color: darkgrey;
+        <div id='${String(this.options.id)}' style='display: flex;justify-content: space-around; background-color: darkgrey;
         color: green; font-family: monospace;font-size:small; width:100%; height:100%; opacity:1;
         transition: opacity 1s;'>
             <div style='margin-top: auto;margin-bottom: auto; padding:40px;
@@ -195,7 +195,7 @@ export class LoadingScreenView {
             >
                 <div  style='display: flex;justify-content: space-around;' >
                     <div id='logo' style='white-space: pre-wrap; margin-top: auto; margin-bottom: auto; /*animation: spin 3s linear infinite*/'> 
-                        ${this.options.logo}
+                        ${String(this.options.logo)}
                     </div>   
                 </div> 
                 <div  style='width: 50px; '>
@@ -216,32 +216,34 @@ export class LoadingScreenView {
      * @param event event to account for
      */
     next(event: CdnEvent) {
-        if (isCdnEvent(event) && event.step == 'CdnLoadingGraphErrorEvent') {
+        if (isCdnEvent(event) && event.step === 'CdnLoadingGraphErrorEvent') {
             insertLoadingGraphError(
                 this.contentDiv,
                 event as CdnLoadingGraphErrorEvent,
             )
         }
         if (
-            (isCdnEvent(event) && event.step == 'CdnMessageEvent') ||
+            (isCdnEvent(event) && event.step === 'CdnMessageEvent') ||
             event instanceof BackendEvent
         ) {
-            let divLib: HTMLDivElement = this.wrapperDiv.querySelector(
+            const divLib = this.wrapperDiv.querySelector(
                 `#${sanitizeCssId(event.id)}`,
-            )
+            ) as unknown as HTMLDivElement | null
             if (divLib) {
                 divLib.textContent = '> ' + event.text
             }
             if (!divLib) {
-                divLib = document.createElement('div')
-                divLib.id = sanitizeCssId(event.id)
-                divLib.textContent = '> ' + event.text
-                this.contentDiv.appendChild(divLib)
+                const divLibNew = document.createElement('div')
+                divLibNew.id = sanitizeCssId(event.id)
+                divLibNew.textContent = '> ' + event.text
+                this.contentDiv.appendChild(divLibNew)
             }
         }
         const libraryName = event.id
         const cssId = sanitizeCssId(libraryName)
-        let divLib: HTMLDivElement = this.wrapperDiv.querySelector(`#${cssId}`)
+        let divLib = this.wrapperDiv.querySelector(
+            `#${cssId}`,
+        ) as unknown as HTMLDivElement | null
         if (!divLib) {
             divLib = document.createElement('div')
             divLib.id = cssId
@@ -255,10 +257,10 @@ export class LoadingScreenView {
      * to actually see the updates.
      */
     render() {
-        this.options.container.appendChild(this.wrapperDiv)
+        this.options.container?.appendChild(this.wrapperDiv)
         this.contentDiv = this.wrapperDiv.querySelector(
             '.screen-messages-container',
-        )
+        ) as unknown as HTMLDivElement
     }
 
     /**
@@ -267,9 +269,11 @@ export class LoadingScreenView {
     done() {
         this.wrapperDiv.style.setProperty(
             'transition',
-            `opacity ${this.options.fadingTimeout}ms`,
+            `opacity ${String(this.options.fadingTimeout ?? 200)}ms`,
         )
         this.wrapperDiv.style.setProperty('opacity', '0')
-        setTimeout(() => this.wrapperDiv.remove(), this.options.fadingTimeout)
+        setTimeout(() => {
+            this.wrapperDiv.remove()
+        }, this.options.fadingTimeout)
     }
 }

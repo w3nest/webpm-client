@@ -16,7 +16,8 @@ import { installBackendClientDeps } from './backends'
 
 import type { Observable } from 'rxjs'
 import type { ContextMessage } from '@w3nest/http-clients'
-
+import type * as HttpClients from '@w3nest/http-clients'
+import { CdnError } from './errors.models'
 export type LibraryName = string
 export type Version = string
 
@@ -29,21 +30,18 @@ export class Monitoring {
     /**
      * Dictionary with key of form `${libName}#${libVersion}`
      */
-    public readonly exportedSymbols: {
-        [k: string]: { symbol: string; apiKey: string }
-    }
+    public readonly exportedSymbols: Record<
+        string,
+        { symbol: string; apiKey: string }
+    >
     /**
      *  Dictionary `libName->versions`.
      */
-    public readonly importedBundles: {
-        [k: string]: string[]
-    }
+    public readonly importedBundles: Record<string, string[]>
     /**
      * Dictionary `libName->latest version`.
      */
-    public readonly latestVersion: {
-        [k: string]: string
-    }
+    public readonly latestVersion: Record<string, string>
     /**
      * Create a VirtualDOM (see [rx-vdom](https://l.youwol.com/doc/@youwol/rx-vdom))
      * representing the current state of installation (modules installed & available symbols).
@@ -51,7 +49,7 @@ export class Monitoring {
     public readonly view: VirtualDOM<'div'>
 
     constructor() {
-        this.exportedSymbols = { ...StateImplementation.getExportedSymbol }
+        //this.exportedSymbols = { ...StateImplementation.getExportedSymbol }
         this.importedBundles = [
             ...StateImplementation.importedBundles.entries(),
         ].reduce(
@@ -81,6 +79,7 @@ export class Monitoring {
  *
  *  @category State
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class State {
     /**
      * Pin some dependencies to use whenever a loading graph is resolved,
@@ -122,14 +121,16 @@ export class State {
  *
  * This is essentially a 'friend' class used by {@link Client} which should not be exposed.
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class StateImplementation {
     /**
      * Dictionary of `${libName}#${libVersion}` -> `{ symbol: string; apiKey: string }`
      *
      */
-    static exportedSymbolsDict: {
-        [k: string]: { symbol: string; apiKey: string; aliases: string[] }
-    } = {
+    static exportedSymbolsDict: Record<
+        string,
+        { symbol: string; apiKey: string; aliases?: string[] }
+    > = {
         [`${setup.name}#${setup.version}`]: {
             symbol: setup.name,
             apiKey: setup.apiVersion,
@@ -155,7 +156,7 @@ export class StateImplementation {
             // This case can happen when installing a saved loading graph that did not included aliases at that time.
             return { ...exported, aliases: [] }
         }
-        return exported
+        return { aliases: [], ...exported }
     }
 
     static updateExportedSymbolsDict(
@@ -171,7 +172,7 @@ export class StateImplementation {
     ) {
         const newEntries = modules.reduce((acc, e) => {
             const suffix =
-                e.type == 'js/wasm'
+                e.type === 'js/wasm'
                     ? ''
                     : `${PARTITION_PREFIX}${backendPartitionId}`
             return {
@@ -199,7 +200,10 @@ export class StateImplementation {
      * Fetched loading graph: mapping between a loading graph's body uid and corresponding computed loading graph.
      * @hidden
      */
-    static fetchedLoadingGraph = new Map<string, Promise<LoadingGraph>>()
+    static fetchedLoadingGraph = new Map<
+        string,
+        Promise<LoadingGraph | CdnError>
+    >()
 
     /**
      * Installed loading graph: mapping between a loading graph's body uid and window state
@@ -221,18 +225,23 @@ export class StateImplementation {
         [setup.name, setup.version],
     ])
 
-    static webSocketsStore: {
-        [k: string]: Promise<Observable<ContextMessage>>
-    } = {}
+    static webSocketsStore: Record<
+        string,
+        Promise<Observable<ContextMessage>>
+    > = {}
 
     static getWebSocket(wsUrl: string): Promise<Observable<ContextMessage>> {
-        if (StateImplementation.webSocketsStore[wsUrl]) {
+        if (wsUrl in StateImplementation.webSocketsStore) {
             return StateImplementation.webSocketsStore[wsUrl]
         }
         StateImplementation.webSocketsStore[wsUrl] =
-            installBackendClientDeps().then(({ http }) => {
-                return new http.WebSocketClient(wsUrl).connectWs()
-            })
+            installBackendClientDeps().then(
+                ({ http }: { http: typeof HttpClients }) => {
+                    return new http.WebSocketClient<ContextMessage>(
+                        wsUrl,
+                    ).connectWs()
+                },
+            )
         return StateImplementation.webSocketsStore[wsUrl]
     }
 
@@ -247,38 +256,41 @@ export class StateImplementation {
         libName: string,
         version: string,
     ): boolean {
-        if (libName == '@youwol/webpm-client') {
+        if (libName === '@youwol/webpm-client') {
             const symbol = getExpectedFullExportedSymbol(libName, version)
-            const alreadyHere = window[symbol]
-            const compatibleInstalled =
+            const alreadyHere = (window as unknown as never)[symbol] as
+                | {
+                      setup: { version: string }
+                  }
+                | undefined
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const compatibleInstalled: boolean | undefined =
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 alreadyHere && gte(alreadyHere.setup.version, version)
-            return compatibleInstalled == undefined
-                ? false
-                : compatibleInstalled
+            return compatibleInstalled ?? false
         }
-        if (!StateImplementation.importedBundles.has(libName)) {
+        const installedVersions =
+            StateImplementation.importedBundles.get(libName)
+        if (!installedVersions) {
             return false
         }
 
-        if (
-            StateImplementation.importedBundles.get(libName).includes(version)
-        ) {
+        if (installedVersions.includes(version)) {
             return true
         }
 
-        const installedVersions =
-            StateImplementation.importedBundles.get(libName)
         const compatibleVersion = installedVersions
             .filter(
                 (installedVersion) =>
                     StateImplementation.getExportedSymbol(
                         libName,
                         installedVersion,
-                    ).apiKey ==
+                    ).apiKey ===
                     StateImplementation.getExportedSymbol(libName, version)
                         .apiKey,
             )
             .find((installedVersion) => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 return gt(installedVersion, version)
             })
 
@@ -296,7 +308,7 @@ export class StateImplementation {
                 },
             )
         }
-        return compatibleVersion != undefined
+        return compatibleVersion !== undefined
     }
 
     /**
@@ -305,11 +317,12 @@ export class StateImplementation {
      * @hidden
      */
     static installAliases(
-        aliases: { [key: string]: string | ((Window) => unknown) },
+        aliases: Record<string, string | ((Window) => unknown)>,
         executingWindow: WindowOrWorkerGlobalScope,
     ) {
         Object.entries(aliases).forEach(([alias, original]) => {
-            const pointed =
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const pointed: { __yw_aliases__?: Set<string> } | undefined =
                 typeof original == 'string'
                     ? executingWindow[original]
                     : original(executingWindow)
@@ -317,10 +330,13 @@ export class StateImplementation {
                 console.warn('can not create alias', { alias, original })
                 return
             }
+
             executingWindow[alias] = pointed
+
             if (!pointed.__yw_aliases__) {
                 pointed.__yw_aliases__ = new Set()
             }
+
             pointed.__yw_aliases__.add(alias)
         })
     }
@@ -352,7 +368,7 @@ export class StateImplementation {
      * @hidden
      */
     static clear(executingWindow?: Window) {
-        executingWindow = executingWindow || window
+        executingWindow ??= window
         Array.from(StateImplementation.importedBundles.entries())
             .map(([lib, versions]) => {
                 return versions.map((version) => [lib, version])
@@ -360,8 +376,10 @@ export class StateImplementation {
             .flat()
             .map(([lib, version]) => {
                 const symbolName = this.getExportedSymbol(lib, version).symbol
-                const aliases =
-                    executingWindow[symbolName]?.__yw_aliases__ || []
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const aliases: Set<string> =
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    executingWindow[symbolName]?.__yw_aliases__ || new Set()
                 return [
                     symbolName,
                     getInstalledFullExportedSymbol(lib, version),
@@ -371,6 +389,7 @@ export class StateImplementation {
             })
             .flat()
             .forEach((toDelete) => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-expressions,@typescript-eslint/no-dynamic-delete
                 executingWindow[toDelete] && delete executingWindow[toDelete]
             })
 
@@ -389,11 +408,8 @@ export class StateImplementation {
         executingWindow: WindowOrWorkerGlobalScope,
     ) {
         modules.forEach(({ name, version }) => {
-            const existingVersions = StateImplementation.importedBundles.has(
-                name,
-            )
-                ? StateImplementation.importedBundles.get(name)
-                : []
+            const existingVersions =
+                StateImplementation.importedBundles.get(name) ?? []
             StateImplementation.importedBundles.set(name, [
                 ...existingVersions,
                 version,
@@ -429,12 +445,13 @@ export class StateImplementation {
         const toConsiderForUpdate = modules.filter(({ name, version }) => {
             return !(
                 StateImplementation.latestVersion.has(name) &&
-                StateImplementation.latestVersion.get(name) == version
+                StateImplementation.latestVersion.get(name) === version
             )
         })
         toConsiderForUpdate.forEach(({ name, version }) => {
             if (
                 StateImplementation.latestVersion.has(name) &&
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 lt(version, StateImplementation.latestVersion.get(name))
             ) {
                 return
@@ -456,9 +473,9 @@ export class StateImplementation {
                     },
                 )
             }
-            if (StateImplementation.latestVersion.has(name)) {
-                const prevLatestVersion =
-                    StateImplementation.latestVersion.get(name)
+            const prevLatestVersion =
+                StateImplementation.latestVersion.get(name)
+            if (prevLatestVersion) {
                 const { symbol, aliases } =
                     StateImplementation.getExportedSymbol(
                         name,
@@ -468,9 +485,11 @@ export class StateImplementation {
                 toRemove.forEach((alias) => {
                     if (alias.includes(':')) {
                         const baseName = alias.split(':')[0]
+                        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                         delete executingWindow[baseName]
                         return
                     }
+                    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                     delete executingWindow[alias]
                 })
             }
@@ -479,10 +498,13 @@ export class StateImplementation {
                 if (alias.includes(':')) {
                     const baseName = alias.split(':')[0]
                     const property = alias.split(':')[1]
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     executingWindow[baseName] =
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                         executingWindow[exportedName][property]
                     return
                 }
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 executingWindow[alias] = executingWindow[exportedName]
             })
             StateImplementation.latestVersion.set(name, version)
@@ -513,9 +535,17 @@ export class StateImplementation {
      *
      * @hidden
      */
-    private static urlPatcher: ({ name, version, assetId, url }) => string = ({
+    private static urlPatcher: ({
+        name,
+        version,
+        assetId,
         url,
-    }) => url
+    }: {
+        name: string
+        version: string
+        assetId: string
+        url: string
+    }) => string = ({ url }) => url
 
     /**
      *
@@ -524,7 +554,17 @@ export class StateImplementation {
      * @param assetId id of the asset
      * @param url original URL
      */
-    static getPatchedUrl({ name, version, assetId, url }) {
+    static getPatchedUrl({
+        name,
+        version,
+        assetId,
+        url,
+    }: {
+        name: string
+        version: string
+        assetId: string
+        url: string
+    }) {
         return StateImplementation.urlPatcher({ name, version, assetId, url })
     }
     /**
@@ -588,7 +628,11 @@ export class StateImplementation {
 class ModulesView implements VirtualDOM<'div'> {
     public readonly tag = 'div'
     public readonly children: ChildrenLike
-    constructor({ importedBundles }) {
+    constructor({
+        importedBundles,
+    }: {
+        importedBundles: Map<string, string[]>
+    }) {
         this.children = Array.from(importedBundles.entries()).map(
             ([k, versions]) => {
                 return {
@@ -624,14 +668,15 @@ class SymbolsView implements VirtualDOM<'div'> {
     constructor({
         exportedSymbolsDict,
     }: {
-        exportedSymbolsDict: {
-            [_k: string]: { symbol: string; apiKey: string }
-        }
+        exportedSymbolsDict: Record<string, { symbol: string; apiKey: string }>
     }) {
         this.children = Array.from(Object.entries(exportedSymbolsDict)).map(
             ([k, symbol]) => {
                 const symbolKey = `${symbol.symbol}_APIv${symbol.apiKey}`
-                const aliases = window[symbolKey]?.__yw_aliases__ || new Set()
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const aliases: Set<string> =
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    window[symbolKey]?.__yw_aliases__ || new Set()
                 return {
                     tag: 'div',
                     class: 'd-flex align-items-center my-1 row',

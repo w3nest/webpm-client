@@ -11,7 +11,7 @@ import { BehaviorSubject, combineLatest, of } from 'rxjs'
 /**
  * @category View
  */
-export type EventData = {
+export interface EventData {
     id: string
     text: string
     status: EventStatus
@@ -30,14 +30,14 @@ export class WorkersPoolViewState {
     /**
      * @group Observables
      */
-    public readonly cdnEvents$: { [k: string]: BehaviorSubject<EventData[]> } =
+    public readonly cdnEvents$: Record<string, BehaviorSubject<EventData[]>> =
         {}
 
     constructor(params: { workersPool: WorkersPool }) {
         Object.assign(this, params)
         this.workersPool.startedWorkers$.subscribe((ids) => {
             ids.forEach((workerId) => {
-                if (!this.cdnEvents$[workerId]) {
+                if (!(workerId in this.cdnEvents$)) {
                     this.cdnEvents$[workerId] = new BehaviorSubject<
                         EventData[]
                     >([])
@@ -52,7 +52,7 @@ export class WorkersPoolViewState {
     }
 
     private add(event: CdnEventWorker) {
-        const workerId = event['workerId']
+        const workerId = event.workerId
         const elem = {
             id: event.id,
             status: event.status,
@@ -60,7 +60,7 @@ export class WorkersPoolViewState {
             text: event.text,
         }
         const values = this.cdnEvents$[workerId].value.filter(
-            (d) => d.id != elem.id,
+            (d) => d.id !== elem.id,
         )
         this.cdnEvents$[workerId].next([...values, elem])
     }
@@ -169,7 +169,7 @@ export class WorkerCard implements VirtualDOM<'div'> {
                 children: {
                     policy: 'sync',
                     source$:
-                        this.workersPoolState.cdnEvents$[this.workerId] ||
+                        this.workerId in this.workersPoolState.cdnEvents$ ||
                         of([]),
                     vdomMap: (eventData: EventData) => {
                         return new CdnEventView(eventData)
@@ -263,11 +263,10 @@ export class WorkerCardTitleView implements VirtualDOM<'div'> {
             wp.busyWorkers$,
         ]).pipe(
             map(([ready, busy]) => {
-                return busy.includes(this.workerId)
-                    ? 'Busy'
-                    : ready.includes(this.workerId)
-                      ? 'Created'
-                      : 'Pending'
+                const readyStatus = ready.includes(this.workerId)
+                    ? 'Created'
+                    : 'Pending'
+                return busy.includes(this.workerId) ? 'Busy' : readyStatus
             }),
         )
         this.children = [
@@ -284,7 +283,8 @@ export class WorkerCardTitleView implements VirtualDOM<'div'> {
                 class: {
                     source$: statusWorker$,
                     vdomMap: (status: WorkerStatus): string => classes[status],
-                    wrapper: (d) => `fas ${d} text-success fa-fade mx-2`,
+                    wrapper: (d: string) =>
+                        `fas ${d} text-success fa-fade mx-2`,
                 },
             },
         ]

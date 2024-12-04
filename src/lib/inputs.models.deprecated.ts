@@ -14,7 +14,7 @@ import {
 /**
  * Deprecated.
  */
-export type CustomInstaller = {
+export interface CustomInstaller {
     /**
      * module name of the custom installer
      */
@@ -23,7 +23,7 @@ export type CustomInstaller = {
     /**
      * Inputs forwarded to 'async function install(inputs)'.
      */
-    installInputs: { [k: string]: unknown } & {
+    installInputs: Record<string, unknown> & {
         onEvent?: (cdnEvent: CdnEvent) => void
     }
 }
@@ -31,7 +31,7 @@ export type CustomInstaller = {
 /**
  * Deprectated. See {@link InstallInputs}
  */
-export type InstallInputsDeprecated = {
+export interface InstallInputsDeprecated {
     /**
      * List of modules to install, see {@link LightLibraryWithAliasQueryString} for specification.
      *
@@ -45,7 +45,7 @@ export type InstallInputsDeprecated = {
     backends?: LightLibraryWithAliasQueryString[] | BackendInputs
 
     /**
-     * Specification of pyodide installer, see {@link PyodideInstaller} for specification.
+     * Specification of pyodide installation.
      */
     pyodide?: PyodideInputs
 
@@ -83,9 +83,7 @@ export type InstallInputsDeprecated = {
      * of associated side effects.
      *
      */
-    modulesSideEffects?: {
-        [key: string]: ModuleSideEffectCallback
-    }
+    modulesSideEffects?: Record<string, ModuleSideEffectCallback>
 
     /**
      * Specify a list of scripts to install.
@@ -111,7 +109,7 @@ export type InstallInputsDeprecated = {
     /**
      * Provide aliases to exported symbols name of module.
      */
-    aliases?: { [key: string]: string | ((Window) => unknown) }
+    aliases?: Record<string, string | ((Window) => unknown)>
 
     /**
      * Window global in which installation occurs. If not provided, `window` is used.
@@ -143,17 +141,14 @@ export function isDeprecatedInputs(
     inputs: InstallInputs | InstallInputsDeprecated,
 ): inputs is InstallInputsDeprecated {
     const newInputs = inputs as InstallInputs
-    if (newInputs.esm || newInputs.pyodide || newInputs.backends) {
-        return false
-    }
-    return true
+    return !(newInputs.esm ?? newInputs.pyodide ?? newInputs.backends)
 }
 
 export function upgradeInstallInputs(
     deprecated: InstallInputsDeprecated,
 ): InstallInputs {
     let pyodide = deprecated.pyodide
-    if (!pyodide && deprecated.customInstallers?.length == 1) {
+    if (!pyodide && deprecated.customInstallers?.length === 1) {
         pyodide = {
             modules: deprecated.customInstallers[0].installInputs
                 .modules as PyModule[],
@@ -164,15 +159,15 @@ export function upgradeInstallInputs(
 
     return {
         esm: {
-            modules: deprecated.modules || [],
-            scripts: deprecated.scripts || [],
-            usingDependencies: deprecated.usingDependencies || [],
-            modulesSideEffects: deprecated.modulesSideEffects || {},
-            aliases: deprecated.aliases || {},
+            modules: deprecated.modules ?? [],
+            scripts: deprecated.scripts ?? [],
+            usingDependencies: deprecated.usingDependencies ?? [],
+            modulesSideEffects: deprecated.modulesSideEffects ?? {},
+            aliases: deprecated.aliases ?? {},
         },
-        backends: deprecated.backends || [],
+        backends: deprecated.backends ?? [],
         pyodide,
-        css: deprecated.css || [],
+        css: deprecated.css ?? [],
         executingWindow: deprecated.executingWindow,
         onEvent: deprecated.onEvent,
         displayLoadingScreen: deprecated.displayLoadingScreen,

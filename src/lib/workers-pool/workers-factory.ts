@@ -1,7 +1,7 @@
 /** @format */
 
 import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs'
-import { filter, last, map, mapTo, take, takeWhile, tap } from 'rxjs/operators'
+import { filter, last, map, take, takeWhile, tap } from 'rxjs/operators'
 import { CdnEvent, getAssetId, isCdnEvent } from '..'
 import { WorkersPoolView } from './views'
 import {
@@ -19,18 +19,21 @@ import {
     upgradeInstallInputs,
 } from '../inputs.models.deprecated'
 import { InstallInputs } from '../inputs.models'
+import type * as WebpmClient from '../../lib'
+
 type WorkerId = string
 
 export interface ContextTrait {
-    withChild
-    info
+    withChild: <T>(name: string, cb: (ctx: ContextTrait) => T) => T
+    info: (text: string, data?: unknown) => void
 }
 export class NoContext implements ContextTrait {
-    withChild<T>(name: string, cb: (ctx: ContextTrait) => T): T {
+    withChild<T>(_name: string, cb: (ctx: ContextTrait) => T): T {
         return cb(this)
     }
-    info(_text: string) {
+    info(text: string, data?: unknown) {
         /** no op*/
+        console.log(text, data)
     }
 }
 
@@ -49,7 +52,7 @@ export type CdnEventWorker = CdnEvent & {
 export function implementEventWithWorkerTrait(
     event: unknown,
 ): event is CdnEventWorker {
-    return isCdnEvent(event) && (event as CdnEventWorker).workerId != undefined
+    return isCdnEvent(event) && 'workerId' in event
 }
 
 // noinspection JSValidateJSDoc
@@ -64,12 +67,15 @@ export interface MessageCdnEvent {
 }
 
 function isCdnEventMessage(message: Message): undefined | CdnEventWorker {
-    if (message.type != 'Data') {
+    if (message.type !== 'Data') {
         return undefined
     }
-    const data = message.data as unknown as MessageCdnEvent
-    if (data.type == 'CdnEvent') {
-        return { ...data.event, workerId: data.workerId }
+    const data = message.data
+    if (!('type' in data) || !('event' in data)) {
+        return undefined
+    }
+    if (data.type === 'CdnEvent' && typeof data.event === 'object') {
+        return { ...data.event, workerId: data.workerId } as CdnEventWorker
     }
     return undefined
 }
@@ -165,7 +171,7 @@ export interface WorkerContext {
      * every message send using {@link WorkersPool.sendData} will
      * be forwarded to this callback.
      */
-    onData?: (message) => void
+    onData?: (message: unknown) => void
 }
 
 /**
@@ -175,11 +181,11 @@ export interface WorkerContext {
  */
 export interface MessageExecute {
     /**
-     * Id of the task
+     * ID of the task
      */
     taskId: string
     /**
-     * Id of the worker
+     * ID of the worker
      */
     workerId: string
     /**
@@ -256,12 +262,12 @@ export interface MessagePostError {
  */
 export interface MainToWorkerMessage {
     /**
-     * Id of the task
+     * ID of the task
      */
     taskId: string
 
     /**
-     * Id of the worker
+     * ID of the worker
      */
     workerId: string
 
@@ -305,7 +311,7 @@ export interface EntryPointArguments<TArgs> {
     taskId: string
     workerId: string
     context: WorkerContext
-    workerScope
+    workerScope: Record<string, unknown>
 }
 
 /**
@@ -327,25 +333,32 @@ export function entryPointWorker(messageEvent: MessageEvent) {
         postMessage: (message: unknown) => void
     }
 
-    const message: Message = messageEvent.data
-    const workerScope = globalThis as unknown as DedicatedWorkerGlobalScope
+    const message = messageEvent.data as unknown as Message
+    const workerScope = globalThis as unknown as DedicatedWorkerGlobalScope & {
+        window: unknown
+    }
 
     // contextByTasks allows to communicate from main to worker after tasks have started execution.
     // In worker's implementation, the developer has to define the property `onMessage` of the received `context`.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     globalThis.contextByTasks = globalThis.contextByTasks || {}
-    const contextByTasks = globalThis.contextByTasks
+    const contextByTasks = globalThis.contextByTasks as Record<
+        string,
+        WorkerContext
+    >
 
     const postMessage = (message: { type: string; data: unknown }) => {
         try {
             workerScope.postMessage(message)
-        } catch (e) {
+        } catch (e: unknown) {
             console.error(
                 `Failed to post message from worker to main thread.`,
                 message,
             )
-            if (message.type == 'Exit') {
+            if (message.type === 'Exit') {
                 const data = message.data as MessageExit
-                if (contextByTasks[data.taskId]) {
+                if (data.taskId in contextByTasks) {
+                    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                     delete contextByTasks[data.taskId]
                 }
                 workerScope.postMessage({
@@ -369,17 +382,17 @@ export function entryPointWorker(messageEvent: MessageEvent) {
         }
     }
 
-    if (message.type == 'MainToWorkerMessage') {
+    if (message.type === 'MainToWorkerMessage') {
         const messageContent: MainToWorkerMessage =
             message.data as unknown as MainToWorkerMessage
         const { taskId, data } = messageContent
-        contextByTasks[taskId] &&
-            contextByTasks[taskId].onData &&
+        if (contextByTasks[taskId].onData) {
             contextByTasks[taskId].onData(data)
+        }
     }
     // Following is a workaround to allow installing libraries using 'window' instead of 'globalThis' or 'self'.
-    workerScope['window'] = globalThis
-    if (message.type == 'Execute') {
+    workerScope.window = globalThis
+    if (message.type === 'Execute') {
         const data: MessageExecute = message.data as unknown as MessageExecute
         const context: WorkerContext = {
             info: (text, json) => {
@@ -406,12 +419,13 @@ export function entryPointWorker(messageEvent: MessageEvent) {
         }
 
         contextByTasks[data.taskId] = context
-
+        type EntryPointFunc = (args: unknown) => unknown
         const entryPoint =
             // The first branch is to facilitate test environment
             typeof data.entryPoint == 'function'
-                ? data.entryPoint
-                : new Function(data.entryPoint)()
+                ? (data.entryPoint as EntryPointFunc)
+                : // eslint-disable-next-line @typescript-eslint/no-implied-eval,@typescript-eslint/no-unsafe-call
+                  (new Function(data.entryPoint)() as EntryPointFunc)
 
         postMessage({
             type: 'Start',
@@ -430,7 +444,7 @@ export function entryPointWorker(messageEvent: MessageEvent) {
             })
             if (resultOrPromise instanceof Promise) {
                 resultOrPromise
-                    .then((result) => {
+                    .then((result: unknown) => {
                         postMessage({
                             type: 'Exit',
                             data: {
@@ -441,7 +455,7 @@ export function entryPointWorker(messageEvent: MessageEvent) {
                             },
                         })
                     })
-                    .catch((error) => {
+                    .catch((error: unknown) => {
                         postMessage({
                             type: 'Exit',
                             data: {
@@ -464,7 +478,7 @@ export function entryPointWorker(messageEvent: MessageEvent) {
                     result: resultOrPromise,
                 },
             })
-        } catch (e) {
+        } catch (e: unknown) {
             postMessage({
                 type: 'Exit',
                 data: {
@@ -497,8 +511,8 @@ export interface MessageInstall {
         entryPoint: string
         args: unknown
     }[]
-    onBeforeInstall: InWorkerAction
-    onAfterInstall: InWorkerAction
+    onBeforeInstall?: InWorkerAction
+    onAfterInstall?: InWorkerAction
 }
 
 function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
@@ -506,14 +520,20 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
         // The environment is already installed
         return Promise.resolve()
     }
-    const deserializeFunction = (fct) =>
-        typeof fct == 'string' ? new Function(fct)() : fct
 
-    input.args.onBeforeInstall &&
-        deserializeFunction(input.args.onBeforeInstall)({
+    type InstallFunc = (args: unknown) => unknown
+    const deserializeFunction = (fct: string | InstallFunc) =>
+        typeof fct === 'string'
+            ? // eslint-disable-next-line @typescript-eslint/no-implied-eval,@typescript-eslint/no-unsafe-call
+              (new Function(fct)() as InstallFunc)
+            : fct
+
+    if (input.args.onBeforeInstall) {
+        deserializeFunction(input.args.onBeforeInstall as unknown as string)({
             message: input.args,
             workerScope: input.workerScope,
         })
+    }
 
     /**
      * The function 'importScriptsXMLHttpRequest' is used in place of [importScripts](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/importScripts)
@@ -527,23 +547,27 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
             eval(request.responseText)
         })
     }
-    self['customImportScripts'] = ['', 'anonymous'].includes(
-        input.args.frontendConfiguration.crossOrigin,
+    // @ts-expect-error need refactoring
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    self.customImportScripts = ['', 'anonymous'].includes(
+        input.args.frontendConfiguration.crossOrigin ?? '',
     )
         ? importScriptsXMLHttpRequest
-        : self['importScripts']
+        : // @ts-expect-error need refactoring
+          self.importScripts
 
     console.log('Install environment in worker', input)
 
-    self['customImportScripts'](input.args.cdnUrl)
-    const cdn = self['@youwol/webpm-client']
+    // @ts-expect-error need refactoring
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    self.customImportScripts(input.args.cdnUrl)
+    const cdn = self['@youwol/webpm-client'] as typeof WebpmClient
     cdn.Client.BackendConfiguration = input.args.backendConfiguration
     cdn.Client.backendsPartitionId = input.args.backendsPartitionId
-    const onEvent = (cdnEvent) => {
+    input.args.cdnInstallation.onEvent = (cdnEvent: WebpmClient.CdnEvent) => {
         const message = { type: 'CdnEvent', event: cdnEvent }
         input.context.sendData(message)
     }
-    input.args.cdnInstallation.onEvent = onEvent
 
     const install = cdn.install(input.args.cdnInstallation)
 
@@ -554,7 +578,8 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
             input.args.functions.forEach((f) => {
                 self[f.id] = deserializeFunction(f.target)
             })
-            self['deserializeFunction'] = deserializeFunction
+            // @ts-expect-error need refactoring
+            self.deserializeFunction = deserializeFunction
             input.args.variables.forEach((v) => {
                 self[v.id] = v.value
             })
@@ -563,7 +588,10 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
             input.context.info('Dependencies installation done')
             const donePromises = input.args.postInstallTasks.map((task) => {
                 input.context.info(`Start post-install task '${task.title}'`)
-                const entryPoint = new Function(task.entryPoint)()
+                // eslint-disable-next-line @typescript-eslint/no-implied-eval,@typescript-eslint/no-unsafe-call
+                const entryPoint = new Function(
+                    task.entryPoint,
+                )() as InstallFunc
                 const r = entryPoint({
                     args: task.args,
                     context: input.context,
@@ -580,11 +608,14 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
                 type: 'installEvent',
                 value: 'install done',
             })
-            input.args.onAfterInstall &&
-                deserializeFunction(input.args.onAfterInstall)({
+            if (input.args.onAfterInstall) {
+                deserializeFunction(
+                    input.args.onAfterInstall as unknown as string,
+                )({
                     message: input.args,
                     workerScope: input.workerScope,
                 })
+            }
             self['@youwol/webpm-client:worker-install-done'] = true
         })
 }
@@ -642,7 +673,7 @@ export class Process {
 /**
  * Pool size specification.
  */
-export type PoolSize = {
+export interface PoolSize {
     /**
      * Initial number of workers to get ready before {@link WorkersPool.ready} is fulfilled.
      * Set to `1` by default.
@@ -658,7 +689,7 @@ export type PoolSize = {
  * Input for {@link WorkersPool.constructor}.
  *
  */
-export type WorkersPoolInput = {
+export interface WorkersPoolInput {
     /**
      * If provided, all events regarding installation are forwarded here.
      * Otherwise {@link WorkersPool.cdnEvent$ | WorkersPool.cdnEvent$} is initialized and used.
@@ -667,7 +698,7 @@ export type WorkersPoolInput = {
     /**
      * Globals to be copied in workers' environment.
      */
-    globals?: { [_k: string]: unknown }
+    globals?: Record<string, unknown>
     /**
      * Installation to proceed in the workers.
      */
@@ -697,7 +728,7 @@ export type WorkersPoolInput = {
  *
  * @typeParam TArgs type of the entry point's argument.
  */
-export type ScheduleInput<TArgs> = {
+export interface ScheduleInput<TArgs> {
     /**
      * Title of the task
      */
@@ -754,12 +785,15 @@ export class WorkersPool {
      *
      * @group Observables
      */
-    public readonly workers$ = new BehaviorSubject<{
-        [p: string]: {
-            worker: WWorkerTrait
-            channel$: Observable<Message>
-        }
-    }>({})
+    public readonly workers$ = new BehaviorSubject<
+        Record<
+            string,
+            {
+                worker: WWorkerTrait
+                channel$: Observable<Message>
+            }
+        >
+    >({})
     /**
      * Observable that emit the list of running tasks each time one or more are created or stopped.
      *
@@ -789,7 +823,7 @@ export class WorkersPool {
      * If `CtxFactory` is provided in constructor's argument ({@link WorkersPoolInput}),
      * main thread logging information is available here.
      */
-    public readonly backgroundContext: ContextTrait
+    public readonly backgroundContext: ContextTrait | undefined
 
     /**
      * Observable that gathers all the {@link CdnEventWorker} emitted by the workers.
@@ -805,47 +839,41 @@ export class WorkersPool {
      */
     public readonly environment: WorkerEnvironment
 
-    private tasksQueue: Array<{
+    private tasksQueue: {
         taskId: string
         title: string
         targetWorkerId?: string
         args: unknown
         channel$: Observable<Message>
         entryPoint: (d: EntryPointArguments<unknown>) => unknown
-    }> = []
+    }[] = []
 
     constructor(params: WorkersPoolInput) {
-        if (WorkersPool.BackendConfiguration === undefined) {
-            throw new Error(
-                'Client.BackendConfiguration not configured and no explicit backendConfiguration param',
-            )
-        }
-        this.backgroundContext =
-            params.ctxFactory && params.ctxFactory('background management')
-        this.cdnEvent$ = params.cdnEvent$ || new Subject<CdnEventWorker>()
+        this.backgroundContext = params.ctxFactory?.('background management')
+        this.cdnEvent$ = params.cdnEvent$ ?? new Subject<CdnEventWorker>()
         // Need to manage lifecycle of following subscription
         this.workerReleased$.subscribe(({ workerId, taskId }) => {
             this.busyWorkers$.next(
-                this.busyWorkers$.value.filter((wId) => wId != workerId),
+                this.busyWorkers$.value.filter((wId) => wId !== workerId),
             )
             this.runningTasks$.next(
                 this.runningTasks$.value.filter(
-                    (task) => task.taskId != taskId,
+                    (task) => task.taskId !== taskId,
                 ),
             )
 
             this.pickTask(workerId, this.backgroundContext)
         })
-        const installArgs = params.install || {}
+        const installArgs = params.install ?? {}
         this.environment = {
-            variables: Object.entries(params.globals || {})
-                .filter(([_, value]) => typeof value != 'function')
+            variables: Object.entries(params.globals ?? {})
+                .filter(([, value]) => typeof value != 'function')
                 .map(([id, value]) => ({
                     id,
                     value,
                 })),
-            functions: Object.entries(params.globals || {})
-                .filter(([_, value]) => typeof value == 'function')
+            functions: Object.entries(params.globals ?? {})
+                .filter(([, value]) => typeof value == 'function')
                 .map(([id, target]) => ({
                     id,
                     target,
@@ -853,15 +881,15 @@ export class WorkersPool {
             cdnInstallation: isDeprecatedInputs(installArgs)
                 ? upgradeInstallInputs(installArgs)
                 : installArgs,
-            postInstallTasks: params.postInstallTasks || [],
+            postInstallTasks: params.postInstallTasks ?? [],
         }
         this.pool = {
-            startAt: params.pool?.startAt || 0,
+            startAt: params.pool?.startAt ?? 0,
             stretchTo:
-                params.pool?.stretchTo ||
+                params.pool?.stretchTo ??
                 Math.max(1, navigator.hardwareConcurrency - 1),
         }
-        this.reserve({ workersCount: this.pool.startAt || 0 }).subscribe()
+        this.reserve({ workersCount: this.pool.startAt ?? 0 }).subscribe()
     }
 
     /**
@@ -891,7 +919,8 @@ export class WorkersPool {
                 .pipe(
                     takeWhile(
                         (workers) =>
-                            Object.entries(workers).length < this.pool.startAt,
+                            Object.entries(workers).length <
+                            (this.pool.startAt ?? 1),
                     ),
                     last(),
                 )
@@ -914,7 +943,7 @@ export class WorkersPool {
     ): Observable<Message> {
         const { title, entryPoint, args, targetWorkerId } = input
         return context.withChild('schedule', (ctx) => {
-            const taskId = `t${Math.floor(Math.random() * 1e6)}`
+            const taskId = `t${String(Math.floor(Math.random() * Math.pow(10, 6)))}`
             const p = new Process({
                 taskId,
                 title,
@@ -922,10 +951,10 @@ export class WorkersPool {
             })
             const taskChannel$ = this.getTaskChannel$(p, taskId, ctx)
 
-            if (targetWorkerId && !this.workers$.value[targetWorkerId]) {
+            if (targetWorkerId && !(targetWorkerId in this.workers$.value)) {
                 throw Error('Provided workerId not known')
             }
-            if (targetWorkerId && this.workers$.value[targetWorkerId]) {
+            if (targetWorkerId && targetWorkerId in this.workers$.value) {
                 ctx.info('Target worker already created, enqueue task')
                 p.schedule()
                 this.tasksQueue.push({
@@ -1001,9 +1030,9 @@ export class WorkersPool {
      * @param args arguments to forward,
      * should be valid regarding the [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).
      */
-    sendData<T>({ taskId, data }: { taskId: string; data: T }) {
+    sendData({ taskId, data }: { taskId: string; data: unknown }) {
         const runningTask = this.runningTasks$.value.find(
-            (t) => t.taskId == taskId,
+            (t) => t.taskId === taskId,
         )
         if (!runningTask) {
             console.error(`WorkersPool.sendMessage: no task #${taskId} running`)
@@ -1027,13 +1056,13 @@ export class WorkersPool {
     ): Observable<Message> {
         return context.withChild('getTaskChannel$', (ctx) => {
             const channel$ = this.mergedChannel$.pipe(
-                filter((message) => message.data.taskId == taskId),
-                takeWhile((message) => message.type != 'Exit', true),
+                filter((message) => message.data.taskId === taskId),
+                takeWhile((message) => message.type !== 'Exit', true),
             )
 
             channel$
                 .pipe(
-                    filter((message) => message.type == 'Start'),
+                    filter((message) => message.type === 'Start'),
                     take(1),
                 )
                 .subscribe((message) => {
@@ -1043,7 +1072,7 @@ export class WorkersPool {
 
             channel$
                 .pipe(
-                    filter((message) => message.type == 'Exit'),
+                    filter((message) => message.type === 'Exit'),
                     take(1),
                 )
                 .subscribe((message) => {
@@ -1063,7 +1092,7 @@ export class WorkersPool {
                     )
                 })
             channel$
-                .pipe(filter((message) => message.type == 'Log'))
+                .pipe(filter((message) => message.type === 'Log'))
                 .subscribe((message) => {
                     const data = message.data as unknown as MessageLog
                     exposedProcess.log(data.text)
@@ -1074,13 +1103,13 @@ export class WorkersPool {
         })
     }
 
-    private getIdleWorkerOrCreate$(
-        context: ContextTrait = new NoContext(),
-    ): Observable<{
-        workerId: string
-        worker: Worker
-        channel$: Observable<Message>
-    }> {
+    private getIdleWorkerOrCreate$(context: ContextTrait = new NoContext()):
+        | Observable<{
+              workerId: string
+              worker: Worker
+              channel$: Observable<Message>
+          }>
+        | undefined {
         return context.withChild('getIdleWorkerOrCreate$', (ctx) => {
             const idleWorkerId = Object.keys(this.workers$.value).find(
                 (workerId) => !this.busyWorkers$.value.includes(workerId),
@@ -1094,16 +1123,22 @@ export class WorkersPool {
                     channel$: this.workers$.value[idleWorkerId].channel$,
                 })
             }
-            if (this.requestedWorkersCount < this.pool.stretchTo) {
+            if (this.requestedWorkersCount < (this.pool.stretchTo ?? 1)) {
                 return this.createWorker$(ctx)
             }
             return undefined
-        })
+        }) as
+            | Observable<{
+                  workerId: string
+                  worker: Worker
+                  channel$: Observable<Message>
+              }>
+            | undefined
     }
 
     private createWorker$(context: ContextTrait = new NoContext()): Observable<{
         workerId: string
-        worker: Worker
+        worker: WWorkerTrait
         channel$: Observable<Message>
     }> {
         return context.withChild('createWorker$', (ctx) => {
@@ -1112,7 +1147,7 @@ export class WorkersPool {
 
             const workerProxy = WorkersPool.webWorkersProxy.createWorker({
                 onMessageWorker: entryPointWorker,
-                onMessageMain: ({ data }) => {
+                onMessageMain: ({ data }: { data: Message }) => {
                     workerChannel$.next(data)
                     this.mergedChannel$.next(data)
                 },
@@ -1120,7 +1155,7 @@ export class WorkersPool {
             const workerId = workerProxy.uid
             ctx.info(`New raw worker ${workerId} created`)
             this.startedWorkers$.next([...this.startedWorkers$.value, workerId])
-            const taskId = `t${Math.floor(Math.random() * 1e6)}`
+            const taskId = `t${String(Math.floor(Math.random() * Math.pow(10, 6)))}`
             const title = 'Install environment'
             const p = new Process({
                 taskId,
@@ -1145,7 +1180,7 @@ export class WorkersPool {
                         target,
                     }: {
                         id: string
-                        target: (...unknown) => unknown
+                        target: (...unknown: unknown[]) => unknown
                     }) => ({
                         id,
                         target: WorkersPool.webWorkersProxy.serializeFunction(
@@ -1154,7 +1189,7 @@ export class WorkersPool {
                     }),
                 ),
                 cdnInstallation: this.environment.cdnInstallation,
-                postInstallTasks: this.environment.postInstallTasks.map(
+                postInstallTasks: (this.environment.postInstallTasks ?? []).map(
                     (task) => {
                         return {
                             title: task.title,
@@ -1165,10 +1200,10 @@ export class WorkersPool {
                 ),
                 onBeforeInstall: WorkersPool.webWorkersProxy.serializeFunction(
                     WorkersPool.webWorkersProxy.onBeforeWorkerInstall,
-                ),
+                ) as unknown as InWorkerAction,
                 onAfterInstall: WorkersPool.webWorkersProxy.serializeFunction(
                     WorkersPool.webWorkersProxy.onAfterWorkerInstall,
-                ),
+                ) as unknown as InWorkerAction,
             }
 
             p.schedule()
@@ -1182,10 +1217,10 @@ export class WorkersPool {
                 tap((message: Message) => {
                     const cdnEvent = isCdnEventMessage(message)
                     if (cdnEvent) {
-                        this.cdnEvent$ && this.cdnEvent$.next(cdnEvent)
+                        this.cdnEvent$.next(cdnEvent)
                     }
                 }),
-                filter((message) => message.type == 'Exit'),
+                filter((message) => message.type === 'Exit'),
                 take(1),
                 tap(() => {
                     ctx.info(`New worker ready (${workerId}), pick task if any`)
@@ -1197,11 +1232,11 @@ export class WorkersPool {
                         },
                     })
                 }),
-                mapTo({
+                map(() => ({
                     workerId,
                     worker: workerProxy,
                     channel$: taskChannel$,
-                }),
+                })),
             )
         })
     }
@@ -1214,16 +1249,16 @@ export class WorkersPool {
         context: ContextTrait = new NoContext(),
     ) {
         context.withChild('pickTask', (ctx) => {
-            if (this.tasksQueue.length == 0) {
+            if (this.tasksQueue.length === 0) {
                 ctx.info(`No tasks in queue`)
                 return
             }
             if (
                 this.tasksQueue.filter(
                     (task) =>
-                        task.targetWorkerId == undefined ||
-                        task.targetWorkerId == workerId,
-                ).length == 0
+                        task.targetWorkerId === undefined ||
+                        task.targetWorkerId === workerId,
+                ).length === 0
             ) {
                 ctx.info(
                     `No tasks in queue match fo target worker (${workerId})`,
@@ -1237,12 +1272,18 @@ export class WorkersPool {
                 )
             }
             this.busyWorkers$.next([...this.busyWorkers$.value, workerId])
-            const { taskId, title, entryPoint, args, channel$ } =
-                this.tasksQueue.find((t) =>
-                    t.targetWorkerId ? t.targetWorkerId === workerId : true,
+            const task = this.tasksQueue.find((t) =>
+                t.targetWorkerId ? t.targetWorkerId === workerId : true,
+            )
+            if (!task) {
+                ctx.info(
+                    `No tasks in queue match fo target worker (${workerId})`,
                 )
+                return
+            }
+            const { taskId, title, entryPoint, args, channel$ } = task
             ctx.info(`Pick task ${taskId} by ${workerId}`)
-            this.tasksQueue = this.tasksQueue.filter((t) => t.taskId != taskId)
+            this.tasksQueue = this.tasksQueue.filter((t) => t.taskId !== taskId)
 
             this.runningTasks$.next([
                 ...this.runningTasks$.value,
@@ -1253,7 +1294,7 @@ export class WorkersPool {
             channel$
                 .pipe(
                     filter((message) => {
-                        return message.type == 'Exit'
+                        return message.type === 'Exit'
                     }),
                 )
                 .subscribe((message) => {
@@ -1271,9 +1312,9 @@ export class WorkersPool {
      * Terminate all the workers.
      */
     terminate() {
-        Object.values(this.workers$.value).forEach(({ worker }) =>
-            worker.terminate(),
-        )
+        Object.values(this.workers$.value).forEach(({ worker }) => {
+            worker.terminate()
+        })
     }
 
     /**
