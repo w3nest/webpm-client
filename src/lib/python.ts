@@ -1,4 +1,17 @@
-import { CdnEvent, CdnMessageEvent } from './events.models'
+import {
+    CdnEvent,
+    PyRuntimeReadyEvent,
+    StartPyRuntimeEvent,
+    StartPyEnvironmentInstallEvent,
+    InstallPyModuleEvent,
+    PyModuleLoadedEvent,
+    PyEnvironmentReadyEvent,
+    FetchPyRuntimeEvent,
+    FetchedPyRuntimeEvent,
+    ConsoleEvent,
+    PyEnvironmentErrorEvent,
+    PyModuleErrorEvent,
+} from './events.models'
 import { addScriptElements } from './utils'
 import { StateImplementation } from './state'
 import { PyodideInputs } from './inputs.models'
@@ -6,6 +19,16 @@ import { PyodideInputs } from './inputs.models'
 export interface PythonIndexes {
     urlPyodide: string
     urlPypi: string
+}
+
+function log(text: string, onEvent: (ev: CdnEvent) => void) {
+    onEvent(new ConsoleEvent('Info', 'Python', text))
+}
+
+interface Pyodide {
+    loadPackage: (...modules: string[]) => Promise<void>
+    runPythonAsync: (src: string) => Promise<unknown>
+    version: string
 }
 export async function installPython(
     pyodideInputs: PyodideInputs & {
@@ -24,30 +47,43 @@ export async function installPython(
         (() => {
             /*no op*/
         })
-    onEvent(
-        new CdnMessageEvent(
-            `pyodide runtime`,
-            `Installing python runtime...`,
-            'Pending',
-        ),
-    )
-
+    if (globalThis.pyodide) {
+        log(
+            `Pyodide runtime already available at ${(globalThis.pyodide as Pyodide).version}`,
+            onEvent,
+        )
+    }
     if (!globalThis.pyodide) {
+        log(`No Pyodide runtime available, proceed to installation`, onEvent)
         let pyodideVersion = pyodideInputs.version
         if (!pyodideVersion) {
-            const latest = (await fetch(
-                'https://api.github.com/repos/pyodide/pyodide/releases/latest',
-            ).then((resp) => resp.json())) as { tag_name: string }
+            const urlLatestTag =
+                'https://api.github.com/repos/pyodide/pyodide/releases/latest'
+            log(
+                `No Pyodide version provided, fetch the latest from tag from ${urlLatestTag}`,
+                onEvent,
+            )
+            const latest = (await fetch(urlLatestTag).then((resp) =>
+                resp.json(),
+            )) as { tag_name: string }
             pyodideVersion = latest.tag_name
+            log(`Found latest Pyodide version: ${pyodideVersion}`, onEvent)
         }
         const indexURL = pyodideInputs.urlPyodide.replace(
             '$VERSION',
             pyodideVersion,
         )
-
+        log(`Install Pyodide from '${indexURL}'`, onEvent)
+        onEvent(
+            new FetchPyRuntimeEvent(pyodideVersion, `${indexURL}/pyodide.js`),
+        )
         const content = await fetch(`${indexURL}/pyodide.js`).then((resp) =>
             resp.text(),
         )
+        onEvent(
+            new FetchedPyRuntimeEvent(pyodideVersion, `${indexURL}/pyodide.js`),
+        )
+        onEvent(new StartPyRuntimeEvent(pyodideVersion))
         await addScriptElements([
             {
                 name: 'pyodide',
@@ -66,63 +102,49 @@ export async function installPython(
         globalThis[pyodideInputs.pyodideAlias] = globalThis.pyodide
     }
 
-    const pyodide = globalThis.pyodide as {
-        loadPackage: (...modules: string[]) => Promise<void>
-        runPythonAsync: (src: string) => Promise<unknown>
-    }
-    onEvent(
-        new CdnMessageEvent(
-            `pyodide runtime`,
-            `Python runtime installed`,
-            'Succeeded',
-        ),
-    )
-    onEvent(
-        new CdnMessageEvent(
-            'loadDependencies',
-            'Loading Python dependencies...',
-            'Pending',
-        ),
-    )
+    const pyodide = globalThis.pyodide as Pyodide
+
+    const pyodideVersion = pyodide.version
+    onEvent(new PyRuntimeReadyEvent(pyodideVersion))
+    onEvent(new StartPyEnvironmentInstallEvent())
+    onEvent(new InstallPyModuleEvent('micropip'))
     await pyodide.loadPackage('micropip')
 
+    onEvent(new PyModuleLoadedEvent('micropip'))
     modulesRequired.forEach((module) => {
-        onEvent(
-            new CdnMessageEvent(module, `${module} installing ...`, 'Pending'),
-        )
+        onEvent(new InstallPyModuleEvent(module))
     })
 
-    await Promise.all(
-        modulesRequired.map((module) => {
-            const parameters = pyodideInputs.urlPypi.includes('https')
-                ? ''
-                : `, index_urls='${pyodideInputs.urlPypi}'`
-            return pyodide
-                .runPythonAsync(
-                    `
+    const installModule = (module: string) => {
+        const parameters = pyodideInputs.urlPypi.includes('https')
+            ? ''
+            : `, index_urls='${pyodideInputs.urlPypi}'`
+        return pyodide.runPythonAsync(`
 import micropip
-await micropip.install(requirements='${module}'${parameters})`,
-                )
-                .then(() => {
-                    StateImplementation.registerImportedPyModules([module])
-                    onEvent(
-                        new CdnMessageEvent(
-                            module,
-                            `${module} loaded`,
-                            'Succeeded',
-                        ),
-                    )
-                })
-        }),
-    )
+await micropip.install(requirements='${module}'${parameters})`)
+    }
 
-    onEvent(
-        new CdnMessageEvent(
-            'loadDependencies',
-            'Python dependencies loaded',
-            'Succeeded',
-        ),
-    )
+    try {
+        await Promise.all(
+            modulesRequired.map((module) => {
+                return installModule(module).then(
+                    () => {
+                        StateImplementation.registerImportedPyModules([module])
+                        onEvent(new PyModuleLoadedEvent(module))
+                    },
+                    (error: unknown) => {
+                        onEvent(new PyModuleErrorEvent(module))
+                        throw error
+                    },
+                )
+            }),
+        )
+    } catch (error) {
+        onEvent(new PyEnvironmentErrorEvent(String(error)))
+        throw error
+    }
+
+    onEvent(new PyEnvironmentReadyEvent())
 
     const lock = await pyodide.runPythonAsync(
         'import micropip\nmicropip.freeze()',

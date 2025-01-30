@@ -383,3 +383,173 @@ export class BackendErrorEvent extends BackendEvent {
         this.detail = params.detail
     }
 }
+
+/**
+ * Base class for Pyodide related event.
+ *
+ * @category Events
+ */
+export type CdnPyEvent = CdnEvent
+/**
+ * Event emitted when starting to fetch Pyodide runtime.
+ *
+ * @category Events
+ */
+export class FetchPyRuntimeEvent implements CdnPyEvent {
+    public readonly step = 'FetchPyRuntimeEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Pending'
+    constructor(
+        public readonly pyodideVersion: string,
+        public readonly url: string,
+    ) {
+        this.id = `fetch-pyodide-${pyodideVersion}`
+        this.text = `Fetch pyodide runtime`
+    }
+}
+/**
+ * Event emitted when Pyodide runtime's installation failed.
+ *
+ * @category Events
+ */
+export class FetchedPyRuntimeEvent implements CdnPyEvent {
+    public readonly step = 'FetchedPyRuntimeEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Succeeded'
+    constructor(
+        public readonly pyodideVersion: string,
+        public readonly url: string,
+    ) {
+        this.id = `fetch-pyodide-${pyodideVersion}`
+        this.text = `Fetch pyodide runtime`
+    }
+}
+/**
+ * Event emitted when starting to install Pyodide runtime.
+ *
+ * @category Events
+ */
+export class StartPyRuntimeEvent implements CdnPyEvent {
+    public readonly step = 'StartPyRuntimeEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Pending'
+    constructor(public readonly pyodideVersion: string) {
+        this.id = `start-pyodide-${pyodideVersion}`
+        this.text = `Start pyodide runtime`
+    }
+}
+
+/**
+ * Event emitted when the Pyodide runtime is ready.
+ *
+ * @category Events
+ */
+export class PyRuntimeReadyEvent implements CdnPyEvent {
+    public readonly step = 'PyRuntimeReadyEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Succeeded'
+    constructor(public readonly pyodideVersion: string) {
+        this.id = `ready-pyodide-${pyodideVersion}`
+        this.text = `Pyodide runtime ready`
+    }
+}
+
+/**
+ * Event emitted when starting to install Pyodide environment.
+ *
+ * @category Events
+ */
+export class StartPyEnvironmentInstallEvent implements CdnPyEvent {
+    public readonly step = 'StartPyEnvironmentInstallEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Pending'
+    constructor() {
+        this.id = `install-pyodide-dependencies`
+        this.text = `Install dependencies`
+    }
+}
+
+/**
+ * Event emitted when starting to install a module.
+ *
+ * @category Events
+ */
+export class InstallPyModuleEvent implements CdnPyEvent {
+    public readonly step = 'InstallPyModuleEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Pending'
+    constructor(public readonly name: string) {
+        this.id = `install-pyodide-module-${name}`
+        this.text = `Installing ${this.name}`
+    }
+}
+
+/**
+ * Event emitted when a Pyodide module has been loaded.
+ *
+ * @category Events
+ */
+export class PyModuleLoadedEvent implements CdnPyEvent {
+    public readonly step = 'PyModuleLoadedEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Pending'
+    constructor(public readonly name: string) {
+        this.id = `install-pyodide-module-${name}`
+        this.text = `Installing ${this.name}`
+    }
+}
+
+/**
+ * Event emitted when loading a Pyodide module failed.
+ *
+ * @category Events
+ */
+export class PyModuleErrorEvent implements CdnPyEvent {
+    public readonly step = 'PyModuleErrorEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Failed'
+    constructor(public readonly name: string) {
+        this.id = `error-pyodide-module-${name}`
+        this.text = `Error loading ${this.name}`
+    }
+}
+
+/**
+ * Event emitted when the Pyodide environment is ready.
+ *
+ * @category Events
+ */
+export class PyEnvironmentReadyEvent implements CdnPyEvent {
+    public readonly step = 'PyEnvironmentReadyEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Pending'
+    constructor() {
+        this.id = `pyodide-environment-ready`
+        this.text = `Environment installed`
+    }
+}
+
+/**
+ * Event emitted when installation of Pyodide environment failed.
+ *
+ * @category Events
+ */
+export class PyEnvironmentErrorEvent implements CdnPyEvent {
+    public readonly step = 'PyEnvironmentErrorEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Failed'
+    constructor(public readonly detail: string) {
+        this.id = `pyodide-environment-error`
+        this.text = detail
+    }
+}
