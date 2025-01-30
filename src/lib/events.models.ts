@@ -3,21 +3,95 @@
  */
 import { LoadingGraphError } from './errors.models'
 
-export type EventType =
-    | 'CdnMessageEvent'
-    | 'StartEvent'
-    | 'SourceLoadingEvent'
-    | 'SourceLoadedEvent'
-    | 'SourceParsedEvent'
-    | 'InstallDoneEvent'
-    | 'UnauthorizedEvent'
-    | 'UrlNotFoundEvent'
-    | 'ParseErrorEvent'
-    | 'CdnLoadingGraphErrorEvent'
-    | 'DownloadBackendEvent'
-    | 'InstallBackendEvent'
-    | 'StartBackendEvent'
-    | 'BackendErrorEvent'
+export interface AllEvents {
+    CdnMessageEvent: CdnMessageEvent
+    CdnLoadingGraphErrorEvent: CdnLoadingGraphErrorEvent
+    InstallDoneEvent: InstallDoneEvent
+    InstallErrorEvent: InstallErrorEvent
+    StartEvent: StartEvent
+    SourceLoadingEvent: SourceLoadingEvent
+    SourceLoadedEvent: SourceLoadedEvent
+    SourceParsedEvent: SourceParsedEvent
+    UnauthorizedEvent: UnauthorizedEvent
+    UrlNotFoundEvent: UrlNotFoundEvent
+    ParseErrorEvent: ParseErrorEvent
+    FetchPyRuntimeEvent: FetchPyRuntimeEvent
+    FetchedPyRuntimeEvent: FetchedPyRuntimeEvent
+    StartPyRuntimeEvent: StartPyRuntimeEvent
+    PyRuntimeReadyEvent: PyRuntimeReadyEvent
+    StartPyEnvironmentInstallEvent: StartPyEnvironmentInstallEvent
+    InstallPyModuleEvent: InstallPyModuleEvent
+    PyModuleLoadedEvent: PyModuleLoadedEvent
+    PyModuleErrorEvent: PyModuleErrorEvent
+    PyEnvironmentReadyEvent: PyEnvironmentReadyEvent
+    PyEnvironmentErrorEvent: PyEnvironmentErrorEvent
+    ConsoleEvent: ConsoleEvent
+    DownloadBackendEvent: DownloadBackendEvent
+    InstallBackendEvent: InstallBackendEvent
+    StartBackendEvent: StartBackendEvent
+    BackendErrorEvent: BackendErrorEvent
+}
+const esmEventTypes = [
+    'StartEvent',
+    'SourceLoadingEvent',
+    'SourceLoadedEvent',
+    'SourceParsedEvent',
+    'UnauthorizedEvent',
+    'UrlNotFoundEvent',
+    'ParseErrorEvent',
+] as const
+
+export type EsmEventType = (typeof esmEventTypes)[number]
+
+export function isEsmEvent(event: CdnEvent): event is AllEvents[EsmEventType] {
+    return esmEventTypes.includes(event.step as EsmEventType)
+}
+
+const pyEventTypes = [
+    'FetchPyRuntimeEvent',
+    'FetchedPyRuntimeEvent',
+    'StartPyRuntimeEvent',
+    'PyRuntimeReadyEvent',
+    'StartPyEnvironmentInstallEvent',
+    'InstallPyModuleEvent',
+    'PyModuleLoadedEvent',
+    'PyModuleErrorEvent',
+    'PyEnvironmentReadyEvent',
+    'PyEnvironmentErrorEvent',
+] as const
+
+export type PyEventType = (typeof pyEventTypes)[number]
+
+export function isPyEvent(event: CdnEvent): event is AllEvents[PyEventType] {
+    return pyEventTypes.includes(event.step as PyEventType)
+}
+
+const backendEventTypes = [
+    'DownloadBackendEvent',
+    'InstallBackendEvent',
+    'StartBackendEvent',
+    'BackendErrorEvent',
+] as const
+export type BackendEventType = (typeof backendEventTypes)[number]
+
+export function isBackendEvent(
+    event: CdnEvent,
+): event is AllEvents[BackendEventType] {
+    return backendEventTypes.includes(event.step as BackendEventType)
+}
+
+const eventTypes = [
+    'CdnMessageEvent',
+    'CdnLoadingGraphErrorEvent',
+    'InstallDoneEvent',
+    'InstallErrorEvent',
+    'ConsoleEvent',
+    ...esmEventTypes,
+    ...pyEventTypes,
+    ...backendEventTypes,
+] as const
+
+export type EventType = (typeof eventTypes)[number]
 
 /**
  * @category Events
@@ -39,22 +113,7 @@ export interface CdnEvent {
  * @category Events
  */
 export function isCdnEvent(event: unknown): event is CdnEvent {
-    const types: EventType[] = [
-        'CdnMessageEvent',
-        'StartEvent',
-        'SourceLoadingEvent',
-        'SourceLoadedEvent',
-        'SourceParsedEvent',
-        'InstallDoneEvent',
-        'UnauthorizedEvent',
-        'UrlNotFoundEvent',
-        'ParseErrorEvent',
-        'CdnLoadingGraphErrorEvent',
-        'DownloadBackendEvent',
-        'InstallBackendEvent',
-        'StartBackendEvent',
-    ]
-    return types.includes((event as CdnEvent).step)
+    return eventTypes.includes((event as CdnEvent).step)
 }
 
 /**
