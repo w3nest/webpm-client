@@ -553,3 +553,21 @@ export class PyEnvironmentErrorEvent implements CdnPyEvent {
         this.text = detail
     }
 }
+
+/**
+ * An event representing a log entry.
+ *
+ * @category Events
+ */
+export class ConsoleEvent implements CdnPyEvent {
+    public readonly id: string
+    public readonly step = 'ConsoleEvent'
+    public readonly status = 'Pending'
+    constructor(
+        public readonly level: 'Info' | 'Warning' | 'Error',
+        public readonly component: 'ESM' | 'Backend' | 'Python',
+        public readonly text: string,
+    ) {
+        this.id = String(Math.floor(Math.random() * 1e6))
+    }
+}
