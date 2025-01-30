@@ -24,6 +24,7 @@ import {
     InstallDoneEvent,
     CdnEvent,
     InstallErrorEvent,
+    ConsoleEvent,
 } from './events.models'
 import {
     CdnError,
@@ -259,7 +260,15 @@ export class Client {
         const importedScript = StateImplementation.importedScripts.get(url)
         if (importedScript) {
             const { progressEvent } = await importedScript
-            onEvent?.(new SourceLoadedEvent(name, assetId, url, progressEvent))
+            onEvent?.(
+                new SourceLoadedEvent(
+                    name,
+                    assetId,
+                    url,
+                    version,
+                    progressEvent,
+                ),
+            )
             return importedScript
         }
         if (!isInstanceOfWindow(globalThis)) {
@@ -282,7 +291,15 @@ export class Client {
             req.addEventListener(
                 'progress',
                 function (event) {
-                    onEvent?.(new SourceLoadingEvent(name, assetId, url, event))
+                    onEvent?.(
+                        new SourceLoadingEvent(
+                            name,
+                            assetId,
+                            url,
+                            version,
+                            event,
+                        ),
+                    )
                 },
                 false,
             )
@@ -304,7 +321,7 @@ export class Client {
             req.open('GET', url)
             req.responseType = 'text' // Client.responseParser ? 'blob' : 'text'
             req.send()
-            onEvent?.(new StartEvent(name, assetId, url))
+            onEvent?.(new StartEvent(name, assetId, url, version))
         })
         StateImplementation.importedScripts.set(url, scriptPromise)
         return scriptPromise
@@ -411,6 +428,17 @@ export class Client {
      * @param inputs
      */
     async installLoadingGraph(inputs: InstallLoadingGraphInputs) {
+        const onEvent =
+            inputs.onEvent ??
+            (() => {
+                /*No OP*/
+            })
+        const logEsm = (text: string) => {
+            onEvent(new ConsoleEvent('Info', 'ESM', text))
+        }
+        const logBackend = (text: string) => {
+            onEvent(new ConsoleEvent('Info', 'Backend', text))
+        }
         const all = inputs.loadingGraph.lock
             .map((pack) => [pack.id, pack])
             .reduce<
@@ -422,9 +450,19 @@ export class Client {
         const graph_fronts = inputs.loadingGraph.definition.map((layer) =>
             layer.filter((l) => all[l[0]].type !== 'backend'),
         )
+        graph_fronts.forEach((layer, index) => {
+            logEsm(
+                `Layer ${String(index)} includes ${String(layer.length)} modules`,
+            )
+        })
         const graph_backs = inputs.loadingGraph.definition.map((layer) =>
             layer.filter((l) => all[l[0]].type === 'backend'),
         )
+        graph_backs.forEach((layer, index) => {
+            logBackend(
+                `Layer ${String(index)} includes ${String(layer.length)} modules`,
+            )
+        })
         const executingWindow = inputs.executingWindow ?? window
 
         StateImplementation.updateExportedSymbolsDict(
@@ -445,20 +483,26 @@ export class Client {
                         `Can not find expected asset ${assetId} in loading graph`,
                     )
                 }
+                const url = `${Client.BackendConfiguration.urlResource}/${cdn_url}`
+                logEsm(`Entry point ${asset.name}#${asset.version} : ${url}`)
                 return {
                     assetId,
-                    url: `${Client.BackendConfiguration.urlResource}/${cdn_url}`,
+                    url,
                     name: asset.name,
                     version: asset.version,
                 }
             })
-            .filter(
-                ({ name, version }) =>
-                    !StateImplementation.isCompatibleVersionInstalled(
+            .filter(({ name, version }) => {
+                const existCompatible =
+                    StateImplementation.isCompatibleVersionInstalled(
                         name,
                         version,
-                    ),
-            )
+                    )
+                logEsm(
+                    `Compatible version found in runtime for ${name}#${version}: ${String(existCompatible)}`,
+                )
+                return !existCompatible
+            })
         const errors: unknown[] = []
         const futures = packagesSelected.map(
             ({ name, url }: { name: string; url: string }) => {
@@ -467,6 +511,7 @@ export class Client {
                     url,
                     onEvent: inputs.onEvent,
                 }).catch((error: unknown) => {
+                    logEsm(`Error while fetching script at ${url}`)
                     errors.push(error)
                 })
             },

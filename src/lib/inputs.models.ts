@@ -318,7 +318,7 @@ export interface InstallLoadingGraphInputs {
     /**
      * See `onEvent` from {@link InstallInputs}
      */
-    onEvent?: (event: CdnFetchEvent) => void
+    onEvent?: (event: CdnEvent) => void
 }
 
 export interface FetchScriptInputs {
@@ -388,7 +388,7 @@ export interface InstallScriptsInputs {
     /**
      * See {@link InstallInputs.onEvent}
      */
-    onEvent?: (CdnEvent) => void
+    onEvent?: (ev: CdnEvent) => void
 
     /**
      * See {@link InstallInputs.aliases}
