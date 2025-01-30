@@ -52,7 +52,7 @@ export function onHttpRequestLoad(
             req.responseText +
             `\n//# sourceURL=${url.split('/').slice(0, -1).join('/')}/`
 
-        onEvent?.(new SourceLoadedEvent(name, assetId, url, event))
+        onEvent?.(new SourceLoadedEvent(name, assetId, url, version, event))
         resolve({
             name,
             version,
@@ -63,12 +63,12 @@ export function onHttpRequestLoad(
         } as FetchedScript)
     }
     if (req.status === Status401 || req.status === Status403) {
-        const unauthorized = new UnauthorizedEvent(name, assetId, url)
+        const unauthorized = new UnauthorizedEvent(name, assetId, url, version)
         onEvent?.(unauthorized)
         reject(new Unauthorized({ assetId, name, url }))
     }
     if (req.status === Status404) {
-        const urlNotFound = new UrlNotFoundEvent(name, assetId, url)
+        const urlNotFound = new UrlNotFoundEvent(name, assetId, url, version)
         onEvent?.(urlNotFound)
         reject(new UrlNotFound({ assetId, name, url }))
     }
@@ -416,7 +416,7 @@ export async function addScriptElements(
                     console.error(
                         `Failed to parse source code of ${name}#${version}: ${scriptOrError.message}`,
                     )
-                    onEvent?.(new ParseErrorEvent(name, assetId, url))
+                    onEvent?.(new ParseErrorEvent(name, assetId, url, version))
                     throw new SourceParsingFailed({
                         assetId,
                         name,
@@ -424,7 +424,7 @@ export async function addScriptElements(
                         message: scriptOrError.message,
                     })
                 }
-                onEvent?.(new SourceParsedEvent(name, assetId, url))
+                onEvent?.(new SourceParsedEvent(name, assetId, url, version))
                 if (sideEffect) {
                     return sideEffect({
                         origin: {

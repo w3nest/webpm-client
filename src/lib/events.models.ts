@@ -79,7 +79,9 @@ export class CdnMessageEvent implements CdnEvent {
 export type CdnFetchEvent = CdnEvent & {
     id: string
     assetId: string
+    targetName: string
     url: string
+    version: string
 }
 
 /**
@@ -96,6 +98,7 @@ export class StartEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
+        public readonly version: string,
     ) {
         this.id = targetName
         this.text = `${targetName}: start importing`
@@ -116,6 +119,7 @@ export class SourceLoadingEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
+        public readonly version: string,
         public readonly progress: ProgressEvent<XMLHttpRequestEventTarget>,
     ) {
         this.id = targetName
@@ -137,6 +141,7 @@ export class SourceLoadedEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
+        public readonly version: string,
         public readonly progress?: ProgressEvent<XMLHttpRequestEventTarget>,
     ) {
         this.id = targetName
@@ -158,6 +163,7 @@ export class SourceParsedEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
+        public readonly version: string,
     ) {
         this.id = targetName
         this.text = `${targetName}: module/script imported`
@@ -178,6 +184,7 @@ export class UnauthorizedEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
+        public readonly version: string,
     ) {
         this.id = targetName
         this.text = `${targetName}: unauthorized to access the resource`
@@ -198,6 +205,7 @@ export class UrlNotFoundEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
+        public readonly version: string,
     ) {
         this.id = targetName
         this.text = `${targetName}: resource not found at ${url}`
@@ -218,6 +226,7 @@ export class ParseErrorEvent implements CdnFetchEvent {
         public readonly targetName: string,
         public readonly assetId: string,
         public readonly url: string,
+        public readonly version: string,
     ) {
         this.id = targetName
         this.text = `${targetName}: parsing the module/script failed`
