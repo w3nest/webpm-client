@@ -258,6 +258,18 @@ export class InstallDoneEvent implements CdnEvent {
     public readonly status = 'Succeeded'
 }
 
+/**
+ * Event emitted when an installation failed ({@link install}).
+ *
+ * @category Events
+ */
+export class InstallErrorEvent implements CdnEvent {
+    public readonly id = 'InstallErrorEvent'
+    public readonly step = 'InstallErrorEvent'
+    public readonly text = 'Installation error'
+    public readonly status = 'Failed'
+}
+
 export class BackendEvent implements CdnEvent {
     public readonly id: string
     public readonly text: string

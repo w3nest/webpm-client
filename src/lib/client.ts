@@ -23,6 +23,7 @@ import {
     CdnLoadingGraphErrorEvent,
     InstallDoneEvent,
     CdnEvent,
+    InstallErrorEvent,
 } from './events.models'
 import {
     CdnError,
@@ -393,6 +394,10 @@ export class Client {
                     loadingScreen.done()
                 }
                 return executingWindow
+            },
+            (error: unknown) => {
+                onEvent(new InstallErrorEvent())
+                throw error
             },
         )
     }
