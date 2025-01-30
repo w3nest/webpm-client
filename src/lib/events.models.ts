@@ -270,6 +270,11 @@ export class InstallErrorEvent implements CdnEvent {
     public readonly status = 'Failed'
 }
 
+/**
+ * Base class for events related to backend.
+ *
+ * @category Events
+ */
 export class BackendEvent implements CdnEvent {
     public readonly id: string
     public readonly text: string
@@ -290,8 +295,20 @@ export class BackendEvent implements CdnEvent {
         this.status = event === 'failed' ? 'Failed' : 'Pending'
     }
 }
+
+/**
+ * Events emitted when a backend is downloaded.
+ *
+ * @category Events
+ */
 export class DownloadBackendEvent extends BackendEvent {
-    constructor(params: { name: string; version: string; event: string }) {
+    public readonly event: 'started' | 'succeeded' | 'failed'
+
+    constructor(params: {
+        name: string
+        version: string
+        event: 'started' | 'succeeded' | 'failed'
+    }) {
         super(
             'DownloadBackendEvent',
             params.name,
@@ -301,8 +318,18 @@ export class DownloadBackendEvent extends BackendEvent {
         )
     }
 }
+/**
+ * Events emitted when a backend is installed.
+ *
+ * @category Events
+ */
 export class InstallBackendEvent extends BackendEvent {
-    constructor(params: { name: string; version: string; event: string }) {
+    public readonly event: 'started' | 'succeeded' | 'failed'
+    constructor(params: {
+        name: string
+        version: string
+        event: 'started' | 'succeeded' | 'failed'
+    }) {
         super(
             'InstallBackendEvent',
             params.name,
@@ -312,8 +339,18 @@ export class InstallBackendEvent extends BackendEvent {
         )
     }
 }
+/**
+ * Events emitted when a backend is started.
+ *
+ * @category Events
+ */
 export class StartBackendEvent extends BackendEvent {
-    constructor(params: { name: string; version: string; event: string }) {
+    public readonly event: 'starting' | 'listening' | 'failed'
+    constructor(params: {
+        name: string
+        version: string
+        event: 'starting' | 'listening' | 'failed'
+    }) {
         super(
             'StartBackendEvent',
             params.name,
@@ -323,7 +360,11 @@ export class StartBackendEvent extends BackendEvent {
         )
     }
 }
-
+/**
+ * Events emitted when a backend error has been caught.
+ *
+ * @category Events
+ */
 export class BackendErrorEvent extends BackendEvent {
     public readonly detail: string
     constructor(params: {

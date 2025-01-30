@@ -60,6 +60,7 @@ function computeOrigin(
 export interface Cookie {
     type: 'local' | 'remote'
     wsDataUrl: string
+    wsLogsUrl: string
     port: number
     origin: string
     webpm: {

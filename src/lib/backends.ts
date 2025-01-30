@@ -7,6 +7,7 @@ import {
     BackendErrorEvent,
     BackendEvent,
     CdnEvent,
+    ConsoleEvent,
     DownloadBackendEvent,
     InstallBackendEvent,
     StartBackendEvent,
@@ -55,21 +56,31 @@ export async function installBackends({
     webpmClient: Client
     executingWindow: WindowOrWorkerGlobalScope
 }) {
+    function log(text: string) {
+        onEvent(new ConsoleEvent('Info', 'Backend', text))
+    }
+
     const isEmpty =
         graph.definition.filter((layer) => layer.length > 0).length === 0
     if (isEmpty) {
+        log('No backend to install')
         return
     }
     const ywLocalCookie = getLocalCookie()
     if (!ywLocalCookie || ywLocalCookie.type !== 'local') {
+        log(
+            'No cookie for local backend installation found, abort installation',
+        )
         throw new LocalYouwolRequired(
             'Backends installation requires the local youwol server',
         )
     }
-    const wsUrl = `ws://localhost:${String(ywLocalCookie.port)}/${ywLocalCookie.wsDataUrl}`
-    const wsData$ = await StateImplementation.getWebSocket(wsUrl)
+    const wsDataUrl = `ws://localhost:${String(ywLocalCookie.port)}/${ywLocalCookie.wsDataUrl}`
+    const wsData$ = await StateImplementation.getWebSocket(wsDataUrl)
 
-    const installId = String(Math.floor(Math.random() * Math.pow(10, 9)))
+    const wsLogUrl = `ws://localhost:${String(ywLocalCookie.port)}/${ywLocalCookie.wsLogsUrl}`
+    const wsLog$ = await StateImplementation.getWebSocket(wsLogUrl)
+    const installId = `webpm-${String(Math.floor(Math.random() * Math.pow(10, 9)))}`
     const installKey = `${setup.name}-${setup.version}:${installId}`
     let error: BackendErrorEvent | undefined
 
@@ -80,7 +91,12 @@ export async function installBackends({
         event: string
     }
 
-    const all$ = wsData$.pipe(
+    const allData$ = wsData$.pipe(
+        rxjs.filter((m) => m.attributes?.[installKey] === installId),
+        rxjs.map((m) => m as ContextMessage<Message>),
+        rxjs.shareReplay({ bufferSize: 1, refCount: true }),
+    )
+    const allLogs$ = wsLog$.pipe(
         rxjs.filter((m) => m.attributes?.[installKey] === installId),
         rxjs.map((m) => m as ContextMessage<Message>),
         rxjs.shareReplay({ bufferSize: 1, refCount: true }),
@@ -114,9 +130,10 @@ export async function installBackends({
         m.attributes?.event === 'failed'
 
     const filterEvent = (kind: EventKind) =>
-        all$.pipe(
-            rxjs.filter((m) => m.labels?.includes(kind) !== undefined),
+        allData$.pipe(
+            rxjs.filter((m) => m.labels?.includes(kind) ?? false),
             rxjs.tap((m) => {
+                log(`${m.text} : ${m.data?.event ?? ''}`)
                 if (m.data?.event === 'failed') {
                     const event = new BackendErrorEvent({
                         ...m.data,
@@ -135,8 +152,19 @@ export async function installBackends({
     const download$ = filterEvent('DownloadBackendEvent')
     const install$ = filterEvent('InstallBackendEvent')
     const start$ = filterEvent('StartBackendEvent')
-
-    rxjs.merge(download$, install$, start$)
+    const shellLabels = [
+        'Label.START_BACKEND_SH',
+        'Label.INSTALL_BACKEND_SH',
+    ] as const
+    const logsInstall$ = allLogs$.pipe(
+        rxjs.filter(
+            (m) => shellLabels.find((l) => m.labels?.includes(l)) !== undefined,
+        ),
+        rxjs.tap((m) => {
+            onEvent(new ConsoleEvent('Info', 'Backend', m.text))
+        }),
+    )
+    rxjs.merge(download$, install$, start$, logsInstall$)
         .pipe(rxjs.takeWhile((m) => !isDone(m)))
         .subscribe()
 
@@ -150,6 +178,7 @@ export async function installBackends({
         headers: {
             'Content-Type': 'application/json',
             'x-trace-attributes': `{"${installKey}": "${installId}"}`,
+            'x-install-id': installId,
         },
         body: JSON.stringify(body),
     })
