@@ -9,9 +9,13 @@ import {
     InstallInputs,
     QueryLoadingGraphInputs,
     PyodideInputs,
+    CssSideEffectCallback,
 } from './inputs.models'
 import {
     CdnEvent,
+    ConsoleEvent,
+    CssLoadingEvent,
+    CssParsedEvent,
     ParseErrorEvent,
     SourceLoadedEvent,
     SourceParsedEvent,
@@ -691,4 +695,100 @@ export function normalizeInstallInputs(
         esm: normalizeEsmInputs(sanitizedInputs),
         pyodide: normalizePyodideInputs(sanitizedInputs),
     }
+}
+
+export function appendStyleSheet({
+    assetId,
+    version,
+    name,
+    url,
+    sideEffects,
+    renderingWindow,
+    onEvent,
+}: {
+    assetId: string
+    version: string
+    name: string
+    url: string
+    sideEffects?: CssSideEffectCallback
+    renderingWindow: Window
+    onEvent: (ev: CdnEvent) => void
+}) {
+    const logError = (text: string) => {
+        onEvent(new ConsoleEvent('Error', 'CSS', text))
+    }
+    return new Promise<HTMLLinkElement>((resolveCb, rejectCb) => {
+        onEvent(new CssLoadingEvent(name, assetId, url, version))
+        const link = renderingWindow.document.createElement('link')
+        link.id = url
+        if (Client.FrontendConfiguration.crossOrigin !== undefined) {
+            link.crossOrigin = Client.FrontendConfiguration.crossOrigin
+        }
+        const classes = [assetId, name, version].map((key) =>
+            sanitizeCssId(key),
+        )
+        link.classList.add(...classes)
+        link.setAttribute('type', 'text/css')
+        link.href = url
+        link.rel = 'stylesheet'
+        renderingWindow.document
+            .getElementsByTagName('head')[0]
+            .appendChild(link)
+
+        link.onerror = (e) => {
+            console.error('Failed to append style sheet', e)
+            logError(`Failed to install stylesheet from ${url}`)
+            fetch(url, { method: 'HEAD', credentials: 'include' }).then(
+                (response) => {
+                    logError(
+                        `Status: ${String(response.status)} ${response.statusText}`,
+                    )
+                    if (response.status === 401) {
+                        onEvent(
+                            new UnauthorizedEvent(name, assetId, url, version),
+                        )
+                        rejectCb(new Error(`Unauthorized: ${url}`))
+                        return
+                    } else if ([404, 405].includes(response.status)) {
+                        onEvent(
+                            new UrlNotFoundEvent(name, assetId, url, version),
+                        )
+                        rejectCb(new Error(`Not Found: ${url}`))
+                        return
+                    }
+                    rejectCb(new Error(`Unknown Error: ${url}`))
+                },
+                (e: unknown) => {
+                    console.error("Call to 'fetch' failed", e)
+                    logError(`Failed to trigger fetch on ${url}`)
+                },
+            )
+        }
+        link.onload = () => {
+            const se = sideEffects?.({
+                origin: {
+                    moduleName: name,
+                    version,
+                    assetId,
+                    url,
+                },
+                htmlLinkElement: link,
+                renderingWindow,
+            })
+            if (se instanceof Promise) {
+                se.then(
+                    () => {
+                        /*No OP*/
+                    },
+                    () => {
+                        throw Error(
+                            `Failed to apply side effects for ${name}#${version}`,
+                        )
+                    },
+                )
+            }
+            onEvent(new CssParsedEvent(name, assetId, url, version))
+            resolveCb(link)
+        }
+    })
 }

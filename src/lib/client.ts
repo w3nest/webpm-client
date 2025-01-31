@@ -25,6 +25,8 @@ import {
     CdnEvent,
     InstallErrorEvent,
     ConsoleEvent,
+    SourceParsedEvent,
+    CssParsedEvent,
 } from './events.models'
 import {
     CdnError,
@@ -34,7 +36,6 @@ import {
 } from './errors.models'
 import { Monitoring, StateImplementation } from './state'
 import { LoadingScreenView } from './loader.view'
-import { sanitizeCssId } from './utils.view'
 import { satisfies } from 'semver'
 import {
     addScriptElements,
@@ -51,6 +52,7 @@ import {
     normalizeEsmInputs,
     normalizePyodideInputs,
     normalizeLoadingGraphInputs,
+    appendStyleSheet,
 } from './utils'
 import { BackendConfiguration } from './backend-configuration'
 import { FrontendConfiguration } from './frontend-configuration'
@@ -393,6 +395,7 @@ export class Client {
             ? this.installStyleSheets({
                   css,
                   renderingWindow: executingWindow,
+                  onEvent: inputs.onEvent,
               })
             : Promise.resolve()
 
@@ -703,15 +706,25 @@ export class Client {
     private installStyleSheets(
         inputs: InstallStyleSheetsInputs,
     ): Promise<HTMLLinkElement[]> {
+        const onEvent =
+            inputs.onEvent ??
+            (() => {
+                /*No OP*/
+            })
+        const logCss = (text: string) => {
+            onEvent(new ConsoleEvent('Info', 'CSS', text))
+        }
         const css = inputs.css
 
         const renderingWindow = inputs.renderingWindow ?? window
+        const installedUrls = [
+            ...renderingWindow.document.head.querySelectorAll('link'),
+        ].map((e) => e.href)
 
         const getLinkElement = (url: string) => {
-            return Array.from(
-                renderingWindow.document.head.querySelectorAll('link'),
-            ).find((e) => e.href === Client.BackendConfiguration.origin + url)
+            return installedUrls.find((existUrl) => existUrl === url)
         }
+
         const futures = css
             .map((elem) => {
                 return typeof elem == 'string'
@@ -730,52 +743,25 @@ export class Client {
                 })
                 return { assetId, version, name, url, sideEffects }
             })
-            .filter(({ url }) => !getLinkElement(url))
-            .map(({ assetId, version, name, url, sideEffects }) => {
-                return new Promise<HTMLLinkElement>((resolveCb) => {
-                    const link = renderingWindow.document.createElement('link')
-                    link.id = url
-                    if (
-                        Client.FrontendConfiguration.crossOrigin !== undefined
-                    ) {
-                        link.crossOrigin =
-                            Client.FrontendConfiguration.crossOrigin
-                    }
-                    const classes = [assetId, name, version].map((key) =>
-                        sanitizeCssId(key),
+            .filter(({ assetId, version, name, url }) => {
+                const alreadyInstalled = getLinkElement(url)
+                if (alreadyInstalled) {
+                    logCss(
+                        `Stylesheet already installed for ${name}#${version} (${url})`,
                     )
-                    link.classList.add(...classes)
-                    link.setAttribute('type', 'text/css')
-                    link.href = url
-                    link.rel = 'stylesheet'
-                    renderingWindow.document
-                        .getElementsByTagName('head')[0]
-                        .appendChild(link)
-                    link.onload = () => {
-                        const se = sideEffects?.({
-                            origin: {
-                                moduleName: name,
-                                version,
-                                assetId,
-                                url,
-                            },
-                            htmlLinkElement: link,
-                            renderingWindow,
-                        })
-                        if (se instanceof Promise) {
-                            se.then(
-                                () => {
-                                    /*No OP*/
-                                },
-                                () => {
-                                    throw Error(
-                                        `Failed to apply side effects for ${name}#${version}`,
-                                    )
-                                },
-                            )
-                        }
-                        resolveCb(link)
-                    }
+                    onEvent(new CssParsedEvent(name, assetId, url, version))
+                }
+                return alreadyInstalled === undefined
+            })
+            .map(({ assetId, version, name, url, sideEffects }) => {
+                return appendStyleSheet({
+                    assetId,
+                    version,
+                    name,
+                    url,
+                    sideEffects,
+                    renderingWindow,
+                    onEvent,
                 })
             })
         return Promise.all(futures)

@@ -12,6 +12,8 @@ export interface AllEvents {
     SourceLoadingEvent: SourceLoadingEvent
     SourceLoadedEvent: SourceLoadedEvent
     SourceParsedEvent: SourceParsedEvent
+    CssLoadingEvent: CssLoadingEvent
+    CssParsedEvent: CssParsedEvent
     UnauthorizedEvent: UnauthorizedEvent
     UrlNotFoundEvent: UrlNotFoundEvent
     ParseErrorEvent: ParseErrorEvent
@@ -45,6 +47,24 @@ export type EsmEventType = (typeof esmEventTypes)[number]
 
 export function isEsmEvent(event: CdnEvent): event is AllEvents[EsmEventType] {
     return esmEventTypes.includes(event.step as EsmEventType)
+}
+
+const cssEventTypes = [
+    'CssLoadingEvent',
+    'CssParsedEvent',
+    'UnauthorizedEvent',
+    'UrlNotFoundEvent',
+] as const
+
+export type CssEventType = (typeof cssEventTypes)[number]
+
+export function isCssEvent(event: CdnEvent): event is AllEvents[CssEventType] {
+    if (['UnauthorizedEvent', 'UrlNotFoundEvent'].includes(event.step)) {
+        return (event as UnauthorizedEvent | UrlNotFoundEvent).url.endsWith(
+            '.css',
+        )
+    }
+    return cssEventTypes.includes(event.step as CssEventType)
 }
 
 const pyEventTypes = [
@@ -86,6 +106,7 @@ const eventTypes = [
     'InstallDoneEvent',
     'InstallErrorEvent',
     'ConsoleEvent',
+    ...cssEventTypes,
     ...esmEventTypes,
     ...pyEventTypes,
     ...backendEventTypes,
@@ -215,6 +236,48 @@ export class SourceLoadedEvent implements CdnFetchEvent {
  */
 export class SourceParsedEvent implements CdnFetchEvent {
     public readonly step = 'SourceParsedEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Succeeded'
+    constructor(
+        public readonly targetName: string,
+        public readonly assetId: string,
+        public readonly url: string,
+        public readonly version: string,
+    ) {
+        this.id = targetName
+        this.text = `${targetName}: module/script imported`
+    }
+}
+
+/**
+ * Event emitted when starting to install a style sheet.
+ *
+ * @category Events
+ */
+export class CssLoadingEvent implements CdnFetchEvent {
+    public readonly step = 'CssLoadingEvent'
+    public readonly id: string
+    public readonly text: string
+    public readonly status = 'Pending'
+    constructor(
+        public readonly targetName: string,
+        public readonly assetId: string,
+        public readonly url: string,
+        public readonly version: string,
+    ) {
+        this.id = targetName
+        this.text = `${targetName}: fetching over HTTP`
+    }
+}
+
+/**
+ * Event emitted when a style sheet has been added to the document.
+ *
+ * @category Events
+ */
+export class CssParsedEvent implements CdnFetchEvent {
+    public readonly step = 'CssParsedEvent'
     public readonly id: string
     public readonly text: string
     public readonly status = 'Succeeded'
@@ -624,7 +687,7 @@ export class ConsoleEvent implements CdnPyEvent {
     public readonly status = 'Pending'
     constructor(
         public readonly level: 'Info' | 'Warning' | 'Error',
-        public readonly component: 'ESM' | 'Backend' | 'Python',
+        public readonly component: 'ESM' | 'Backend' | 'Python' | 'CSS',
         public readonly text: string,
     ) {
         this.id = String(Math.floor(Math.random() * 1e6))

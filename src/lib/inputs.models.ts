@@ -282,6 +282,11 @@ export interface InstallStyleSheetsInputs {
      * Window global in which css elements are added. If not provided, `window` is used.
      */
     renderingWindow?: Window
+
+    /**
+     * See `onEvent` from {@link InstallInputs}
+     */
+    onEvent?: (event: CdnEvent) => void
 }
 
 export interface InstallLoadingGraphInputs {
