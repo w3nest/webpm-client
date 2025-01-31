@@ -495,7 +495,7 @@ export class Client {
                     version: asset.version,
                 }
             })
-            .filter(({ name, version }) => {
+            .filter(({ name, version, url, assetId }) => {
                 const existCompatible =
                     StateImplementation.isCompatibleVersionInstalled(
                         name,
@@ -504,6 +504,9 @@ export class Client {
                 logEsm(
                     `Compatible version found in runtime for ${name}#${version}: ${String(existCompatible)}`,
                 )
+                if (existCompatible) {
+                    onEvent(new SourceParsedEvent(name, assetId, url, version))
+                }
                 return !existCompatible
             })
         const errors: unknown[] = []
