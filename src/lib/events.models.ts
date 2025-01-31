@@ -46,6 +46,11 @@ const esmEventTypes = [
 export type EsmEventType = (typeof esmEventTypes)[number]
 
 export function isEsmEvent(event: CdnEvent): event is AllEvents[EsmEventType] {
+    if (['UnauthorizedEvent', 'UrlNotFoundEvent'].includes(event.step)) {
+        return (event as UnauthorizedEvent | UrlNotFoundEvent).url.endsWith(
+            '.js',
+        )
+    }
     return esmEventTypes.includes(event.step as EsmEventType)
 }
 
