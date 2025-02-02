@@ -13,7 +13,6 @@ import {
     StartBackendEvent,
 } from './events.models'
 import type * as rxjsModuleType from 'rxjs'
-import type { ContextMessage } from '@w3nest/http-clients'
 import { getLocalCookie } from './backend-configuration'
 
 import type * as HttpClients from '@w3nest/http-clients'
@@ -40,6 +39,8 @@ export async function installBackendClientDeps(): Promise<{
     })) as unknown as Install
     return { http } as unknown as { http: typeof HttpClients }
 }
+
+type ContextMessage<T> = HttpClients.ContextMessage<T>
 
 export async function installBackends({
     graph,
