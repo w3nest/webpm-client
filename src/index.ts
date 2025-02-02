@@ -6,7 +6,6 @@
  *
  * @module MainModule
  */
-
 export * from './lib'
 export { setup } from './auto-generated'
 import * as cdnClient from './lib'
@@ -36,6 +35,17 @@ if (scriptSrc) {
         cdnClient.Client.BackendConfiguration = cdnClient.backendConfiguration({
             origin: ywCookie.origin,
             ...ywCookie.webpm,
+        })
+        // We are not sure whether backends have been installed under the auto-generated default partition ID.
+        // Worst case scenario we got a 404.
+        const url = ywCookie.webpm.pathBackendUninstall.replace(
+            '%UID%',
+            cdnClient.Client.backendsPartitionId,
+        )
+        window.addEventListener('beforeunload', () => {
+            fetch(url, { method: 'DELETE', keepalive: true }).catch(() => {
+                /*No OP*/
+            })
         })
     } else {
         // !!TO REMOVE!!, only cookie mechanism allowed soon to avoid sync request

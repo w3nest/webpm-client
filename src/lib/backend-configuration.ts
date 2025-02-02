@@ -69,6 +69,7 @@ export interface Cookie {
         pathPyodide: string
         pathPypi: string
         pathBackendInstall: string
+        pathBackendUninstall: string
     }
 }
 
