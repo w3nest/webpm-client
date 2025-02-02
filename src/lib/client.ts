@@ -27,6 +27,8 @@ import {
     ConsoleEvent,
     SourceParsedEvent,
     CssParsedEvent,
+    CdnLoadingGraphQueryEvent,
+    CdnLoadingGraphResolvedEvent,
 } from './events.models'
 import {
     CdnError,
@@ -436,11 +438,8 @@ export class Client {
             (() => {
                 /*No OP*/
             })
-        const logEsm = (text: string) => {
-            onEvent(new ConsoleEvent('Info', 'ESM', text))
-        }
-        const logBackend = (text: string) => {
-            onEvent(new ConsoleEvent('Info', 'Backend', text))
+        const log = (text: string, level: 'Info' | 'Error' = 'Info') => {
+            onEvent(new ConsoleEvent(level, 'LoadingGraph', text))
         }
         const all = inputs.loadingGraph.lock
             .map((pack) => [pack.id, pack])
@@ -450,22 +449,17 @@ export class Client {
         inputs.backendsPartitionId ??= Client.backendsPartitionId
         inputs.backendsConfig ??= {}
 
+        inputs.loadingGraph.definition.forEach((layer, index) => {
+            log(
+                `Layer ${String(index)} includes ${String(layer.length)} modules`,
+            )
+        })
         const graph_fronts = inputs.loadingGraph.definition.map((layer) =>
             layer.filter((l) => all[l[0]].type !== 'backend'),
         )
-        graph_fronts.forEach((layer, index) => {
-            logEsm(
-                `Layer ${String(index)} includes ${String(layer.length)} modules`,
-            )
-        })
         const graph_backs = inputs.loadingGraph.definition.map((layer) =>
             layer.filter((l) => all[l[0]].type === 'backend'),
         )
-        graph_backs.forEach((layer, index) => {
-            logBackend(
-                `Layer ${String(index)} includes ${String(layer.length)} modules`,
-            )
-        })
         const executingWindow = inputs.executingWindow ?? window
 
         StateImplementation.updateExportedSymbolsDict(
@@ -487,7 +481,7 @@ export class Client {
                     )
                 }
                 const url = `${Client.BackendConfiguration.urlResource}/${cdn_url}`
-                logEsm(`Entry point ${asset.name}#${asset.version} : ${url}`)
+                log(`Entry point ${asset.name}#${asset.version} : ${url}`)
                 return {
                     assetId,
                     url,
@@ -501,7 +495,7 @@ export class Client {
                         name,
                         version,
                     )
-                logEsm(
+                log(
                     `Compatible version found in runtime for ${name}#${version}: ${String(existCompatible)}`,
                 )
                 if (existCompatible) {
@@ -517,7 +511,7 @@ export class Client {
                     url,
                     onEvent: inputs.onEvent,
                 }).catch((error: unknown) => {
-                    logEsm(`Error while fetching script at ${url}`)
+                    log(`Error while fetching script at ${url}`, 'Error')
                     errors.push(error)
                 })
             },
@@ -608,6 +602,11 @@ export class Client {
     private async installModules(
         inputs: InstallModulesInputs,
     ): Promise<LoadingGraph | undefined> {
+        const onEvent =
+            inputs.onEvent ??
+            (() => {
+                /*No OP*/
+            })
         const usingDependencies = [
             ...StateImplementation.getPinedDependencies(),
             ...(inputs.usingDependencies ?? []),
@@ -646,7 +645,9 @@ export class Client {
             }
         }, inputs.modulesSideEffects ?? {})
         try {
+            onEvent(new CdnLoadingGraphQueryEvent())
             const loadingGraph = await this.queryLoadingGraph(body)
+            onEvent(new CdnLoadingGraphResolvedEvent())
             await this.installLoadingGraph({
                 loadingGraph,
                 modulesSideEffects,
@@ -658,9 +659,14 @@ export class Client {
             })
             return loadingGraph
         } catch (error: unknown) {
-            inputs.onEvent?.(
-                new CdnLoadingGraphErrorEvent(error as LoadingGraphError),
+            onEvent(
+                new ConsoleEvent(
+                    'Error',
+                    'LoadingGraph',
+                    'Failed to retrieve the loading graph: HTTP request failed. See console for details.',
+                ),
             )
+            onEvent(new CdnLoadingGraphErrorEvent(error as LoadingGraphError))
             throw error
         }
     }

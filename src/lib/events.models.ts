@@ -3,8 +3,15 @@
  */
 import { LoadingGraphError } from './errors.models'
 
+/**
+ * Available topics when installing components.
+ */
+export type Topic = 'LoadingGraph' | 'ESM' | 'Python' | 'Backend' | 'CSS'
+
 export interface AllEvents {
     CdnMessageEvent: CdnMessageEvent
+    CdnLoadingGraphQueryEvent: CdnLoadingGraphQueryEvent
+    CdnLoadingGraphResolvedEvent: CdnLoadingGraphResolvedEvent
     CdnLoadingGraphErrorEvent: CdnLoadingGraphErrorEvent
     InstallDoneEvent: InstallDoneEvent
     InstallErrorEvent: InstallErrorEvent
@@ -33,6 +40,21 @@ export interface AllEvents {
     StartBackendEvent: StartBackendEvent
     BackendErrorEvent: BackendErrorEvent
 }
+
+const loadingGraphEventTypes = [
+    'CdnLoadingGraphQueryEvent',
+    'CdnLoadingGraphResolvedEvent',
+    'CdnLoadingGraphErrorEvent',
+] as const
+
+export type LoadingGraphEventType = (typeof loadingGraphEventTypes)[number]
+
+export function isLoadingGraphEvent(
+    event: CdnEvent,
+): event is AllEvents[LoadingGraphEventType] {
+    return loadingGraphEventTypes.includes(event.step as LoadingGraphEventType)
+}
+
 const esmEventTypes = [
     'StartEvent',
     'SourceLoadingEvent',
@@ -107,10 +129,10 @@ export function isBackendEvent(
 
 const eventTypes = [
     'CdnMessageEvent',
-    'CdnLoadingGraphErrorEvent',
     'InstallDoneEvent',
     'InstallErrorEvent',
     'ConsoleEvent',
+    ...loadingGraphEventTypes,
     ...cssEventTypes,
     ...esmEventTypes,
     ...pyEventTypes,
@@ -358,6 +380,30 @@ export class ParseErrorEvent implements CdnFetchEvent {
         this.id = targetName
         this.text = `${targetName}: parsing the module/script failed`
     }
+}
+
+/**
+ * Event emitted when querying the loading graph occurred.
+ *
+ * @category Events
+ */
+export class CdnLoadingGraphQueryEvent implements CdnEvent {
+    public readonly id = 'loading-graph-query'
+    public readonly step = 'CdnLoadingGraphQueryEvent'
+    public readonly text = 'Retrieve the loading graph'
+    public readonly status = 'Pending'
+}
+
+/**
+ * Event emitted when querying the loading graph occurred.
+ *
+ * @category Events
+ */
+export class CdnLoadingGraphResolvedEvent implements CdnEvent {
+    public readonly id = 'loading-graph-resolved'
+    public readonly step = 'CdnLoadingGraphResolvedEvent'
+    public readonly text = 'Loading graph resolved'
+    public readonly status = 'Pending'
 }
 
 /**
@@ -692,9 +738,12 @@ export class ConsoleEvent implements CdnPyEvent {
     public readonly status = 'Pending'
     constructor(
         public readonly level: 'Info' | 'Warning' | 'Error',
-        public readonly component: 'ESM' | 'Backend' | 'Python' | 'CSS',
+        public readonly topic: Topic,
         public readonly text: string,
     ) {
         this.id = String(Math.floor(Math.random() * 1e6))
+        if (level === 'Error') {
+            console.error(text)
+        }
     }
 }
