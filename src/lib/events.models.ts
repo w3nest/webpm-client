@@ -6,7 +6,13 @@ import { LoadingGraphError } from './errors.models'
 /**
  * Available topics when installing components.
  */
-export type Topic = 'LoadingGraph' | 'ESM' | 'Python' | 'Backend' | 'CSS'
+export type Topic =
+    | 'LoadingGraph'
+    | 'ESM'
+    | 'Python'
+    | 'Backend'
+    | 'CSS'
+    | 'Worker'
 
 export interface AllEvents {
     CdnMessageEvent: CdnMessageEvent

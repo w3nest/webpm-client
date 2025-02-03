@@ -569,13 +569,21 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
         const message = { type: 'CdnEvent', event: cdnEvent }
         input.context.sendData(message)
     }
+    input.args.cdnInstallation.onEvent = onEvent
+    const log = (text: string) => {
+        onEvent(new webpm.ConsoleEvent('Info', 'Worker', text))
+    }
 
     const install = webpm.install(input.args.cdnInstallation)
 
-    input.context.info('Start install')
+    log(`Start install in worker ${input.workerId}`)
 
     return install
         .then(() => {
+            log(
+                `Expose ${String(input.args.functions.length)} functions & ${String(input.args.variables.length)} variables.`,
+            )
+
             input.args.functions.forEach((f) => {
                 self[f.id] = deserializeFunction(f.target)
             })
@@ -586,9 +594,8 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
             })
         })
         .then(() => {
-            input.context.info('Dependencies installation done')
             const donePromises = input.args.postInstallTasks.map((task) => {
-                input.context.info(`Start post-install task '${task.title}'`)
+                log(`Execute post-install task '${task.title}'`)
                 // eslint-disable-next-line @typescript-eslint/no-implied-eval,@typescript-eslint/no-unsafe-call
                 const entryPoint = new Function(
                     task.entryPoint,
@@ -609,7 +616,10 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
                 type: 'installEvent',
                 value: 'install done',
             })
+            log(`Install done`)
+
             if (input.args.onAfterInstall) {
+                log(`Trigger static 'onAfterInstall'`)
                 deserializeFunction(
                     input.args.onAfterInstall as unknown as string,
                 )({
@@ -1164,7 +1174,7 @@ export class WorkersPool {
                 context: ctx,
             })
             const taskChannel$ = this.getTaskChannel$(p, taskId, context)
-            const cdnPackage = '@youwol/webpm-client'
+            const cdnPackage = '@w3nest/webpm-client'
             const cdnUrl = `${
                 WorkersPool.BackendConfiguration.urlResource
             }/${getAssetId(cdnPackage)}/${setup.version}/dist/${cdnPackage}.js`
