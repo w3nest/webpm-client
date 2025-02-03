@@ -3,7 +3,6 @@
 import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs'
 import { filter, last, map, take, takeWhile, tap } from 'rxjs/operators'
 import { CdnEvent, getAssetId, isCdnEvent } from '..'
-import { WorkersPoolView } from './views'
 import {
     InWorkerAction,
     IWWorkerProxy,
@@ -1315,12 +1314,5 @@ export class WorkersPool {
         Object.values(this.workers$.value).forEach(({ worker }) => {
             worker.terminate()
         })
-    }
-
-    /**
-     * Return a reactive view presenting the workers' state & information.
-     */
-    view() {
-        return new WorkersPoolView({ workersPool: this })
     }
 }

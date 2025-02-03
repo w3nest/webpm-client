@@ -9,5 +9,4 @@
  * @module WorkersPoolModule
  */
 export * from './workers-factory'
-export * from './views'
 export * from './web-worker.proxy'

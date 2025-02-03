@@ -22,6 +22,8 @@ externals = {
     # `@w3nest/http-primitives` is only used for typing & test, not in dev. dependencies to let consuming packages
     # have it in their `node_modules`.
     "@w3nest/http-clients": "^0.1.0",
+    # For the Views module
+    "rx-vdom": "^0.1.1",
 }
 config = ProjectConfig(
     path=project_folder,
@@ -42,10 +44,7 @@ config = ProjectConfig(
     testConfig="https://github.com/youwol/integration-tests-conf",
     userGuide=False,
     bundles=Bundles(
-        mainModule=MainModule(
-            entryFile="./index.ts",
-            aliases=['webpm']
-        ),
+        mainModule=MainModule(entryFile="./index.ts", aliases=["webpm"]),
         auxiliaryModules=[
             AuxiliaryModule(
                 name="workersPool",
@@ -57,11 +56,16 @@ config = ProjectConfig(
                 entryFile="./lib/test-utils/index.ts",
                 loadDependencies=[],
             ),
+            AuxiliaryModule(
+                name="views",
+                entryFile="./lib/views/index.ts",
+                loadDependencies=["rxjs", "rx-vdom"],
+            ),
         ],
     ),
 )
 
-template_folder = project_folder / '.w3nest' / '.template'
+template_folder = project_folder / ".w3nest" / ".template"
 
 generate_template(config=config, dst_folder=template_folder)
 
@@ -71,6 +75,6 @@ files = [
     "package.json",
     # "tsconfig.json",  added '"exclude": ["./webpm-client-doc"]'
     "webpack.config.ts",
-    ]
+]
 for file in files:
     copyfile(src=template_folder / file, dst=project_folder / file)

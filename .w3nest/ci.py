@@ -12,7 +12,7 @@ from w3nest.ci.ts_frontend import (
     TestStepConfig,
     test_result,
     test_coverage,
-    PublishConfig
+    PublishConfig,
 )
 from w3nest_client.context import Context
 
@@ -23,6 +23,7 @@ test_html_outputs: Artifact = Artifact(
     ),
     links=[Link(name="HTML outputs", url="src/tests/.html-outputs/index.html")],
 )
+
 
 class PipelineFactory(IPipelineFactory):
     def __init__(self, **kwargs):
@@ -41,7 +42,13 @@ class PipelineFactory(IPipelineFactory):
                 artifacts=[test_result, test_coverage, test_html_outputs]
             ),
             publishConfig=PublishConfig(
-                packagedArtifacts=["dist", "docs", "test-coverage", "test-html-outputs"]
+                packagedFolders=["assets"],
+                packagedArtifacts=[
+                    "dist",
+                    "docs",
+                    "test-coverage",
+                    "test-html-outputs",
+                ],
             ),
         )
         return await pipeline(config, context)
