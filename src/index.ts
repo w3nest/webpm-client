@@ -70,17 +70,17 @@ if (scriptSrc) {
     }
 }
 
-if (!globalThis['@youwol/webpm-client']) {
+if (!globalThis[setup.name]) {
     /**
      * Cdn client is particular: when imported from a `<script>` element its installation has not been managed
      * by the library itself, and the (latest) version exposed with the original library name has not been set.
      * This is why the following line is needed.
      */
-    globalThis['@youwol/webpm-client'] = { ...cdnClient, setup }
+    globalThis[setup.name] = { ...cdnClient, setup }
     /**
      * For the initial install, aliases have to be installed explicitly.
      * They are coming from the file `template.py`, but are for now not available in auto-generated (hence duplication).
      */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    globalThis.webpm = globalThis['@youwol/webpm-client']
+    globalThis.webpm = globalThis[setup.name]
 }

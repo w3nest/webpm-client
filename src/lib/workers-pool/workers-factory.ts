@@ -515,7 +515,8 @@ export interface MessageInstall {
 }
 
 function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
-    if (self['@youwol/webpm-client:worker-install-done']) {
+    const markerInstallDone = '@w3nest/webpm-client:worker-install-done'
+    if (self[markerInstallDone]) {
         // The environment is already installed
         return Promise.resolve()
     }
@@ -560,15 +561,16 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
     // @ts-expect-error need refactoring
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     self.customImportScripts(input.args.cdnUrl)
-    const cdn = self['@youwol/webpm-client'] as typeof WebpmClient
-    cdn.Client.BackendConfiguration = input.args.backendConfiguration
-    cdn.Client.backendsPartitionId = input.args.backendsPartitionId
-    input.args.cdnInstallation.onEvent = (cdnEvent: WebpmClient.CdnEvent) => {
+    const webpm = self['@w3nest/webpm-client'] as typeof WebpmClient
+
+    webpm.Client.BackendConfiguration = input.args.backendConfiguration
+    webpm.Client.backendsPartitionId = input.args.backendsPartitionId
+    const onEvent = (cdnEvent: WebpmClient.CdnEvent) => {
         const message = { type: 'CdnEvent', event: cdnEvent }
         input.context.sendData(message)
     }
 
-    const install = cdn.install(input.args.cdnInstallation)
+    const install = webpm.install(input.args.cdnInstallation)
 
     input.context.info('Start install')
 
@@ -615,7 +617,7 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
                     workerScope: input.workerScope,
                 })
             }
-            self['@youwol/webpm-client:worker-install-done'] = true
+            self[markerInstallDone] = true
         })
 }
 
