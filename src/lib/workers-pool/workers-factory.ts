@@ -510,8 +510,8 @@ export interface MessageInstall {
         entryPoint: string
         args: unknown
     }[]
-    onBeforeInstall?: InWorkerAction
-    onAfterInstall?: InWorkerAction
+    onBeforeInstall?: InWorkerAction | string
+    onAfterInstall?: InWorkerAction | string
 }
 
 function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
@@ -1179,6 +1179,9 @@ export class WorkersPool {
                 WorkersPool.BackendConfiguration.urlResource
             }/${getAssetId(cdnPackage)}/${setup.version}/dist/${cdnPackage}.js`
 
+            const proxy = WorkersPool.webWorkersProxy
+            const staticOnBefore = proxy.onBeforeWorkerInstall
+            const staticOnAfter = proxy.onAfterWorkerInstall
             const argsInstall: MessageInstall = {
                 backendsPartitionId: WorkersPool.backendsPartitionId,
                 backendConfiguration: WorkersPool.BackendConfiguration,
@@ -1194,9 +1197,7 @@ export class WorkersPool {
                         target: (...unknown: unknown[]) => unknown
                     }) => ({
                         id,
-                        target: WorkersPool.webWorkersProxy.serializeFunction(
-                            target,
-                        ),
+                        target: proxy.serializeFunction(target),
                     }),
                 ),
                 cdnInstallation: this.environment.cdnInstallation,
@@ -1205,16 +1206,16 @@ export class WorkersPool {
                         return {
                             title: task.title,
                             args: task.args,
-                            entryPoint: `return ${String(task.entryPoint)}`,
+                            entryPoint: proxy.serializeFunction(
+                                task.entryPoint,
+                            ),
                         }
                     },
                 ),
-                onBeforeInstall: WorkersPool.webWorkersProxy.serializeFunction(
-                    WorkersPool.webWorkersProxy.onBeforeWorkerInstall,
-                ) as unknown as InWorkerAction,
-                onAfterInstall: WorkersPool.webWorkersProxy.serializeFunction(
-                    WorkersPool.webWorkersProxy.onAfterWorkerInstall,
-                ) as unknown as InWorkerAction,
+                onBeforeInstall:
+                    staticOnBefore && proxy.serializeFunction(staticOnBefore),
+                onAfterInstall:
+                    staticOnAfter && proxy.serializeFunction(staticOnAfter),
             }
 
             p.schedule()
