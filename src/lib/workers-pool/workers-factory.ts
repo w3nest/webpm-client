@@ -212,12 +212,19 @@ export interface MessageStart {
  *
  * @category Worker's Message
  */
-export interface MessageExit {
+export type MessageExit = {
     taskId: string
     workerId: string
-    error: boolean
+} & (
+    | {
+          error: true
+          result: Error
+      }
+    | {
+          error: false
     result: unknown
 }
+)
 
 /**
  * Message emitted from workers when a log is sent (see {@link WorkerContext}).
@@ -277,12 +284,9 @@ export interface MainToWorkerMessage {
 }
 
 /**
- * Messages exchanged between the main thread and the workers' thread.
- *
- * @category Worker's Message
+ * Represents the available `type` in {@link Message}.
  */
-export interface Message {
-    type:
+export type MessageType =
         | 'Execute'
         | 'Exit'
         | 'Start'
@@ -290,14 +294,47 @@ export interface Message {
         | 'Data'
         | 'MainToWorkerMessage'
         | 'PostError'
-    data:
-        | MessageExecute
-        | MessageData
-        | MessageExit
-        | MessageLog
-        | MessageStart
-        | MainToWorkerMessage
-        | MessagePostError
+    | 'CdnEvent'
+
+/**
+ * Type mapping between {@link MessageType} and associated data structure.
+ */
+export type MessageContent = {
+    Execute: MessageExecute
+    Exit: MessageExit
+    Start: MessageStart
+    Log: MessageLog
+    Data: MessageData
+    MainToWorkerMessage: MainToWorkerMessage
+    PostError: MessagePostError
+    CdnEvent: {
+        type: 'CdnEvent'
+        event: unknown
+        workerId: string
+        taskId: string
+    }
+}
+/**
+ * Messages exchanged between the main thread and the workers' thread.
+ *
+ * @category Worker's Message
+ */
+export type Message =
+    | { type: 'Execute'; data: MessageExecute }
+    | { type: 'Exit'; data: MessageExit }
+    | { type: 'Start'; data: MessageStart }
+    | { type: 'Log'; data: MessageLog }
+    | { type: 'Data'; data: MessageData }
+    | { type: 'MainToWorkerMessage'; data: MainToWorkerMessage }
+    | { type: 'PostError'; data: MessagePostError }
+    | {
+          type: 'CdnEvent'
+          data: {
+              type: 'CdnEvent'
+              event: CdnEvent
+              workerId: string
+              taskId: string
+          }
 }
 
 /**
@@ -553,8 +590,7 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
         input.args.frontendConfiguration.crossOrigin ?? '',
     )
         ? importScriptsXMLHttpRequest
-        : // @ts-expect-error need refactoring
-          self.importScripts
+        : self.importScripts
 
     console.log('Install environment in worker', input)
 
@@ -689,12 +725,12 @@ export interface PoolSize {
      * Initial number of workers to get ready before {@link WorkersPool.ready} is fulfilled.
      * Set to `1` by default.
      */
-    startAt?: number
+    startAt: number
     /**
      * Maximum number of workers.
      * Set to `max(1, navigator.hardwareConcurrency - 1)` by default.
      */
-    stretchTo?: number
+    stretchTo: number
 }
 /**
  * Input for {@link WorkersPool.constructor}.
