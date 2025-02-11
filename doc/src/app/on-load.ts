@@ -1,6 +1,14 @@
 import { render, AnyVirtualDOM } from 'rx-vdom'
 import { navigation } from './navigation'
 import { Router, DefaultLayout } from 'mkdocs-ts'
+import { createRootContext, inMemReporter } from './common'
+
+const ctx = createRootContext({
+    threadName: 'App',
+    labels: [],
+})
+
+console.log('In memory logs reporter', inMemReporter)
 
 export const router = new Router({
     navigation,
@@ -41,8 +49,11 @@ export const logo: AnyVirtualDOM = {
 }
 document.getElementById('content').appendChild(
     render(
-        new DefaultLayout.Layout({
-            router,
-        }),
+        new DefaultLayout.Layout(
+            {
+                router,
+            },
+            ctx,
+        ),
     ),
 )
