@@ -1,6 +1,7 @@
-import { installCodeApiModule, MdWidgets } from 'mkdocs-ts'
+import { DefaultLayout, installCodeApiModule, MdWidgets } from 'mkdocs-ts'
 import { AppNav, createRootContext, placeholders } from '../common'
 import { firstValueFrom } from 'rxjs'
+import { companionNodes$ } from '../on-load'
 
 export async function apiNav(): Promise<AppNav> {
     const context = createRootContext({
@@ -22,6 +23,12 @@ export async function apiNav(): Promise<AppNav> {
                     tag: 'i' as const,
                     class: `fas fa-code`,
                 },
+                actions: [
+                    DefaultLayout.splitCompanionAction({
+                        path: '/api',
+                        companionNodes$,
+                    }),
+                ],
             },
             entryModule: 'webpm-client',
             docBasePath: '../assets/api',

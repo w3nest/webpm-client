@@ -1,4 +1,4 @@
-import { render, VirtualDOM, ChildrenLike, CSSAttribute } from 'rx-vdom'
+import { render, VirtualDOM, ChildrenLike } from 'rx-vdom'
 import { navigation } from './navigation'
 import { Router, DefaultLayout, MdWidgets } from 'mkdocs-ts'
 import { createRootContext, inMemReporter } from './common'
@@ -16,6 +16,8 @@ export const router = new Router({
 })
 
 const bookmarks$ = new BehaviorSubject(['/', '/how-to', '/tutorials', '/api'])
+
+export const companionNodes$ = new BehaviorSubject([])
 
 const pageVertPadding = '3rem'
 
@@ -58,16 +60,17 @@ export class NavHeaderView implements VirtualDOM<'div'> {
     }
 }
 
-document.getElementById('content').appendChild(
-    render(
-        new DefaultLayout.Layout(
-            {
-                router,
-                bookmarks$,
-                displayOptions: { pageVertPadding },
-                sideNavHeader: () => new NavHeaderView(),
-            },
-            ctx,
-        ),
-    ),
+const app = new DefaultLayout.LayoutWithCompanion(
+    {
+        router,
+        bookmarks$,
+        displayOptions: {
+            pageVertPadding: '3rem',
+        },
+        sideNavHeader: () => new NavHeaderView(),
+        companionNodes$,
+    },
+    ctx,
 )
+
+document.getElementById('content').appendChild(render(app))
