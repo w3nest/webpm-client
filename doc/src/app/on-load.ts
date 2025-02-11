@@ -1,7 +1,8 @@
-import { render, AnyVirtualDOM } from 'rx-vdom'
+import { render, VirtualDOM, ChildrenLike, CSSAttribute } from 'rx-vdom'
 import { navigation } from './navigation'
-import { Router, DefaultLayout } from 'mkdocs-ts'
+import { Router, DefaultLayout, MdWidgets } from 'mkdocs-ts'
 import { createRootContext, inMemReporter } from './common'
+import { BehaviorSubject } from 'rxjs'
 
 const ctx = createRootContext({
     threadName: 'App',
@@ -14,44 +15,57 @@ export const router = new Router({
     navigation,
 })
 
-export const logo: AnyVirtualDOM = {
-    tag: 'div',
-    class: 'd-flex align-items-center',
-    children: [
-        {
-            tag: 'div',
-            innerText: '<',
-            style: {
-                color: 'white',
-                fontWeight: 'bolder',
-                fontSize: 'x-large',
+const bookmarks$ = new BehaviorSubject(['/', '/how-to', '/tutorials', '/api'])
+
+const pageVertPadding = '3rem'
+
+export class NavHeaderView implements VirtualDOM<'div'> {
+    public readonly tag = 'div'
+    public readonly class = 'd-flex align-items-center justify-content-center'
+    public readonly children: ChildrenLike
+    public readonly style = {
+        height: pageVertPadding,
+    }
+
+    constructor() {
+        this.children = [
+            {
+                tag: 'a',
+                class: 'mx-2',
+                href: 'https://github.com/w3nest/webpm-client',
+                children: [
+                    {
+                        ...MdWidgets.githubIcon,
+                        style: {
+                            filter: 'invert(1)',
+                        },
+                    },
+                ],
             },
-        },
-        {
-            tag: 'img',
-            class: 'mx-1',
-            style: {
-                width: '30px',
-                height: '30px',
+            {
+                tag: 'a',
+                class: 'mx-2',
+                href: 'https://www.npmjs.com/package/@w3nest/webpm-client',
+                children: [MdWidgets.npmIcon],
             },
-            src: '../assets/logo.svg',
-        },
-        {
-            tag: 'div',
-            innerText: '>',
-            style: {
-                color: 'white',
-                fontWeight: 'bolder',
-                fontSize: 'x-large',
+            {
+                tag: 'a',
+                class: 'mx-2',
+                href: 'https://github.com/w3nest/webpm-client/blob/main/LICENSE',
+                children: [MdWidgets.mitIcon],
             },
-        },
-    ],
+        ]
+    }
 }
+
 document.getElementById('content').appendChild(
     render(
         new DefaultLayout.Layout(
             {
                 router,
+                bookmarks$,
+                displayOptions: { pageVertPadding },
+                sideNavHeader: () => new NavHeaderView(),
             },
             ctx,
         ),
