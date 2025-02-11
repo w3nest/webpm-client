@@ -9,3 +9,4 @@ cdn.zip
 __pycache__
 *.iml
 .template
+**/.local-dependencies

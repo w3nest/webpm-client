@@ -4,3 +4,5 @@ dist/docs
 src/tests
 webpm-client-doc
 cdn.zip
+.w3nest
+doc/

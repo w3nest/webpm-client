@@ -1,0 +1,202 @@
+{
+    "name": "TestUtilsTypes",
+    "documentation": {
+        "sections": []
+    },
+    "path": "webpm-client/MainModule/TestUtilsTypes",
+    "navPath": "@nav/api/",
+    "attributes": [],
+    "types": [
+        {
+            "name": "WebWorkerJest",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Trait for abstracting the concept of Web Worker; default implementation is based on\nthe WebWorker API provided by the browser, see  [WebWorkerBrowser](@nav/api/WorkersPoolModule.WebWorkerBrowser) .",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WebWorkerJest",
+            "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest",
+            "attributes": [
+                {
+                    "name": "uid",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Worker's UID",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WebWorkerJest.uid",
+                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.uid",
+                    "code": {
+                        "filePath": "src/lib/test-utils/index.ts",
+                        "declaration": "public readonly uid: string",
+                        "implementation": "",
+                        "startLine": 17,
+                        "endLine": 18,
+                        "references": {
+                            "uid": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.uid",
+                            "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid"
+                        }
+                    }
+                }
+            ],
+            "callables": [
+                {
+                    "name": "send",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Send to the worker some data in the channel associated to  `taskId`",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WebWorkerJest.send",
+                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.send",
+                    "code": {
+                        "filePath": "src/lib/test-utils/index.ts",
+                        "declaration": "send({ taskId, data }: { taskId: string; data: unknown })",
+                        "implementation": "send({ taskId, data }: { taskId: string; data: unknown }) {\n    const messageToWorker = {\n        type: 'MainToWorkerMessage',\n        data: {\n            taskId,\n            workerId: this.uid,\n            data,\n        },\n    }\n    setTimeout(() => {\n        this.globalEntryPoint({ data: messageToWorker } as MessageEvent)\n    }, 0)\n}",
+                        "startLine": 56,
+                        "endLine": 69,
+                        "references": {
+                            "send": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.send"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                }
+            ],
+            "code": {
+                "filePath": "src/lib/test-utils/index.ts",
+                "declaration": "export class WebWorkerJest implements WWorkerTrait",
+                "implementation": "export class WebWorkerJest implements WWorkerTrait {\n    public readonly uid: string\n    public readonly messages: Message[] = []\n    public readonly globalEntryPoint: typeof entryPointWorker\n    onMessageWorker: (message: { data: Message }) => unknown\n    onMessageMain: (message: { data: Message }) => unknown\n\n    constructor(params: {\n        uid: string\n        onMessageWorker: (message) => unknown\n        onMessageMain: (message) => unknown\n        globalEntryPoint: typeof entryPointWorker\n    }) {\n        Object.assign(this, params)\n    }\n\n    execute<T>({\n        taskId,\n        entryPoint,\n        args,\n    }: {\n        taskId: string\n        entryPoint: (args: EntryPointArguments<T>) => unknown\n        args: T\n    }) {\n        const message = {\n            type: 'Execute',\n            data: {\n                taskId,\n                workerId: this.uid,\n                args,\n                entryPoint,\n            },\n        }\n        setTimeout(() => {\n            // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- testing workaround\n            // @ts-ignore\n            this.globalEntryPoint({ data: message })\n        }, 0)\n    }\n    send({ taskId, data }: { taskId: string; data: unknown }) {\n        const messageToWorker = {\n            type: 'MainToWorkerMessage',\n            data: {\n                taskId,\n                workerId: this.uid,\n                data,\n            },\n        }\n        setTimeout(() => {\n            this.globalEntryPoint({ data: messageToWorker } as MessageEvent)\n        }, 0)\n    }\n    sendBackToMain(message: Message) {\n        this.messages.push(message)\n        this.onMessageMain({ data: message })\n    }\n    terminate() {\n        /*no op*/\n    }\n}",
+                "startLine": 16,
+                "endLine": 77,
+                "references": {
+                    "WebWorkerJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest",
+                    "Message": "@nav/api/WorkersPoolModule.Message",
+                    "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid",
+                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
+                    "WWorkerTrait.execute": "@nav/api/WorkersPoolModule.WWorkerTrait.execute",
+                    "WWorkerTrait.send": "@nav/api/WorkersPoolModule.WWorkerTrait.send",
+                    "WWorkerTrait.terminate": "@nav/api/WorkersPoolModule.WWorkerTrait.terminate",
+                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait"
+                }
+            },
+            "semantic": {
+                "role": "class",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WebWorkersJest",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Proxy for WebWorkers creation.\n\nThe default implementation used is the one provided by the browser ( [WebWorkersBrowser](@nav/api/WorkersPoolModule.WebWorkersBrowser) ).\nCan be also overriden for example for testing contexts.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WebWorkersJest",
+            "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/test-utils/index.ts",
+                "declaration": "export class WebWorkersJest implements IWWorkerProxy",
+                "implementation": "export class WebWorkersJest implements IWWorkerProxy {\n    public readonly type = 'WebWorkersJest'\n    static workers: Record<string, WebWorkerJest> = {}\n    public readonly globalEntryPoint: typeof entryPointWorker\n\n    public readonly onBeforeWorkerInstall?: InWorkerAction\n    public readonly onAfterWorkerInstall?: InWorkerAction\n\n    constructor(params: {\n        globalEntryPoint: typeof entryPointWorker\n        cdnClient: typeof cdnClient\n        onBeforeWorkerInstall?: InWorkerAction\n        onAfterWorkerInstall?: InWorkerAction\n    }) {\n        Object.assign(this, params)\n\n        globalThis.importScripts = () => {\n            // this is only called when 'installing' cdnClient in worker\n            window['@youwol/webpm-client'] = params.cdnClient\n        }\n\n        globalThis.postMessage = (\n            message: Message & {\n                data: {\n                    notCloneable: boolean\n                    result: { notCloneable: boolean }\n                } & MessageExit\n            },\n        ) => {\n            if (message.data.notCloneable || message.data.result.notCloneable) {\n                throw Error('Data can not be cloned to be sent to worker')\n            }\n            //setTimeout because in worker 'postMessage' let the eventLoop to process the next task\n            setTimeout(() => {\n                const workerId = message.data.workerId\n                const worker = WebWorkersJest.workers[workerId]\n                worker.sendBackToMain(message)\n            }, 0)\n        }\n    }\n    createWorker({\n        onMessageWorker,\n        onMessageMain,\n    }: {\n        onMessageWorker: (message: Message) => unknown\n        onMessageMain: (message: Message) => unknown\n    }) {\n        const worker = new WebWorkerJest({\n            uid: `w${String(Math.floor(Math.random() * Math.pow(10, 6)))}`,\n            onMessageWorker,\n            onMessageMain,\n            globalEntryPoint: this.globalEntryPoint,\n        })\n        WebWorkersJest.workers[worker.uid] = worker\n        return worker\n    }\n\n    serializeFunction(fct: (...unknown: unknown[]) => unknown) {\n        // In test env, serialization is skipped, this is workaround\n        return fct as unknown as string\n    }\n}",
+                "startLine": 78,
+                "endLine": 140,
+                "references": {
+                    "WebWorkersJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest",
+                    "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
+                    "IWWorkerProxy.onAfterWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
+                    "IWWorkerProxy.onBeforeWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
+                    "IWWorkerProxy.type": "@nav/api/WorkersPoolModule.IWWorkerProxy.type",
+                    "WebWorkerJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest",
+                    "Message": "@nav/api/WorkersPoolModule.Message",
+                    "IWWorkerProxy.createWorker": "@nav/api/WorkersPoolModule.IWWorkerProxy.createWorker",
+                    "IWWorkerProxy.serializeFunction": "@nav/api/WorkersPoolModule.IWWorkerProxy.serializeFunction",
+                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy"
+                }
+            },
+            "semantic": {
+                "role": "class",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        }
+    ],
+    "callables": [],
+    "files": [
+        {
+            "name": "index.ts",
+            "path": "src/lib/test-utils/index.ts",
+            "documentation": {
+                "sections": [
+                    {
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        },
+                        "content": "",
+                        "contentType": "markdown"
+                    }
+                ]
+            }
+        }
+    ],
+    "children": [],
+    "semantic": {
+        "role": "module",
+        "labels": [],
+        "attributes": {},
+        "relations": {}
+    }
+}

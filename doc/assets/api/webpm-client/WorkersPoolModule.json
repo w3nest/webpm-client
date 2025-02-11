@@ -1,0 +1,3119 @@
+{
+    "name": "WorkersPoolModule",
+    "documentation": {
+        "sections": [
+            {
+                "content": "Add-on module of the library that handles resources installation in\n[Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).\n\nThis add-on module is loaded using  [MainModule.installWorkersPoolModule](@nav/api/MainModule.installWorkersPoolModule)  from the main module.",
+                "contentType": "markdown",
+                "semantic": {
+                    "role": "",
+                    "labels": [],
+                    "attributes": {},
+                    "relations": {}
+                }
+            }
+        ]
+    },
+    "path": "webpm-client/WorkersPoolModule",
+    "navPath": "@nav/api/",
+    "attributes": [],
+    "types": [
+        {
+            "name": "Process",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "A process is an abstraction managing lifecycle of a particular task.\nNot doing much for now besides gathering callbacks to call at different stage of the task (logging into console).",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "Process",
+            "navPath": "@nav/api/WorkersPoolModule.Process",
+            "attributes": [
+                {
+                    "name": "context",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Associated context.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "Process.context",
+                    "navPath": "@nav/api/WorkersPoolModule.Process.context",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly context: ContextTrait",
+                        "implementation": "",
+                        "startLine": 680,
+                        "endLine": 681,
+                        "references": {
+                            "context": "@nav/api/WorkersPoolModule.Process.context",
+                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                        }
+                    }
+                },
+                {
+                    "name": "taskId",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Task's id.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "Process.taskId",
+                    "navPath": "@nav/api/WorkersPoolModule.Process.taskId",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly taskId: string",
+                        "implementation": "",
+                        "startLine": 672,
+                        "endLine": 673,
+                        "references": {
+                            "taskId": "@nav/api/WorkersPoolModule.Process.taskId"
+                        }
+                    }
+                },
+                {
+                    "name": "title",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Task's title.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "Process.title",
+                    "navPath": "@nav/api/WorkersPoolModule.Process.title",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly title: string",
+                        "implementation": "",
+                        "startLine": 676,
+                        "endLine": 677,
+                        "references": {
+                            "title": "@nav/api/WorkersPoolModule.Process.title"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export class Process",
+                "implementation": "export class Process {\n    /**\n     * Task's id.\n     */\n    public readonly taskId: string\n    /**\n     * Task's title.\n     */\n    public readonly title: string\n    /**\n     * Associated context.\n     */\n    public readonly context: ContextTrait\n\n    constructor(params: {\n        taskId: string\n        title: string\n        context: ContextTrait\n    }) {\n        Object.assign(this, params)\n    }\n\n    schedule() {\n        this.context.info(`Schedule task  ${this.title} (${this.taskId})`)\n    }\n\n    start() {\n        this.context.info(`Start task  ${this.title} (${this.taskId})`)\n    }\n\n    fail(error: unknown) {\n        console.error('An error occurred in a worker', error)\n        this.context.info(`Task failed  ${this.title} (${this.taskId})`, {\n            error,\n        })\n    }\n\n    succeed() {\n        this.context.info(`Task succeeded  ${this.title} (${this.taskId})`)\n    }\n\n    log(text: string) {\n        this.context.info(`${this.title} (${this.taskId}): ${text}`)\n    }\n}",
+                "startLine": 668,
+                "endLine": 713,
+                "references": {
+                    "Process": "@nav/api/WorkersPoolModule.Process",
+                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                }
+            },
+            "semantic": {
+                "role": "class",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WebWorkerBrowser",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Implementation of  [WWorkerTrait](@nav/api/WorkersPoolModule.WWorkerTrait)  for Web Workers provided by browsers.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WebWorkerBrowser",
+            "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
+            "attributes": [
+                {
+                    "name": "uid",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Immutable Constants",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WebWorkerBrowser.uid",
+                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.uid",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                        "declaration": "public readonly uid: string",
+                        "implementation": "",
+                        "startLine": 66,
+                        "endLine": 67,
+                        "references": {
+                            "uid": "@nav/api/WorkersPoolModule.WebWorkerBrowser.uid",
+                            "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid"
+                        }
+                    }
+                },
+                {
+                    "name": "worker",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Immutable Constants",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WebWorkerBrowser.worker",
+                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.worker",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                        "declaration": "public readonly worker: Worker",
+                        "implementation": "",
+                        "startLine": 70,
+                        "endLine": 71,
+                        "references": {
+                            "worker": "@nav/api/WorkersPoolModule.WebWorkerBrowser.worker"
+                        }
+                    }
+                }
+            ],
+            "callables": [
+                {
+                    "name": "send",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Send to the worker some data in the channel associated to  `taskId`",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WebWorkerBrowser.send",
+                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.send",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                        "declaration": "send({ taskId, data }: { taskId: string; data: unknown })",
+                        "implementation": "send({ taskId, data }: { taskId: string; data: unknown }) {\n    const messageToWorker = {\n        type: 'MainToWorkerMessage',\n        data: {\n            taskId,\n            workerId: this.uid,\n            data,\n        },\n    }\n    this.worker.postMessage(messageToWorker)\n}",
+                        "startLine": 97,
+                        "endLine": 108,
+                        "references": {
+                            "send": "@nav/api/WorkersPoolModule.WebWorkerBrowser.send"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                }
+            ],
+            "code": {
+                "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                "declaration": "export class WebWorkerBrowser implements WWorkerTrait",
+                "implementation": "export class WebWorkerBrowser implements WWorkerTrait {\n    /**\n     * Immutable Constants\n     */\n    public readonly uid: string\n    /**\n     * Immutable Constants\n     */\n    public readonly worker: Worker\n\n    constructor(params: { uid: string; worker: Worker }) {\n        Object.assign(this, params)\n    }\n\n    execute<T>({\n        taskId,\n        entryPoint,\n        args,\n    }: {\n        taskId: string\n        entryPoint: (args: EntryPointArguments<T>) => unknown\n        args: T\n    }) {\n        const message = {\n            type: 'Execute',\n            data: {\n                taskId,\n                workerId: this.uid,\n                args,\n                entryPoint: `return ${String(entryPoint)}`,\n            },\n        }\n        this.worker.postMessage(message)\n    }\n\n    send({ taskId, data }: { taskId: string; data: unknown }) {\n        const messageToWorker = {\n            type: 'MainToWorkerMessage',\n            data: {\n                taskId,\n                workerId: this.uid,\n                data,\n            },\n        }\n        this.worker.postMessage(messageToWorker)\n    }\n\n    terminate() {\n        this.worker.terminate()\n    }\n}",
+                "startLine": 62,
+                "endLine": 113,
+                "references": {
+                    "WebWorkerBrowser": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
+                    "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid",
+                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
+                    "WWorkerTrait.execute": "@nav/api/WorkersPoolModule.WWorkerTrait.execute",
+                    "WWorkerTrait.send": "@nav/api/WorkersPoolModule.WWorkerTrait.send",
+                    "WWorkerTrait.terminate": "@nav/api/WorkersPoolModule.WWorkerTrait.terminate",
+                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait"
+                }
+            },
+            "semantic": {
+                "role": "class",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WebWorkersBrowser",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Proxy for WebWorkers creation.\n\nThe default implementation used is the one provided by the browser ( [WebWorkersBrowser](@nav/api/WorkersPoolModule.WebWorkersBrowser) ).\nCan be also overriden for example for testing contexts.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WebWorkersBrowser",
+            "navPath": "@nav/api/WorkersPoolModule.WebWorkersBrowser",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                "declaration": "export class WebWorkersBrowser implements IWWorkerProxy",
+                "implementation": "export class WebWorkersBrowser implements IWWorkerProxy {\n    type = 'WebWorkersBrowser'\n    createWorker({\n        onMessageWorker,\n        onMessageMain,\n    }: {\n        onMessageWorker: (message) => unknown\n        onMessageMain: (message) => unknown\n    }) {\n        const blob = new Blob(\n            ['self.onmessage = ', onMessageWorker.toString()],\n            {\n                type: 'text/javascript',\n            },\n        )\n        const url = URL.createObjectURL(blob)\n        const worker = new Worker(url)\n\n        worker.onmessage = onMessageMain\n        return new WebWorkerBrowser({\n            uid: `w${String(Math.floor(Math.random() * Math.pow(10, 6)))}`,\n            worker,\n        })\n    }\n\n    serializeFunction(fct?: (...unknown) => unknown) {\n        return `return ${String(fct)}`\n    }\n}",
+                "startLine": 114,
+                "endLine": 143,
+                "references": {
+                    "WebWorkersBrowser": "@nav/api/WorkersPoolModule.WebWorkersBrowser",
+                    "IWWorkerProxy.type": "@nav/api/WorkersPoolModule.IWWorkerProxy.type",
+                    "WebWorkerBrowser": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
+                    "IWWorkerProxy.createWorker": "@nav/api/WorkersPoolModule.IWWorkerProxy.createWorker",
+                    "IWWorkerProxy.serializeFunction": "@nav/api/WorkersPoolModule.IWWorkerProxy.serializeFunction",
+                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy"
+                }
+            },
+            "semantic": {
+                "role": "class",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WorkersPool",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Entry point to create workers pool.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WorkersPool",
+            "navPath": "@nav/api/WorkersPoolModule.WorkersPool",
+            "attributes": [
+                {
+                    "name": "backgroundContext",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "If  `CtxFactory`  is provided in constructor's argument ( [WorkersPoolInput](@nav/api/WorkersPoolModule.WorkersPoolInput) ),\nmain thread logging information is available here.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.backgroundContext",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.backgroundContext",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly backgroundContext: ContextTrait | undefined",
+                        "implementation": "",
+                        "startLine": 867,
+                        "endLine": 868,
+                        "references": {
+                            "backgroundContext": "@nav/api/WorkersPoolModule.WorkersPool.backgroundContext",
+                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                        }
+                    }
+                },
+                {
+                    "name": "busyWorkers$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Observable that emits the id of workers that are currently running a tasks each time a task is started\nor stopped.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.busyWorkers$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.busyWorkers$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly busyWorkers$ = new BehaviorSubject<string[]>([])",
+                        "implementation": "",
+                        "startLine": 852,
+                        "endLine": 853,
+                        "references": {
+                            "busyWorkers$": "@nav/api/WorkersPoolModule.WorkersPool.busyWorkers$",
+                            "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                        }
+                    }
+                },
+                {
+                    "name": "cdnEvent$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Observable that gathers all the  [CdnEventWorker](@nav/api/WorkersPoolModule.CdnEventWorker)  emitted by the workers.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.cdnEvent$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.cdnEvent$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly cdnEvent$: Subject<CdnEventWorker>",
+                        "implementation": "",
+                        "startLine": 874,
+                        "endLine": 875,
+                        "references": {
+                            "cdnEvent$": "@nav/api/WorkersPoolModule.WorkersPool.cdnEvent$",
+                            "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
+                            "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                        }
+                    }
+                },
+                {
+                    "name": "environment",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Workers' environment.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.environment",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.environment",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly environment: WorkerEnvironment",
+                        "implementation": "",
+                        "startLine": 881,
+                        "endLine": 882,
+                        "references": {
+                            "environment": "@nav/api/WorkersPoolModule.WorkersPool.environment",
+                            "WorkerEnvironment": "@nav/api/WorkersPoolModule.WorkerEnvironment"
+                        }
+                    }
+                },
+                {
+                    "name": "mergedChannel$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "All the  [messages ](@nav/api/WorkersPoolModule.Message)  from all workers.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.mergedChannel$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.mergedChannel$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly mergedChannel$ = new Subject<Message>()",
+                        "implementation": "",
+                        "startLine": 814,
+                        "endLine": 815,
+                        "references": {
+                            "mergedChannel$": "@nav/api/WorkersPoolModule.WorkersPool.mergedChannel$",
+                            "Message": "@nav/api/WorkersPoolModule.Message",
+                            "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                        }
+                    }
+                },
+                {
+                    "name": "pool",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Constraints on workers' pool size.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.pool",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.pool",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly pool: PoolSize",
+                        "implementation": "",
+                        "startLine": 805,
+                        "endLine": 806,
+                        "references": {
+                            "pool": "@nav/api/WorkersPoolModule.WorkersPool.pool",
+                            "PoolSize": "@nav/api/WorkersPoolModule.PoolSize"
+                        }
+                    }
+                },
+                {
+                    "name": "runningTasks$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Observable that emit the list of running tasks each time one or more are created or stopped.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.runningTasks$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.runningTasks$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly runningTasks$ = new BehaviorSubject<\n        { workerId: string; taskId: string; title: string }[]\n    >([])",
+                        "implementation": "",
+                        "startLine": 843,
+                        "endLine": 844,
+                        "references": {
+                            "runningTasks$": "@nav/api/WorkersPoolModule.WorkersPool.runningTasks$",
+                            "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                        }
+                    }
+                },
+                {
+                    "name": "startedWorkers$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Observable that emit the list of started workers as soon as one or more is starting creation.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.startedWorkers$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.startedWorkers$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly startedWorkers$ = new BehaviorSubject<string[]>([])",
+                        "implementation": "",
+                        "startLine": 820,
+                        "endLine": 821,
+                        "references": {
+                            "startedWorkers$": "@nav/api/WorkersPoolModule.WorkersPool.startedWorkers$",
+                            "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                        }
+                    }
+                },
+                {
+                    "name": "workerReleased$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Observable that emits  `{taskId, workerId}`  each time a worker finished processing a task.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.workerReleased$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.workerReleased$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly workerReleased$ = new Subject<{\n        workerId: WorkerId\n        taskId: string\n    }>()",
+                        "implementation": "",
+                        "startLine": 858,
+                        "endLine": 859,
+                        "references": {
+                            "workerReleased$": "@nav/api/WorkersPoolModule.WorkersPool.workerReleased$",
+                            "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                        }
+                    }
+                },
+                {
+                    "name": "workers$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Observable that emit a dictionary  `workerId -> {worker, channel$}`  each time new workers\nare ready to be used (installation & post-install tasks achieved).\n\nThe  `channel$`  object is streaming all associated worker's  [Message](@nav/api/WorkersPoolModule.Message) .",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.workers$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.workers$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "public readonly workers$ = new BehaviorSubject<\n        Record<\n            string,\n            {\n                worker: WWorkerTrait\n                channel$: Observable<Message>\n            }\n        >\n    >({})",
+                        "implementation": "",
+                        "startLine": 829,
+                        "endLine": 830,
+                        "references": {
+                            "workers$": "@nav/api/WorkersPoolModule.WorkersPool.workers$",
+                            "Message": "@nav/api/WorkersPoolModule.Message",
+                            "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
+                            "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
+                            "Observable": "https://rxjs.dev/guide/observable"
+                        }
+                    }
+                }
+            ],
+            "callables": [
+                {
+                    "name": "getWebWorkersProxy",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Return the Web Workers proxy.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.getWebWorkersProxy",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.getWebWorkersProxy",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "getWebWorkersProxy()",
+                        "implementation": "getWebWorkersProxy() {\n    return WorkersPool.webWorkersProxy\n}",
+                        "startLine": 1092,
+                        "endLine": 1095,
+                        "references": {
+                            "getWebWorkersProxy": "@nav/api/WorkersPoolModule.WorkersPool.getWebWorkersProxy",
+                            "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                },
+                {
+                    "name": "ready",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "When this method is awaited, it ensures that  `pool.startAt`  workers are ready to be used\n(installation & post-install tasks achieved).",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.ready",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.ready",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "async ready()",
+                        "implementation": "async ready() {\n    if (Object.entries(this.workers$.value).length >= this.pool.startAt) {\n        return\n    }\n    return new Promise<void>((resolve) => {\n        this.workers$\n            .pipe(\n                takeWhile(\n                    (workers) =>\n                        Object.entries(workers).length <\n                        (this.pool.startAt ?? 1),\n                ),\n                last(),\n            )\n            .subscribe(() => {\n                resolve()\n            })\n    })\n}",
+                        "startLine": 957,
+                        "endLine": 976,
+                        "references": {
+                            "ready": "@nav/api/WorkersPoolModule.WorkersPool.ready"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                },
+                {
+                    "name": "reserve",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Reserve a particular amount of worker.\nNo workers are deleted, and the number of worker can not exceed  `pool.stretchTo`  property.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.reserve",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.reserve",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "reserve({ workersCount }: { workersCount: number })",
+                        "implementation": "reserve({ workersCount }: { workersCount: number }) {\n    return forkJoin(\n        new Array(workersCount)\n            .fill(undefined)\n            .map(() =>\n                this.createWorker$(this.backgroundContext).pipe(\n                    map(({ channel$ }) => channel$),\n                ),\n            ),\n    )\n}",
+                        "startLine": 941,
+                        "endLine": 952,
+                        "references": {
+                            "reserve": "@nav/api/WorkersPoolModule.WorkersPool.reserve",
+                            "Message": "@nav/api/WorkersPoolModule.Message",
+                            "Observable": "https://rxjs.dev/guide/observable"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                },
+                {
+                    "name": "schedule",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Schedule a task.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            },
+                            {
+                                "title": "Arguments",
+                                "content": "\n*  **input**: task description\n*  **context**: context to log run-time info",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "arguments",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            },
+                            {
+                                "title": "Generics",
+                                "content": "\n*  **TArgs**: type of the entry point's argument",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "arguments",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.schedule",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.schedule",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "schedule<TArgs = unknown>(\n    input: ScheduleInput<TArgs>,\n    context = new NoContext(),\n): Observable<Message>",
+                        "implementation": "schedule<TArgs = unknown>(\n    input: ScheduleInput<TArgs>,\n    context = new NoContext(),\n): Observable<Message> {\n    const { title, entryPoint, args, targetWorkerId } = input\n    return context.withChild('schedule', (ctx) => {\n        const taskId = `t${String(Math.floor(Math.random() * Math.pow(10, 6)))}`\n        const p = new Process({\n            taskId,\n            title,\n            context: ctx,\n        })\n        const taskChannel$ = this.getTaskChannel$(p, taskId, ctx)\n\n        if (targetWorkerId && !(targetWorkerId in this.workers$.value)) {\n            throw Error('Provided workerId not known')\n        }\n        if (targetWorkerId && targetWorkerId in this.workers$.value) {\n            ctx.info('Target worker already created, enqueue task')\n            p.schedule()\n            this.tasksQueue.push({\n                entryPoint,\n                args,\n                taskId,\n                title,\n                channel$: taskChannel$,\n                targetWorkerId,\n            })\n\n            if (!this.busyWorkers$.value.includes(targetWorkerId)) {\n                ctx.info('Target worker IDLE, pick task')\n                this.pickTask(targetWorkerId, ctx)\n            }\n\n            return taskChannel$\n        }\n        const worker$ = this.getIdleWorkerOrCreate$(ctx)\n        if (!worker$) {\n            ctx.info('No worker available & max worker count reached')\n            p.schedule()\n            this.tasksQueue.push({\n                entryPoint,\n                args,\n                taskId,\n                title,\n                channel$: taskChannel$,\n            })\n            return taskChannel$\n        }\n        worker$\n            .pipe(\n                map(({ workerId }) => {\n                    ctx.info(`Got a worker ready ${workerId}`)\n                    p.schedule()\n                    this.tasksQueue.push({\n                        entryPoint,\n                        args,\n                        taskId,\n                        title,\n                        channel$: taskChannel$,\n                    })\n                    this.pickTask(workerId, ctx)\n                    return workerId\n                }),\n            )\n            .subscribe()\n\n        return taskChannel$\n    })\n}",
+                        "startLine": 984,
+                        "endLine": 1054,
+                        "references": {
+                            "schedule": "@nav/api/WorkersPoolModule.WorkersPool.schedule",
+                            "ScheduleInput": "@nav/api/WorkersPoolModule.ScheduleInput",
+                            "NoContext": "@nav/api/WorkersPoolModule.NoContext",
+                            "Message": "@nav/api/WorkersPoolModule.Message",
+                            "Observable": "https://rxjs.dev/guide/observable"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                },
+                {
+                    "name": "sendData",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Send a message from main thread to the worker processing a target task.\nThe function running in the worker has to instrument the received  `context` \nargument in order to process the messages.\nE.g.\n ```\nasync function functionInWorker({\n    args,\n    workerScope,\n    workerId,\n    taskId,\n    context,\n}){\n    context.onData = (args) => {\n        console.log('Received data from main thread', args)\n    }\n}\n```",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.sendData",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.sendData",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "sendData({ taskId, data }: { taskId: string; data: unknown })",
+                        "implementation": "sendData({ taskId, data }: { taskId: string; data: unknown }) {\n    const runningTask = this.runningTasks$.value.find(\n        (t) => t.taskId === taskId,\n    )\n    if (!runningTask) {\n        console.error(`WorkersPool.sendMessage: no task #${taskId} running`)\n        return\n    }\n    const worker = this.workers$.value[runningTask.workerId].worker\n    worker.send({ taskId, data })\n}",
+                        "startLine": 1077,
+                        "endLine": 1088,
+                        "references": {
+                            "sendData": "@nav/api/WorkersPoolModule.WorkersPool.sendData"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                },
+                {
+                    "name": "terminate",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Terminate all the workers.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPool.terminate",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.terminate",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "terminate()",
+                        "implementation": "terminate() {\n    Object.values(this.workers$.value).forEach(({ worker }) => {\n        worker.terminate()\n    })\n}",
+                        "startLine": 1359,
+                        "endLine": 1364,
+                        "references": {
+                            "terminate": "@nav/api/WorkersPoolModule.WorkersPool.terminate"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                }
+            ],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export class WorkersPool",
+                "implementation": "export class WorkersPool {\n    static backendsPartitionId: string\n    static BackendConfiguration: BackendConfiguration\n    static FrontendConfiguration: FrontendConfiguration = {}\n    static webWorkersProxy: IWWorkerProxy = new WebWorkersBrowser()\n\n    /**\n     * Constraints on workers' pool size.\n     * @group Immutable Constants\n     */\n    public readonly pool: PoolSize\n\n    private requestedWorkersCount = 0\n\n    /**\n     * All the {@link Message | messages } from all workers.\n     *\n     * @group Observables\n     */\n    public readonly mergedChannel$ = new Subject<Message>()\n    /**\n     * Observable that emit the list of started workers as soon as one or more is starting creation.\n     *\n     * @group Observables\n     */\n    public readonly startedWorkers$ = new BehaviorSubject<string[]>([])\n    /**\n     * Observable that emit a dictionary `workerId -> {worker, channel$}` each time new workers\n     * are ready to be used (installation & post-install tasks achieved).\n     *\n     * The `channel$` object is streaming all associated worker's {@link Message}.\n     *\n     * @group Observables\n     */\n    public readonly workers$ = new BehaviorSubject<\n        Record<\n            string,\n            {\n                worker: WWorkerTrait\n                channel$: Observable<Message>\n            }\n        >\n    >({})\n    /**\n     * Observable that emit the list of running tasks each time one or more are created or stopped.\n     *\n     * @group Observables\n     */\n    public readonly runningTasks$ = new BehaviorSubject<\n        { workerId: string; taskId: string; title: string }[]\n    >([])\n    /**\n     * Observable that emits the id of workers that are currently running a tasks each time a task is started\n     * or stopped.\n     *\n     * @group Observables\n     */\n    public readonly busyWorkers$ = new BehaviorSubject<string[]>([])\n    /**\n     * Observable that emits `{taskId, workerId}` each time a worker finished processing a task.\n     *\n     * @group Observables\n     */\n    public readonly workerReleased$ = new Subject<{\n        workerId: WorkerId\n        taskId: string\n    }>()\n\n    /**\n     * If `CtxFactory` is provided in constructor's argument ({@link WorkersPoolInput}),\n     * main thread logging information is available here.\n     */\n    public readonly backgroundContext: ContextTrait | undefined\n\n    /**\n     * Observable that gathers all the {@link CdnEventWorker} emitted by the workers.\n     *\n     * @group Observables\n     */\n    public readonly cdnEvent$: Subject<CdnEventWorker>\n\n    /**\n     * Workers' environment.\n     *\n     * @group Immutable Constants\n     */\n    public readonly environment: WorkerEnvironment\n\n    private tasksQueue: {\n        taskId: string\n        title: string\n        targetWorkerId?: string\n        args: unknown\n        channel$: Observable<Message>\n        entryPoint: (d: EntryPointArguments<unknown>) => unknown\n    }[] = []\n\n    constructor(params: WorkersPoolInput) {\n        this.backgroundContext = params.ctxFactory?.('background management')\n        this.cdnEvent$ = params.cdnEvent$ ?? new Subject<CdnEventWorker>()\n        // Need to manage lifecycle of following subscription\n        this.workerReleased$.subscribe(({ workerId, taskId }) => {\n            this.busyWorkers$.next(\n                this.busyWorkers$.value.filter((wId) => wId !== workerId),\n            )\n            this.runningTasks$.next(\n                this.runningTasks$.value.filter(\n                    (task) => task.taskId !== taskId,\n                ),\n            )\n\n            this.pickTask(workerId, this.backgroundContext)\n        })\n        const installArgs = params.install ?? {}\n        this.environment = {\n            variables: Object.entries(params.globals ?? {})\n                .filter(([, value]) => typeof value != 'function')\n                .map(([id, value]) => ({\n                    id,\n                    value,\n                })),\n            functions: Object.entries(params.globals ?? {})\n                .filter(([, value]) => typeof value == 'function')\n                .map(([id, target]) => ({\n                    id,\n                    target,\n                })),\n            cdnInstallation: isDeprecatedInputs(installArgs)\n                ? upgradeInstallInputs(installArgs)\n                : installArgs,\n            postInstallTasks: params.postInstallTasks ?? [],\n        }\n        this.pool = {\n            startAt: params.pool?.startAt ?? 0,\n            stretchTo:\n                params.pool?.stretchTo ??\n                Math.max(1, navigator.hardwareConcurrency - 1),\n        }\n        this.reserve({ workersCount: this.pool.startAt ?? 0 }).subscribe()\n    }\n\n    /**\n     * Reserve a particular amount of worker.\n     * No workers are deleted, and the number of worker can not exceed `pool.stretchTo` property.\n     * @param workersCount\n     */\n    reserve({ workersCount }: { workersCount: number }) {\n        return forkJoin(\n            new Array(workersCount)\n                .fill(undefined)\n                .map(() =>\n                    this.createWorker$(this.backgroundContext).pipe(\n                        map(({ channel$ }) => channel$),\n                    ),\n                ),\n        )\n    }\n\n    /**\n     * When this method is awaited, it ensures that `pool.startAt` workers are ready to be used\n     * (installation & post-install tasks achieved).\n     */\n    async ready() {\n        if (Object.entries(this.workers$.value).length >= this.pool.startAt) {\n            return\n        }\n        return new Promise<void>((resolve) => {\n            this.workers$\n                .pipe(\n                    takeWhile(\n                        (workers) =>\n                            Object.entries(workers).length <\n                            (this.pool.startAt ?? 1),\n                    ),\n                    last(),\n                )\n                .subscribe(() => {\n                    resolve()\n                })\n        })\n    }\n\n    /**\n     * Schedule a task.\n     *\n     * @param input task description\n     * @param context context to log run-time info\n     * @typeParam TArgs type of the entry point's argument\n     */\n    schedule<TArgs = unknown>(\n        input: ScheduleInput<TArgs>,\n        context = new NoContext(),\n    ): Observable<Message> {\n        const { title, entryPoint, args, targetWorkerId } = input\n        return context.withChild('schedule', (ctx) => {\n            const taskId = `t${String(Math.floor(Math.random() * Math.pow(10, 6)))}`\n            const p = new Process({\n                taskId,\n                title,\n                context: ctx,\n            })\n            const taskChannel$ = this.getTaskChannel$(p, taskId, ctx)\n\n            if (targetWorkerId && !(targetWorkerId in this.workers$.value)) {\n                throw Error('Provided workerId not known')\n            }\n            if (targetWorkerId && targetWorkerId in this.workers$.value) {\n                ctx.info('Target worker already created, enqueue task')\n                p.schedule()\n                this.tasksQueue.push({\n                    entryPoint,\n                    args,\n                    taskId,\n                    title,\n                    channel$: taskChannel$,\n                    targetWorkerId,\n                })\n\n                if (!this.busyWorkers$.value.includes(targetWorkerId)) {\n                    ctx.info('Target worker IDLE, pick task')\n                    this.pickTask(targetWorkerId, ctx)\n                }\n\n                return taskChannel$\n            }\n            const worker$ = this.getIdleWorkerOrCreate$(ctx)\n            if (!worker$) {\n                ctx.info('No worker available & max worker count reached')\n                p.schedule()\n                this.tasksQueue.push({\n                    entryPoint,\n                    args,\n                    taskId,\n                    title,\n                    channel$: taskChannel$,\n                })\n                return taskChannel$\n            }\n            worker$\n                .pipe(\n                    map(({ workerId }) => {\n                        ctx.info(`Got a worker ready ${workerId}`)\n                        p.schedule()\n                        this.tasksQueue.push({\n                            entryPoint,\n                            args,\n                            taskId,\n                            title,\n                            channel$: taskChannel$,\n                        })\n                        this.pickTask(workerId, ctx)\n                        return workerId\n                    }),\n                )\n                .subscribe()\n\n            return taskChannel$\n        })\n    }\n\n    /**\n     * Send a message from main thread to the worker processing a target task.\n     * The function running in the worker has to instrument the received `context`\n     * argument in order to process the messages.\n     * E.g.\n     * ```\n     * async function functionInWorker({\n     *     args,\n     *     workerScope,\n     *     workerId,\n     *     taskId,\n     *     context,\n     * }){\n     *     context.onData = (args) => {\n     *         console.log('Received data from main thread', args)\n     *     }\n     * }\n     * ```\n     * @param taskId target taskId\n     * @param args arguments to forward,\n     * should be valid regarding the [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).\n     */\n    sendData({ taskId, data }: { taskId: string; data: unknown }) {\n        const runningTask = this.runningTasks$.value.find(\n            (t) => t.taskId === taskId,\n        )\n        if (!runningTask) {\n            console.error(`WorkersPool.sendMessage: no task #${taskId} running`)\n            return\n        }\n        const worker = this.workers$.value[runningTask.workerId].worker\n        worker.send({ taskId, data })\n    }\n\n    /**\n     * Return the Web Workers proxy.\n     */\n    getWebWorkersProxy() {\n        return WorkersPool.webWorkersProxy\n    }\n\n    private getTaskChannel$(\n        exposedProcess: Process,\n        taskId: string,\n        context: ContextTrait = new NoContext(),\n    ): Observable<Message> {\n        return context.withChild('getTaskChannel$', (ctx) => {\n            const channel$ = this.mergedChannel$.pipe(\n                filter((message) => message.data.taskId === taskId),\n                takeWhile((message) => message.type !== 'Exit', true),\n            )\n\n            channel$\n                .pipe(\n                    filter((message) => message.type === 'Start'),\n                    take(1),\n                )\n                .subscribe((message) => {\n                    ctx.info(`worker started on task ${taskId}`, message)\n                    exposedProcess.start()\n                })\n\n            channel$\n                .pipe(\n                    filter((message) => message.type === 'Exit'),\n                    take(1),\n                )\n                .subscribe((message) => {\n                    const data = message.data as unknown as MessageExit\n                    if (data.error) {\n                        ctx.info(\n                            `worker exited abnormally on task ${taskId}`,\n                            message,\n                        )\n                        exposedProcess.fail(data.result)\n                        return\n                    }\n                    exposedProcess.succeed()\n                    ctx.info(\n                        `worker exited normally on task ${taskId}`,\n                        message,\n                    )\n                })\n            channel$\n                .pipe(filter((message) => message.type === 'Log'))\n                .subscribe((message) => {\n                    const data = message.data as unknown as MessageLog\n                    exposedProcess.log(data.text)\n                    ctx.info(data.text, data.json)\n                })\n\n            return channel$\n        })\n    }\n\n    private getIdleWorkerOrCreate$(context: ContextTrait = new NoContext()):\n        | Observable<{\n              workerId: string\n              worker: WWorkerTrait\n              channel$: Observable<Message>\n          }>\n        | undefined {\n        return context.withChild('getIdleWorkerOrCreate$', (ctx) => {\n            const idleWorkerId = Object.keys(this.workers$.value).find(\n                (workerId) => !this.busyWorkers$.value.includes(workerId),\n            )\n\n            if (idleWorkerId) {\n                ctx.info(`return idle worker ${idleWorkerId}`)\n                return of({\n                    workerId: idleWorkerId,\n                    worker: this.workers$.value[idleWorkerId].worker,\n                    channel$: this.workers$.value[idleWorkerId].channel$,\n                })\n            }\n            if (this.requestedWorkersCount < (this.pool.stretchTo ?? 1)) {\n                return this.createWorker$(ctx)\n            }\n            return undefined\n        }) as\n            | Observable<{\n                  workerId: string\n                  worker: WWorkerTrait\n                  channel$: Observable<Message>\n              }>\n            | undefined\n    }\n\n    private createWorker$(context: ContextTrait = new NoContext()): Observable<{\n        workerId: string\n        worker: WWorkerTrait\n        channel$: Observable<Message>\n    }> {\n        return context.withChild('createWorker$', (ctx) => {\n            this.requestedWorkersCount++\n            const workerChannel$ = new Subject<Message>()\n\n            const workerProxy = WorkersPool.webWorkersProxy.createWorker({\n                onMessageWorker: entryPointWorker,\n                onMessageMain: ({ data }: { data: Message }) => {\n                    workerChannel$.next(data)\n                    this.mergedChannel$.next(data)\n                },\n            })\n            const workerId = workerProxy.uid\n            ctx.info(`New raw worker ${workerId} created`)\n            this.startedWorkers$.next([...this.startedWorkers$.value, workerId])\n            const taskId = `t${String(Math.floor(Math.random() * Math.pow(10, 6)))}`\n            const title = 'Install environment'\n            const p = new Process({\n                taskId,\n                title,\n                context: ctx,\n            })\n            const taskChannel$ = this.getTaskChannel$(p, taskId, context)\n            const cdnPackage = '@w3nest/webpm-client'\n            const cdnUrl = `${\n                WorkersPool.BackendConfiguration.urlResource\n            }/${getAssetId(cdnPackage)}/${setup.version}/dist/${cdnPackage}.js`\n\n            const proxy = WorkersPool.webWorkersProxy\n            const staticOnBefore = proxy.onBeforeWorkerInstall\n            const staticOnAfter = proxy.onAfterWorkerInstall\n            const argsInstall: MessageInstall = {\n                backendsPartitionId: WorkersPool.backendsPartitionId,\n                backendConfiguration: WorkersPool.BackendConfiguration,\n                frontendConfiguration: WorkersPool.FrontendConfiguration,\n                cdnUrl: cdnUrl,\n                variables: this.environment.variables,\n                functions: this.environment.functions.map(\n                    ({\n                        id,\n                        target,\n                    }: {\n                        id: string\n                        target: (...unknown: unknown[]) => unknown\n                    }) => ({\n                        id,\n                        target: proxy.serializeFunction(target),\n                    }),\n                ),\n                cdnInstallation: this.environment.cdnInstallation,\n                postInstallTasks: (this.environment.postInstallTasks ?? []).map(\n                    (task) => {\n                        return {\n                            title: task.title,\n                            args: task.args,\n                            entryPoint: proxy.serializeFunction(\n                                task.entryPoint,\n                            ),\n                        }\n                    },\n                ),\n                onBeforeInstall:\n                    staticOnBefore && proxy.serializeFunction(staticOnBefore),\n                onAfterInstall:\n                    staticOnAfter && proxy.serializeFunction(staticOnAfter),\n            }\n\n            p.schedule()\n            workerProxy.execute({\n                taskId,\n                entryPoint: entryPointInstall,\n                args: argsInstall,\n            })\n\n            return workerChannel$.pipe(\n                tap((message: Message) => {\n                    const cdnEvent = isCdnEventMessage(message)\n                    if (cdnEvent) {\n                        this.cdnEvent$.next(cdnEvent)\n                    }\n                }),\n                filter((message) => message.type === 'Exit'),\n                take(1),\n                tap(() => {\n                    ctx.info(`New worker ready (${workerId}), pick task if any`)\n                    this.workers$.next({\n                        ...this.workers$.value,\n                        [workerId]: {\n                            worker: workerProxy,\n                            channel$: workerChannel$,\n                        },\n                    })\n                }),\n                map(() => ({\n                    workerId,\n                    worker: workerProxy,\n                    channel$: taskChannel$,\n                })),\n            )\n        })\n    }\n\n    /**\n     * Start a worker with first task in its queue\n     */\n    private pickTask(\n        workerId: string,\n        context: ContextTrait = new NoContext(),\n    ) {\n        context.withChild('pickTask', (ctx) => {\n            if (this.tasksQueue.length === 0) {\n                ctx.info(`No tasks in queue`)\n                return\n            }\n            if (\n                this.tasksQueue.filter(\n                    (task) =>\n                        task.targetWorkerId === undefined ||\n                        task.targetWorkerId === workerId,\n                ).length === 0\n            ) {\n                ctx.info(\n                    `No tasks in queue match fo target worker (${workerId})`,\n                )\n                return\n            }\n\n            if (this.busyWorkers$.value.includes(workerId)) {\n                throw Error(\n                    `Can not pick task by ${workerId}: worker already busy. Please report a bug for @youwol/webpm-client.`,\n                )\n            }\n            this.busyWorkers$.next([...this.busyWorkers$.value, workerId])\n            const task = this.tasksQueue.find((t) =>\n                t.targetWorkerId ? t.targetWorkerId === workerId : true,\n            )\n            if (!task) {\n                ctx.info(\n                    `No tasks in queue match fo target worker (${workerId})`,\n                )\n                return\n            }\n            const { taskId, title, entryPoint, args, channel$ } = task\n            ctx.info(`Pick task ${taskId} by ${workerId}`)\n            this.tasksQueue = this.tasksQueue.filter((t) => t.taskId !== taskId)\n\n            this.runningTasks$.next([\n                ...this.runningTasks$.value,\n                { workerId, taskId, title },\n            ])\n            const worker = this.workers$.value[workerId].worker\n\n            channel$\n                .pipe(\n                    filter((message) => {\n                        return message.type === 'Exit'\n                    }),\n                )\n                .subscribe((message) => {\n                    const exitData = message.data as unknown as MessageExit\n                    this.workerReleased$.next({\n                        taskId: exitData.taskId,\n                        workerId,\n                    })\n                })\n            worker.execute({ taskId, entryPoint, args })\n        })\n    }\n\n    /**\n     * Terminate all the workers.\n     */\n    terminate() {\n        Object.values(this.workers$.value).forEach(({ worker }) => {\n            worker.terminate()\n        })\n    }\n}",
+                "startLine": 795,
+                "endLine": 1365,
+                "references": {
+                    "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool",
+                    "WorkersPoolInput": "@nav/api/WorkersPoolModule.WorkersPoolInput",
+                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait",
+                    "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
+                    "WorkerEnvironment": "@nav/api/WorkersPoolModule.WorkerEnvironment",
+                    "Message": "@nav/api/WorkersPoolModule.Message",
+                    "PoolSize": "@nav/api/WorkersPoolModule.PoolSize",
+                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
+                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy",
+                    "ScheduleInput": "@nav/api/WorkersPoolModule.ScheduleInput",
+                    "NoContext": "@nav/api/WorkersPoolModule.NoContext",
+                    "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
+                    "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
+                    "Observable": "https://rxjs.dev/guide/observable"
+                }
+            },
+            "semantic": {
+                "role": "class",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "EntryPointArguments",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Encapsulates arguments to be sent to a task's entry point (implementation function).",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "EntryPointArguments",
+            "navPath": "@nav/api/WorkersPoolModule.EntryPointArguments",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface EntryPointArguments<TArgs>",
+                "implementation": "export interface EntryPointArguments<TArgs> {\n    args: TArgs\n    taskId: string\n    workerId: string\n    context: WorkerContext\n    workerScope: Record<string, unknown>\n}",
+                "startLine": 339,
+                "endLine": 346,
+                "references": {
+                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
+                    "WorkerContext": "@nav/api/WorkersPoolModule.WorkerContext"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "IWWorkerProxy",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Proxy for WebWorkers creation.\n\nThe default implementation used is the one provided by the browser ( [WebWorkersBrowser](@nav/api/WorkersPoolModule.WebWorkersBrowser) ).\nCan be also overriden for example for testing contexts.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "IWWorkerProxy",
+            "navPath": "@nav/api/WorkersPoolModule.IWWorkerProxy",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                "declaration": "export interface IWWorkerProxy",
+                "implementation": "export interface IWWorkerProxy {\n    type: string\n\n    createWorker({\n        onMessageWorker,\n        onMessageMain,\n    }: {\n        onMessageWorker: (message) => unknown\n        onMessageMain: (message) => unknown\n    }): WWorkerTrait\n\n    serializeFunction(fct?: (...unknown: unknown[]) => unknown): string\n\n    onBeforeWorkerInstall?: InWorkerAction\n    onAfterWorkerInstall?: InWorkerAction\n}",
+                "startLine": 42,
+                "endLine": 58,
+                "references": {
+                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy",
+                    "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
+                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
+                    "WebWorkersBrowser": "@nav/api/WorkersPoolModule.WebWorkersBrowser",
+                    "WebWorkersJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MainToWorkerMessage",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message send from the main thread to a worker for a particular task.\nSee  [WorkersPool.sendData](@nav/api/WorkersPoolModule.WorkersPool.sendData) .",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MainToWorkerMessage",
+            "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage",
+            "attributes": [
+                {
+                    "name": "data",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Data forwarded",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "MainToWorkerMessage.data",
+                    "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage.data",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "data: unknown",
+                        "implementation": "",
+                        "startLine": 283,
+                        "endLine": 284,
+                        "references": {
+                            "data": "@nav/api/WorkersPoolModule.MainToWorkerMessage.data"
+                        }
+                    }
+                },
+                {
+                    "name": "taskId",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "ID of the task",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "MainToWorkerMessage.taskId",
+                    "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage.taskId",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "taskId: string",
+                        "implementation": "",
+                        "startLine": 273,
+                        "endLine": 274,
+                        "references": {
+                            "taskId": "@nav/api/WorkersPoolModule.MainToWorkerMessage.taskId"
+                        }
+                    }
+                },
+                {
+                    "name": "workerId",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "ID of the worker",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "MainToWorkerMessage.workerId",
+                    "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage.workerId",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "workerId: string",
+                        "implementation": "",
+                        "startLine": 278,
+                        "endLine": 279,
+                        "references": {
+                            "workerId": "@nav/api/WorkersPoolModule.MainToWorkerMessage.workerId"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MainToWorkerMessage",
+                "implementation": "export interface MainToWorkerMessage {\n    /**\n     * ID of the task\n     */\n    taskId: string\n\n    /**\n     * ID of the worker\n     */\n    workerId: string\n\n    /**\n     * Data forwarded\n     */\n    data: unknown\n}",
+                "startLine": 269,
+                "endLine": 285,
+                "references": {
+                    "MainToWorkerMessage": "@nav/api/WorkersPoolModule.MainToWorkerMessage"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessageCdnEvent",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "A special type of  [MessageData](@nav/api/WorkersPoolModule.MessageData)  for  [MainModule.CdnEvent](@nav/api/MainModule.CdnEvent) .",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessageCdnEvent",
+            "navPath": "@nav/api/WorkersPoolModule.MessageCdnEvent",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MessageCdnEvent {",
+                "implementation": "export interface MessageCdnEvent {\n    type: 'CdnEvent'\n    workerId: string\n    event: CdnEvent\n}",
+                "startLine": 62,
+                "endLine": 67,
+                "references": {
+                    "MessageCdnEvent": "@nav/api/WorkersPoolModule.MessageCdnEvent",
+                    "CdnEvent": "@nav/api/MainModule.CdnEvent"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessageData",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message emitted from workers when a data is sent (see  [WorkerContext](@nav/api/WorkersPoolModule.WorkerContext) ).",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessageData",
+            "navPath": "@nav/api/WorkersPoolModule.MessageData",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MessageData",
+                "implementation": "export interface MessageData {\n    taskId: string\n    workerId: string\n    [k: string]: unknown\n}",
+                "startLine": 246,
+                "endLine": 251,
+                "references": {
+                    "MessageData": "@nav/api/WorkersPoolModule.MessageData"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessageExecute",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message send from the workers to the main thread when a task is started.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessageExecute",
+            "navPath": "@nav/api/WorkersPoolModule.MessageExecute",
+            "attributes": [
+                {
+                    "name": "args",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Arguments provided",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "MessageExecute.args",
+                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.args",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "args: unknown",
+                        "implementation": "",
+                        "startLine": 197,
+                        "endLine": 198,
+                        "references": {
+                            "args": "@nav/api/WorkersPoolModule.MessageExecute.args"
+                        }
+                    }
+                },
+                {
+                    "name": "entryPoint",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Serialized entry point",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "MessageExecute.entryPoint",
+                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.entryPoint",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "entryPoint: string",
+                        "implementation": "",
+                        "startLine": 193,
+                        "endLine": 194,
+                        "references": {
+                            "entryPoint": "@nav/api/WorkersPoolModule.MessageExecute.entryPoint"
+                        }
+                    }
+                },
+                {
+                    "name": "taskId",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "ID of the task",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "MessageExecute.taskId",
+                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.taskId",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "taskId: string",
+                        "implementation": "",
+                        "startLine": 185,
+                        "endLine": 186,
+                        "references": {
+                            "taskId": "@nav/api/WorkersPoolModule.MessageExecute.taskId"
+                        }
+                    }
+                },
+                {
+                    "name": "workerId",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "ID of the worker",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "MessageExecute.workerId",
+                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.workerId",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "workerId: string",
+                        "implementation": "",
+                        "startLine": 189,
+                        "endLine": 190,
+                        "references": {
+                            "workerId": "@nav/api/WorkersPoolModule.MessageExecute.workerId"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MessageExecute",
+                "implementation": "export interface MessageExecute {\n    /**\n     * ID of the task\n     */\n    taskId: string\n    /**\n     * ID of the worker\n     */\n    workerId: string\n    /**\n     * Serialized entry point\n     */\n    entryPoint: string\n    /**\n     * Arguments provided\n     */\n    args: unknown\n}",
+                "startLine": 181,
+                "endLine": 199,
+                "references": {
+                    "MessageExecute": "@nav/api/WorkersPoolModule.MessageExecute"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessageInstall",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message sent from the main thread to the workers to request installation of the  [WorkerEnvironment](@nav/api/WorkersPoolModule.WorkerEnvironment) .",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessageInstall",
+            "navPath": "@nav/api/WorkersPoolModule.MessageInstall",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MessageInstall",
+                "implementation": "export interface MessageInstall {\n    backendsPartitionId: string\n    backendConfiguration: BackendConfiguration\n    frontendConfiguration: FrontendConfiguration\n    cdnUrl: string\n    variables: WorkerVariable<unknown>[]\n    functions: { id: string; target: string }[]\n    cdnInstallation: InstallInputs\n    postInstallTasks: {\n        title: string\n        entryPoint: string\n        args: unknown\n    }[]\n    onBeforeInstall?: InWorkerAction | string\n    onAfterInstall?: InWorkerAction | string\n}",
+                "startLine": 531,
+                "endLine": 547,
+                "references": {
+                    "MessageInstall": "@nav/api/WorkersPoolModule.MessageInstall",
+                    "InstallInputs": "@nav/api/MainModule.InstallInputs",
+                    "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
+                    "WorkerVariable": "@nav/api/WorkersPoolModule.WorkerVariable"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessageLog",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message emitted from workers when a log is sent (see  [WorkerContext](@nav/api/WorkersPoolModule.WorkerContext) ).",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessageLog",
+            "navPath": "@nav/api/WorkersPoolModule.MessageLog",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MessageLog",
+                "implementation": "export interface MessageLog {\n    workerId: string\n    taskId: string\n    text: string\n    json: unknown // Json\n}",
+                "startLine": 234,
+                "endLine": 240,
+                "references": {
+                    "MessageLog": "@nav/api/WorkersPoolModule.MessageLog"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessagePostError",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message emitted from workers when an error occurred.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessagePostError",
+            "navPath": "@nav/api/WorkersPoolModule.MessagePostError",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MessagePostError",
+                "implementation": "export interface MessagePostError {\n    taskId: string\n    workerId: string\n    error: Error\n}",
+                "startLine": 257,
+                "endLine": 262,
+                "references": {
+                    "MessagePostError": "@nav/api/WorkersPoolModule.MessagePostError"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessageStart",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message emitted from workers when a task is started.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessageStart",
+            "navPath": "@nav/api/WorkersPoolModule.MessageStart",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface MessageStart",
+                "implementation": "export interface MessageStart {\n    taskId: string\n    workerId: string\n}",
+                "startLine": 205,
+                "endLine": 209,
+                "references": {
+                    "MessageStart": "@nav/api/WorkersPoolModule.MessageStart"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "PoolSize",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Pool size specification.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "PoolSize",
+            "navPath": "@nav/api/WorkersPoolModule.PoolSize",
+            "attributes": [
+                {
+                    "name": "startAt",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Initial number of workers to get ready before  [WorkersPool.ready](@nav/api/WorkersPoolModule.WorkersPool.ready)  is fulfilled.\nSet to  `1`  by default.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "PoolSize.startAt",
+                    "navPath": "@nav/api/WorkersPoolModule.PoolSize.startAt",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "startAt: number",
+                        "implementation": "",
+                        "startLine": 722,
+                        "endLine": 723,
+                        "references": {
+                            "startAt": "@nav/api/WorkersPoolModule.PoolSize.startAt"
+                        }
+                    }
+                },
+                {
+                    "name": "stretchTo",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Maximum number of workers.\nSet to  `max(1, navigator.hardwareConcurrency - 1)`  by default.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "PoolSize.stretchTo",
+                    "navPath": "@nav/api/WorkersPoolModule.PoolSize.stretchTo",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "stretchTo: number",
+                        "implementation": "",
+                        "startLine": 727,
+                        "endLine": 728,
+                        "references": {
+                            "stretchTo": "@nav/api/WorkersPoolModule.PoolSize.stretchTo"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface PoolSize",
+                "implementation": "export interface PoolSize {\n    /**\n     * Initial number of workers to get ready before {@link WorkersPool.ready} is fulfilled.\n     * Set to `1` by default.\n     */\n    startAt: number\n    /**\n     * Maximum number of workers.\n     * Set to `max(1, navigator.hardwareConcurrency - 1)` by default.\n     */\n    stretchTo: number\n}",
+                "startLine": 717,
+                "endLine": 729,
+                "references": {
+                    "PoolSize": "@nav/api/WorkersPoolModule.PoolSize"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "ScheduleInput",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Input for  [WorkersPool.schedule](@nav/api/WorkersPoolModule.WorkersPool.schedule) .",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    },
+                    {
+                        "title": "Generics",
+                        "content": "\n*  **TArgs**: type of the entry point's argument.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "arguments",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "ScheduleInput",
+            "navPath": "@nav/api/WorkersPoolModule.ScheduleInput",
+            "attributes": [
+                {
+                    "name": "args",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Arguments to forward to the entry point when executed",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "ScheduleInput.args",
+                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.args",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "args: TArgs",
+                        "implementation": "",
+                        "startLine": 784,
+                        "endLine": 785,
+                        "references": {
+                            "args": "@nav/api/WorkersPoolModule.ScheduleInput.args"
+                        }
+                    }
+                },
+                {
+                    "name": "entryPoint",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Entry point of the task",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "ScheduleInput.entryPoint",
+                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.entryPoint",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "entryPoint: (input: EntryPointArguments<TArgs>) => void",
+                        "implementation": "",
+                        "startLine": 780,
+                        "endLine": 781,
+                        "references": {
+                            "entryPoint": "@nav/api/WorkersPoolModule.ScheduleInput.entryPoint",
+                            "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments"
+                        }
+                    }
+                },
+                {
+                    "name": "targetWorkerId",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "If provided, schedule the task on this particular worker.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "ScheduleInput.targetWorkerId",
+                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.targetWorkerId",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "targetWorkerId?: string",
+                        "implementation": "",
+                        "startLine": 788,
+                        "endLine": 789,
+                        "references": {
+                            "targetWorkerId": "@nav/api/WorkersPoolModule.ScheduleInput.targetWorkerId"
+                        }
+                    }
+                },
+                {
+                    "name": "title",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Title of the task",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "ScheduleInput.title",
+                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.title",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "title: string",
+                        "implementation": "",
+                        "startLine": 776,
+                        "endLine": 777,
+                        "references": {
+                            "title": "@nav/api/WorkersPoolModule.ScheduleInput.title"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface ScheduleInput<TArgs>",
+                "implementation": "export interface ScheduleInput<TArgs> {\n    /**\n     * Title of the task\n     */\n    title: string\n    /**\n     * Entry point of the task\n     */\n    entryPoint: (input: EntryPointArguments<TArgs>) => void\n    /**\n     * Arguments to forward to the entry point when executed\n     */\n    args: TArgs\n    /**\n     * If provided, schedule the task on this particular worker.\n     */\n    targetWorkerId?: string\n}",
+                "startLine": 772,
+                "endLine": 790,
+                "references": {
+                    "ScheduleInput": "@nav/api/WorkersPoolModule.ScheduleInput",
+                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "Task",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Task specification.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    },
+                    {
+                        "title": "Generics",
+                        "content": "\n*  **TArgs**: Type of the entry point's arguments\n*  **TReturn**: Type of the entry point's return\n(emitted afterward using  [MessageExit.result | MessageExit.result](undefined) ).",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "arguments",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "Task",
+            "navPath": "@nav/api/WorkersPoolModule.Task",
+            "attributes": [
+                {
+                    "name": "args",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Arguments to forward to the entry point upon execution.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "Task.args",
+                    "navPath": "@nav/api/WorkersPoolModule.Task.args",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "args: TArgs",
+                        "implementation": "",
+                        "startLine": 120,
+                        "endLine": 121,
+                        "references": {
+                            "args": "@nav/api/WorkersPoolModule.Task.args"
+                        }
+                    }
+                },
+                {
+                    "name": "entryPoint",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Entry point implementation, the value returned must follow\n[structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "Task.entryPoint",
+                    "navPath": "@nav/api/WorkersPoolModule.Task.entryPoint",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "entryPoint: (args: TArgs) => TReturn | Promise<TReturn>",
+                        "implementation": "",
+                        "startLine": 116,
+                        "endLine": 117,
+                        "references": {
+                            "entryPoint": "@nav/api/WorkersPoolModule.Task.entryPoint"
+                        }
+                    }
+                },
+                {
+                    "name": "title",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Title of the task.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "Task.title",
+                    "navPath": "@nav/api/WorkersPoolModule.Task.title",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "title: string",
+                        "implementation": "",
+                        "startLine": 109,
+                        "endLine": 110,
+                        "references": {
+                            "title": "@nav/api/WorkersPoolModule.Task.title"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface Task<TArgs = unknown, TReturn = unknown>",
+                "implementation": "export interface Task<TArgs = unknown, TReturn = unknown> {\n    /**\n     * Title of the task.\n     */\n    title: string\n    /**\n     * Entry point implementation, the value returned must follow\n     * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)\n     * @param args arguments of the entrypoint,  must follow\n     * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)\n     */\n    entryPoint: (args: TArgs) => TReturn | Promise<TReturn>\n    /**\n     * Arguments to forward to the entry point upon execution.\n     */\n    args: TArgs\n}",
+                "startLine": 105,
+                "endLine": 122,
+                "references": {
+                    "Task": "@nav/api/WorkersPoolModule.Task"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WorkerContext",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Context available in  [WWorkerTrait](@nav/api/WorkersPoolModule.WWorkerTrait)  to log info or send data.\nAll data must follow\n[structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WorkerContext",
+            "navPath": "@nav/api/WorkersPoolModule.WorkerContext",
+            "attributes": [
+                {
+                    "name": "info",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "The info logged are send from the workers to the main thread as\n [MessageLog](@nav/api/WorkersPoolModule.MessageLog) .",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkerContext.info",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkerContext.info",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "info: (text: string, data?: unknown) => void",
+                        "implementation": "",
+                        "startLine": 159,
+                        "endLine": 160,
+                        "references": {
+                            "info": "@nav/api/WorkersPoolModule.WorkerContext.info"
+                        }
+                    }
+                },
+                {
+                    "name": "onData",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "If defined by the developer in its worker's implementation,\nevery message send using  [WorkersPool.sendData](@nav/api/WorkersPoolModule.WorkersPool.sendData)  will\nbe forwarded to this callback.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkerContext.onData",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkerContext.onData",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "onData?: (message: unknown) => void",
+                        "implementation": "",
+                        "startLine": 173,
+                        "endLine": 174,
+                        "references": {
+                            "onData": "@nav/api/WorkersPoolModule.WorkerContext.onData"
+                        }
+                    }
+                },
+                {
+                    "name": "sendData",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "The data logged are send from the workers to the main thread as\n [MessageData](@nav/api/WorkersPoolModule.MessageData) .",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkerContext.sendData",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkerContext.sendData",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "sendData: (data: Record<string, unknown>) => void",
+                        "implementation": "",
+                        "startLine": 166,
+                        "endLine": 167,
+                        "references": {
+                            "sendData": "@nav/api/WorkersPoolModule.WorkerContext.sendData"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface WorkerContext",
+                "implementation": "export interface WorkerContext {\n    /**\n     * The info logged are send from the workers to the main thread as\n     * {@link MessageLog}.\n     *\n     * @param text title of the log\n     * @param data data associated.\n     */\n    info: (text: string, data?: unknown) => void\n    /**\n     * The data logged are send from the workers to the main thread as\n     * {@link MessageData}.\n     *\n     * @param data data to send.\n     */\n    sendData: (data: Record<string, unknown>) => void\n\n    /**\n     * If defined by the developer in its worker's implementation,\n     * every message send using {@link WorkersPool.sendData} will\n     * be forwarded to this callback.\n     */\n    onData?: (message: unknown) => void\n}",
+                "startLine": 151,
+                "endLine": 175,
+                "references": {
+                    "WorkerContext": "@nav/api/WorkersPoolModule.WorkerContext"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WorkerEnvironment",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WorkerEnvironment",
+            "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment",
+            "attributes": [
+                {
+                    "name": "cdnInstallation",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Installation instruction to be executed in worker environment.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkerEnvironment.cdnInstallation",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.cdnInstallation",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "cdnInstallation: InstallInputs",
+                        "implementation": "",
+                        "startLine": 138,
+                        "endLine": 139,
+                        "references": {
+                            "cdnInstallation": "@nav/api/WorkersPoolModule.WorkerEnvironment.cdnInstallation",
+                            "InstallInputs": "@nav/api/MainModule.InstallInputs"
+                        }
+                    }
+                },
+                {
+                    "name": "functions",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Global functions  accessible in worker environment.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkerEnvironment.functions",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.functions",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "functions: WorkerFunction<unknown>[]",
+                        "implementation": "",
+                        "startLine": 134,
+                        "endLine": 135,
+                        "references": {
+                            "functions": "@nav/api/WorkersPoolModule.WorkerEnvironment.functions",
+                            "WorkerFunction": "@nav/api/WorkersPoolModule.WorkerFunction"
+                        }
+                    }
+                },
+                {
+                    "name": "postInstallTasks",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Tasks to realized after installation is done and before marking a worker as ready.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkerEnvironment.postInstallTasks",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.postInstallTasks",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "postInstallTasks?: Task[]",
+                        "implementation": "",
+                        "startLine": 142,
+                        "endLine": 143,
+                        "references": {
+                            "postInstallTasks": "@nav/api/WorkersPoolModule.WorkerEnvironment.postInstallTasks",
+                            "Task": "@nav/api/WorkersPoolModule.Task"
+                        }
+                    }
+                },
+                {
+                    "name": "variables",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Global variables accessible in worker environment.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkerEnvironment.variables",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.variables",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "variables: WorkerVariable<unknown>[]",
+                        "implementation": "",
+                        "startLine": 130,
+                        "endLine": 131,
+                        "references": {
+                            "variables": "@nav/api/WorkersPoolModule.WorkerEnvironment.variables",
+                            "WorkerVariable": "@nav/api/WorkersPoolModule.WorkerVariable"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface WorkerEnvironment",
+                "implementation": "export interface WorkerEnvironment {\n    /**\n     * Global variables accessible in worker environment.\n     */\n    variables: WorkerVariable<unknown>[]\n    /**\n     * Global functions  accessible in worker environment.\n     */\n    functions: WorkerFunction<unknown>[]\n    /**\n     * Installation instruction to be executed in worker environment.\n     */\n    cdnInstallation: InstallInputs\n    /**\n     * Tasks to realized after installation is done and before marking a worker as ready.\n     */\n    postInstallTasks?: Task[]\n}",
+                "startLine": 126,
+                "endLine": 144,
+                "references": {
+                    "WorkerEnvironment": "@nav/api/WorkersPoolModule.WorkerEnvironment",
+                    "InstallInputs": "@nav/api/MainModule.InstallInputs",
+                    "WorkerFunction": "@nav/api/WorkersPoolModule.WorkerFunction",
+                    "Task": "@nav/api/WorkersPoolModule.Task",
+                    "WorkerVariable": "@nav/api/WorkersPoolModule.WorkerVariable"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WorkerFunction",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WorkerFunction",
+            "navPath": "@nav/api/WorkersPoolModule.WorkerFunction",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface WorkerFunction<T>",
+                "implementation": "export interface WorkerFunction<T> {\n    id: string\n    target: T\n}",
+                "startLine": 85,
+                "endLine": 89,
+                "references": {
+                    "WorkerFunction": "@nav/api/WorkersPoolModule.WorkerFunction"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WorkersPoolInput",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Input for  [WorkersPool.constructor](@nav/api/WorkersPoolModule.WorkersPool.constructor) .",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WorkersPoolInput",
+            "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput",
+            "attributes": [
+                {
+                    "name": "cdnEvent$",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "If provided, all events regarding installation are forwarded here.\nOtherwise  [WorkersPool.cdnEvent$](@nav/api/WorkersPoolModule.WorkersPool.cdnEvent$)  is initialized and used.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPoolInput.cdnEvent$",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.cdnEvent$",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "cdnEvent$?: Subject<CdnEventWorker>",
+                        "implementation": "",
+                        "startLine": 738,
+                        "endLine": 739,
+                        "references": {
+                            "cdnEvent$": "@nav/api/WorkersPoolModule.WorkersPoolInput.cdnEvent$",
+                            "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
+                            "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                        }
+                    }
+                },
+                {
+                    "name": "ctxFactory",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "A factory that create a  `Context`  objects used for logging purposes.\nIt serves as dependency injection; the  `Context`  class from the library\n[@youwol/logging](https://github.com/youwol/logging) is appropriate for that purpose.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPoolInput.ctxFactory",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.ctxFactory",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "ctxFactory?: (name: string) => ContextTrait",
+                        "implementation": "",
+                        "startLine": 759,
+                        "endLine": 760,
+                        "references": {
+                            "ctxFactory": "@nav/api/WorkersPoolModule.WorkersPoolInput.ctxFactory",
+                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                        }
+                    }
+                },
+                {
+                    "name": "globals",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Globals to be copied in workers' environment.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPoolInput.globals",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.globals",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "globals?: Record<string, unknown>",
+                        "implementation": "",
+                        "startLine": 742,
+                        "endLine": 743,
+                        "references": {
+                            "globals": "@nav/api/WorkersPoolModule.WorkersPoolInput.globals"
+                        }
+                    }
+                },
+                {
+                    "name": "install",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Installation to proceed in the workers.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPoolInput.install",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.install",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "install?: InstallInputs | InstallInputsDeprecated",
+                        "implementation": "",
+                        "startLine": 746,
+                        "endLine": 747,
+                        "references": {
+                            "install": "@nav/api/WorkersPoolModule.WorkersPoolInput.install",
+                            "InstallInputs": "@nav/api/MainModule.InstallInputs"
+                        }
+                    }
+                },
+                {
+                    "name": "pool",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Constraints on the workers pool size.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPoolInput.pool",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.pool",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "pool?: PoolSize",
+                        "implementation": "",
+                        "startLine": 764,
+                        "endLine": 765,
+                        "references": {
+                            "pool": "@nav/api/WorkersPoolModule.WorkersPoolInput.pool",
+                            "PoolSize": "@nav/api/WorkersPoolModule.PoolSize"
+                        }
+                    }
+                },
+                {
+                    "name": "postInstallTasks",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "A list of tasks to execute in workers after installation is completed.",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WorkersPoolInput.postInstallTasks",
+                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.postInstallTasks",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/workers-factory.ts",
+                        "declaration": "postInstallTasks?: Task[]",
+                        "implementation": "",
+                        "startLine": 750,
+                        "endLine": 751,
+                        "references": {
+                            "postInstallTasks": "@nav/api/WorkersPoolModule.WorkersPoolInput.postInstallTasks",
+                            "Task": "@nav/api/WorkersPoolModule.Task"
+                        }
+                    }
+                }
+            ],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface WorkersPoolInput",
+                "implementation": "export interface WorkersPoolInput {\n    /**\n     * If provided, all events regarding installation are forwarded here.\n     * Otherwise {@link WorkersPool.cdnEvent$ | WorkersPool.cdnEvent$} is initialized and used.\n     */\n    cdnEvent$?: Subject<CdnEventWorker>\n    /**\n     * Globals to be copied in workers' environment.\n     */\n    globals?: Record<string, unknown>\n    /**\n     * Installation to proceed in the workers.\n     */\n    install?: InstallInputs | InstallInputsDeprecated\n    /**\n     * A list of tasks to execute in workers after installation is completed.\n     */\n    postInstallTasks?: Task[]\n    /**\n     * A factory that create a `Context` objects used for logging purposes.\n     * It serves as dependency injection; the `Context` class from the library\n     * [@youwol/logging](https://github.com/youwol/logging) is appropriate for that purpose.\n     *\n     * @param name name of the root node of the context\n     * @return a `Context` object implementing {@link ContextTrait}\n     */\n    ctxFactory?: (name: string) => ContextTrait\n\n    /**\n     * Constraints on the workers pool size.\n     */\n    pool?: PoolSize\n}",
+                "startLine": 733,
+                "endLine": 766,
+                "references": {
+                    "WorkersPoolInput": "@nav/api/WorkersPoolModule.WorkersPoolInput",
+                    "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
+                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait",
+                    "InstallInputs": "@nav/api/MainModule.InstallInputs",
+                    "PoolSize": "@nav/api/WorkersPoolModule.PoolSize",
+                    "Task": "@nav/api/WorkersPoolModule.Task",
+                    "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WorkerVariable",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WorkerVariable",
+            "navPath": "@nav/api/WorkersPoolModule.WorkerVariable",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export interface WorkerVariable<T>",
+                "implementation": "export interface WorkerVariable<T> {\n    id: string\n    value: T\n}",
+                "startLine": 93,
+                "endLine": 97,
+                "references": {
+                    "WorkerVariable": "@nav/api/WorkersPoolModule.WorkerVariable"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "WWorkerTrait",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Trait for abstracting the concept of Web Worker; default implementation is based on\nthe WebWorker API provided by the browser, see  [WebWorkerBrowser](@nav/api/WorkersPoolModule.WebWorkerBrowser) .",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "WWorkerTrait",
+            "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait",
+            "attributes": [
+                {
+                    "name": "uid",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Worker's UID",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WWorkerTrait.uid",
+                    "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait.uid",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                        "declaration": "uid: string",
+                        "implementation": "",
+                        "startLine": 11,
+                        "endLine": 12,
+                        "references": {
+                            "uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid"
+                        }
+                    }
+                }
+            ],
+            "callables": [
+                {
+                    "name": "send",
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Send to the worker some data in the channel associated to  `taskId`",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            },
+                            {
+                                "title": "Arguments",
+                                "content": "\n*  **data**: arguments to send\n*  **taskId**: task ID",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "arguments",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "WWorkerTrait.send",
+                    "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait.send",
+                    "code": {
+                        "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                        "declaration": "send(params: { taskId: string; data: unknown })",
+                        "implementation": "",
+                        "startLine": 30,
+                        "endLine": 31,
+                        "references": {
+                            "send": "@nav/api/WorkersPoolModule.WWorkerTrait.send"
+                        }
+                    },
+                    "semantic": {
+                        "role": "method",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    }
+                }
+            ],
+            "code": {
+                "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
+                "declaration": "export interface WWorkerTrait",
+                "implementation": "export interface WWorkerTrait {\n    /**\n     * Worker's UID\n     */\n    uid: string\n\n    /**\n     *\n     * @param params.taskId task ID\n     * @param params.entryPoint function to execute\n     * @param params.args arguments to provide to the function     *\n     */\n    execute<T>(params: {\n        taskId: string\n        entryPoint: (args: EntryPointArguments<T>) => unknown\n        args: T\n    })\n\n    /**\n     * Send to the worker some data in the channel associated to `taskId`\n     * @param params.taskId task ID\n     * @param params.data arguments to send\n     */\n    send(params: { taskId: string; data: unknown })\n\n    terminate()\n}",
+                "startLine": 7,
+                "endLine": 34,
+                "references": {
+                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
+                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
+                    "WebWorkerBrowser": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
+                    "WebWorkerJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest"
+                }
+            },
+            "semantic": {
+                "role": "interface",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "CdnEventWorker",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Any  [MainModule.CdnEvent](@nav/api/MainModule.CdnEvent)  emitted from a Worker ( [WWorkerTrait](@nav/api/WorkersPoolModule.WWorkerTrait) ).",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "CdnEventWorker",
+            "navPath": "@nav/api/WorkersPoolModule.CdnEventWorker",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export type CdnEventWorker = CdnEvent & {\n    workerId: string\n}",
+                "implementation": "",
+                "startLine": 44,
+                "endLine": 45,
+                "references": {
+                    "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
+                    "CdnEvent": "@nav/api/MainModule.CdnEvent"
+                }
+            },
+            "semantic": {
+                "role": "type-alias",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "Message",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Messages exchanged between the main thread and the workers' thread.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "Message",
+            "navPath": "@nav/api/WorkersPoolModule.Message",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export type Message =\n    | { type: 'Execute'; data: MessageExecute }\n    | { type: 'Exit'; data: MessageExit }\n    | { type: 'Start'; data: MessageStart }\n    | { type: 'Log'; data: MessageLog }\n    | { type: 'Data'; data: MessageData }\n    | { type: 'MainToWorkerMessage'; data: MainToWorkerMessage }\n    | { type: 'PostError'; data: MessagePostError }\n    | {\n          type: 'CdnEvent'\n          data: {\n              type: 'CdnEvent'\n              event: CdnEvent\n              workerId: string\n              taskId: string\n          }\n      }",
+                "implementation": "",
+                "startLine": 316,
+                "endLine": 317,
+                "references": {
+                    "Message": "@nav/api/WorkersPoolModule.Message",
+                    "MessageExecute": "@nav/api/WorkersPoolModule.MessageExecute",
+                    "MessageExit": "@nav/api/WorkersPoolModule.MessageExit",
+                    "MessageStart": "@nav/api/WorkersPoolModule.MessageStart",
+                    "MessageLog": "@nav/api/WorkersPoolModule.MessageLog",
+                    "MessageData": "@nav/api/WorkersPoolModule.MessageData",
+                    "MainToWorkerMessage": "@nav/api/WorkersPoolModule.MainToWorkerMessage",
+                    "MessagePostError": "@nav/api/WorkersPoolModule.MessagePostError",
+                    "CdnEvent": "@nav/api/MainModule.CdnEvent"
+                }
+            },
+            "semantic": {
+                "role": "type-alias",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "MessageExit",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "Message emitted from workers when a task is terminated.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "MessageExit",
+            "navPath": "@nav/api/WorkersPoolModule.MessageExit",
+            "attributes": [],
+            "callables": [],
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export type MessageExit = {\n    taskId: string\n    workerId: string\n} & (\n    | {\n          error: true\n          result: Error\n      }\n    | {\n          error: false\n          result: unknown\n      }\n)",
+                "implementation": "",
+                "startLine": 215,
+                "endLine": 216,
+                "references": {
+                    "MessageExit": "@nav/api/WorkersPoolModule.MessageExit"
+                }
+            },
+            "semantic": {
+                "role": "type-alias",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        }
+    ],
+    "callables": [
+        {
+            "name": "entryPointWorker",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "This function is exposed mostly because it is useful in terms of testing to bypass serialization in string.",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "entryPointWorker",
+            "navPath": "@nav/api/WorkersPoolModule.entryPointWorker",
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export function entryPointWorker(messageEvent: MessageEvent)",
+                "implementation": "export function entryPointWorker(messageEvent: MessageEvent) {\n    // The following interface avoid the interpreter to interpret self as 'Window':\n    // in a worker 'self' is of type DedicatedWorkerGlobalScope.\n    // We can get a proper type definition for DedicatedWorkerGlobalScope from typescript:\n    //   * add 'webworker' in 'compilerOptions.lib'\n    //   * **BUT** typedoc then fails to run, complaining about duplicated declaration.\n    // Not sure how to fix this, we keep the documentation working for now using this workaround\n    // In TypeScript, the 'Worker' type refers to the global object that represents a web worker.\n    // The 'DedicatedWorkerGlobalScope' interface is a subset of the global object that is available to\n    // dedicated workers, which are a type of web worker that runs in a single thread.\n    interface DedicatedWorkerGlobalScope {\n        // message type: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm\n        postMessage: (message: unknown) => void\n    }\n\n    const message = messageEvent.data as unknown as Message\n    const workerScope = globalThis as unknown as DedicatedWorkerGlobalScope & {\n        window: unknown\n    }\n\n    // contextByTasks allows to communicate from main to worker after tasks have started execution.\n    // In worker's implementation, the developer has to define the property `onMessage` of the received `context`.\n    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment\n    globalThis.contextByTasks = globalThis.contextByTasks || {}\n    const contextByTasks = globalThis.contextByTasks as Record<\n        string,\n        WorkerContext\n    >\n\n    const postMessage = (message: { type: string; data: unknown }) => {\n        try {\n            workerScope.postMessage(message)\n        } catch (e: unknown) {\n            console.error(\n                `Failed to post message from worker to main thread.`,\n                message,\n            )\n            if (message.type === 'Exit') {\n                const data = message.data as MessageExit\n                if (data.taskId in contextByTasks) {\n                    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete\n                    delete contextByTasks[data.taskId]\n                }\n                workerScope.postMessage({\n                    type: 'Exit',\n                    data: {\n                        taskId: data.taskId,\n                        workerId: data.workerId,\n                        error: true,\n                    },\n                })\n            }\n            const data = message.data as MessageData | MessageLog\n            workerScope.postMessage({\n                type: 'PostError',\n                data: {\n                    taskId: data.taskId,\n                    workerId: data.workerId,\n                    error: e,\n                },\n            })\n        }\n    }\n\n    if (message.type === 'MainToWorkerMessage') {\n        const messageContent: MainToWorkerMessage =\n            message.data as unknown as MainToWorkerMessage\n        const { taskId, data } = messageContent\n        if (contextByTasks[taskId].onData) {\n            contextByTasks[taskId].onData(data)\n        }\n    }\n    // Following is a workaround to allow installing libraries using 'window' instead of 'globalThis' or 'self'.\n    workerScope.window = globalThis\n    if (message.type === 'Execute') {\n        const data: MessageExecute = message.data as unknown as MessageExecute\n        const context: WorkerContext = {\n            info: (text, json) => {\n                postMessage({\n                    type: 'Log',\n                    data: {\n                        taskId: data.taskId,\n                        workerId: data.workerId,\n                        logLevel: 'info',\n                        text,\n                        json: json,\n                    },\n                })\n            },\n            sendData: (consumerData) => {\n                postMessage({\n                    type: 'Data',\n                    data: {\n                        ...consumerData,\n                        ...{ taskId: data.taskId, workerId: data.workerId },\n                    },\n                })\n            },\n        }\n\n        contextByTasks[data.taskId] = context\n        type EntryPointFunc = (args: unknown) => unknown\n        const entryPoint =\n            // The first branch is to facilitate test environment\n            typeof data.entryPoint == 'function'\n                ? (data.entryPoint as EntryPointFunc)\n                : // eslint-disable-next-line @typescript-eslint/no-implied-eval,@typescript-eslint/no-unsafe-call\n                  (new Function(data.entryPoint)() as EntryPointFunc)\n\n        postMessage({\n            type: 'Start',\n            data: {\n                taskId: data.taskId,\n                workerId: data.workerId,\n            },\n        })\n        try {\n            const resultOrPromise = entryPoint({\n                args: data.args,\n                taskId: data.taskId,\n                workerId: data.workerId,\n                workerScope: workerScope,\n                context,\n            })\n            if (resultOrPromise instanceof Promise) {\n                resultOrPromise\n                    .then((result: unknown) => {\n                        postMessage({\n                            type: 'Exit',\n                            data: {\n                                taskId: data.taskId,\n                                workerId: data.workerId,\n                                error: false,\n                                result: result,\n                            },\n                        })\n                    })\n                    .catch((error: unknown) => {\n                        postMessage({\n                            type: 'Exit',\n                            data: {\n                                taskId: data.taskId,\n                                workerId: data.workerId,\n                                error: true,\n                                result: error,\n                            },\n                        })\n                    })\n                return\n            }\n\n            postMessage({\n                type: 'Exit',\n                data: {\n                    taskId: data.taskId,\n                    workerId: data.workerId,\n                    error: false,\n                    result: resultOrPromise,\n                },\n            })\n        } catch (e: unknown) {\n            postMessage({\n                type: 'Exit',\n                data: {\n                    taskId: data.taskId,\n                    workerId: data.workerId,\n                    error: true,\n                    result: e,\n                },\n            })\n            return\n        }\n    }\n}",
+                "startLine": 351,
+                "endLine": 525,
+                "references": {
+                    "entryPointWorker": "@nav/api/WorkersPoolModule.entryPointWorker"
+                }
+            },
+            "semantic": {
+                "role": "function",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        },
+        {
+            "name": "implementEventWithWorkerTrait",
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "implementEventWithWorkerTrait",
+            "navPath": "@nav/api/WorkersPoolModule.implementEventWithWorkerTrait",
+            "code": {
+                "filePath": "src/lib/workers-pool/workers-factory.ts",
+                "declaration": "export function implementEventWithWorkerTrait(\n    event: unknown,\n): event is CdnEventWorker",
+                "implementation": "export function implementEventWithWorkerTrait(\n    event: unknown,\n): event is CdnEventWorker {\n    return isCdnEvent(event) && 'workerId' in event\n}",
+                "startLine": 51,
+                "endLine": 56,
+                "references": {
+                    "implementEventWithWorkerTrait": "@nav/api/WorkersPoolModule.implementEventWithWorkerTrait",
+                    "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker"
+                }
+            },
+            "semantic": {
+                "role": "function",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            }
+        }
+    ],
+    "files": [
+        {
+            "name": "workers-factory.ts",
+            "path": "src/lib/workers-pool/workers-factory.ts",
+            "documentation": {
+                "sections": [
+                    {
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        },
+                        "content": "",
+                        "contentType": "markdown"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "web-worker.proxy.ts",
+            "path": "src/lib/workers-pool/web-worker.proxy.ts",
+            "documentation": {
+                "sections": [
+                    {
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        },
+                        "content": "",
+                        "contentType": "markdown"
+                    }
+                ]
+            }
+        }
+    ],
+    "children": [],
+    "semantic": {
+        "role": "module",
+        "labels": [],
+        "attributes": {},
+        "relations": {}
+    }
+}

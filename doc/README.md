@@ -1,21 +1,21 @@
-# @youwol/webpm-client-doc
+# @webpm-client/doc
 
-Documentation app for the library @youwol/webpm-client
+Documentation of @w3nest/webpm-client
 
 This library is part of the hybrid cloud/local ecosystem
-[YouWol](https://platform.youwol.com/applications/@youwol/platform/latest).
+[YouWol](https://platform.youwol.com/apps/@youwol/platform/latest).
 
 ## Links
 
-[Running app.](https://platform.youwol.com/applications/@youwol/webpm-client-doc/latest)
+[Running app.](https://platform.youwol.com/apps/@webpm-client/doc/latest)
 
-[Online user-guide](https://l.youwol.com/doc/@youwol/webpm-client-doc)
+<!-- no user guide provided -->
 
-[Developers documentation](https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/webpm-client-doc&tab=doc)
+[Developers documentation](https://platform.youwol.com/apps/@youwol/cdn-explorer/latest?package=@webpm-client/doc&tab=doc)
 
-[Package on npm](https://www.npmjs.com/package/@youwol/webpm-client-doc)
+[Package on npm](https://www.npmjs.com/package/@webpm-client/doc)
 
-[Source on GitHub](https://github.com/youwol/webpm-client-doc)
+[Source on GitHub](https://github.com/webpm-client/doc)
 
 # Installation, Build, Test
 
@@ -68,8 +68,8 @@ the Py-YouWol configuration needs to be updated to include a `WebpackDevServerSw
 `FlowSwitcherMiddleware`. For example:
 
 ```python
-from w3nest.app.config import *
-from w3nest.pipelines.pipeline_typescript_weback_npm import WebpackDevServerSwitch
+from w3nest.app.environment import *
+from w3nest.ci.pipeline_typescript_weback_npm import WebpackDevServerSwitch
 
 Configuration(
     customization = Customization(
@@ -77,7 +77,7 @@ Configuration(
             FlowSwitcherMiddleware(
                 name = 'front-end dev-servers',
                 oneOf = [
-                    WebpackDevServerSwitch(packageName="@youwol/webpm-client-doc", port=3029),
+                    WebpackDevServerSwitch(packageName="@webpm-client/doc", port=3029),
                 ]
             )
         ]
@@ -89,7 +89,7 @@ Additional information on the `Configuration` class can be found in the "Configu
 [Py-YouWol guide](https://l.youwol.com/doc/py-youwol).
 
 Once Py-YouWol is running with the updated configuration,
-the application can be accessed from [here](http://localhost:2000/applications/@youwol/webpm-client-doc/latest)
+the application can be accessed from [here](http://localhost:2000/apps/@webpm-client/doc/latest)
 (providing py-youwol running using the default port `2000`).
 
 ---

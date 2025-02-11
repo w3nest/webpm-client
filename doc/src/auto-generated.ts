@@ -1,25 +1,25 @@
-
+/* eslint-disable */
 const runTimeDependencies = {
     "externals": {
-        "@youwol/mkdocs-ts": "^0.5.0",
-        "@youwol/webpm-client": "^3.0.8",
+        "@w3nest/webpm-client": "^0.1.3",
+        "mkdocs-ts": "^0.3.0",
         "rxjs": "^7.5.6"
     },
     "includedInBundle": {}
 }
 const externals = {
-    "@youwol/mkdocs-ts": "window['@youwol/mkdocs-ts_APIv05']",
-    "@youwol/webpm-client": "window['@youwol/webpm-client_APIv3']",
+    "@w3nest/webpm-client": "window['@w3nest/webpm-client_APIv01']",
+    "mkdocs-ts": "window['mkdocs-ts_APIv03']",
     "rxjs": "window['rxjs_APIv7']"
 }
 const exportedSymbols = {
-    "@youwol/mkdocs-ts": {
-        "apiKey": "05",
-        "exportedSymbol": "@youwol/mkdocs-ts"
+    "@w3nest/webpm-client": {
+        "apiKey": "01",
+        "exportedSymbol": "@w3nest/webpm-client"
     },
-    "@youwol/webpm-client": {
-        "apiKey": "3",
-        "exportedSymbol": "@youwol/webpm-client"
+    "mkdocs-ts": {
+        "apiKey": "03",
+        "exportedSymbol": "mkdocs-ts"
     },
     "rxjs": {
         "apiKey": "7",
@@ -30,8 +30,8 @@ const exportedSymbols = {
 const mainEntry : {entryFile: string,loadDependencies:string[]} = {
     "entryFile": "./main.ts",
     "loadDependencies": [
-        "@youwol/mkdocs-ts",
-        "@youwol/webpm-client",
+        "mkdocs-ts",
+        "@w3nest/webpm-client",
         "rxjs"
     ]
 }
@@ -39,19 +39,20 @@ const mainEntry : {entryFile: string,loadDependencies:string[]} = {
 const secondaryEntries : {[k:string]:{entryFile: string, name: string, loadDependencies:string[]}}= {}
 
 const entries = {
-     '@youwol/webpm-client-doc': './main.ts',
-    ...Object.values(secondaryEntries).reduce( (acc,e) => ({...acc, [`@youwol/webpm-client-doc/${e.name}`]:e.entryFile}), {})
+     '@webpm-client/doc': './main.ts',
+    ...Object.values(secondaryEntries).reduce( (acc,e) => ({...acc, [`@webpm-client/doc/${e.name}`]:e.entryFile}), {})
 }
 export const setup = {
-    name:'@youwol/webpm-client-doc',
-        assetId:'QHlvdXdvbC93ZWJwbS1jbGllbnQtZG9j',
-    version:'3.0.8-wip',
-    shortDescription:"Documentation app for the library @youwol/webpm-client",
-    developerDocumentation:'https://platform.youwol.com/applications/@youwol/cdn-explorer/latest?package=@youwol/webpm-client-doc&tab=doc',
-    npmPackage:'https://www.npmjs.com/package/@youwol/webpm-client-doc',
-    sourceGithub:'https://github.com/youwol/webpm-client-doc',
-    userGuide:'https://l.youwol.com/doc/@youwol/webpm-client-doc',
-    apiVersion:'3',
+    name:'@webpm-client/doc',
+        assetId:'QHdlYnBtLWNsaWVudC9kb2M=',
+    version:'0.1.3-wip',
+    webpmPath: '/api/assets-gateway/webpm/resources/QHdlYnBtLWNsaWVudC9kb2M=/0.1.3-wip',
+    shortDescription:"Documentation of @w3nest/webpm-client",
+    developerDocumentation:'https://platform.youwol.com/apps/@youwol/cdn-explorer/latest?package=@webpm-client/doc&tab=doc',
+    npmPackage:'https://www.npmjs.com/package/@webpm-client/doc',
+    sourceGithub:'https://github.com/webpm-client/doc',
+    userGuide:'',
+    apiVersion:'01',
     runTimeDependencies,
     externals,
     exportedSymbols,
@@ -62,7 +63,7 @@ export const setup = {
     },
 
     installMainModule: ({cdnClient, installParameters}:{
-        cdnClient:{install:(unknown) => Promise<WindowOrWorkerGlobalScope>},
+        cdnClient:{install:(_:unknown) => Promise<WindowOrWorkerGlobalScope>},
         installParameters?
     }) => {
         const parameters = installParameters || {}
@@ -76,12 +77,12 @@ export const setup = {
             modules,
             scripts,
         }).then(() => {
-            return window[`@youwol/webpm-client-doc_APIv3`]
+            return window[`@webpm-client/doc_APIv01`]
         })
     },
     installAuxiliaryModule: ({name, cdnClient, installParameters}:{
         name: string,
-        cdnClient:{install:(unknown) => Promise<WindowOrWorkerGlobalScope>},
+        cdnClient:{install:(_:unknown) => Promise<WindowOrWorkerGlobalScope>},
         installParameters?
     }) => {
         const entry = secondaryEntries[name]
@@ -91,7 +92,7 @@ export const setup = {
         const parameters = installParameters || {}
         const scripts = [
             ...(parameters.scripts || []),
-            `@youwol/webpm-client-doc#3.0.8-wip~dist/@youwol/webpm-client-doc/${entry.name}.js`
+            `@webpm-client/doc#0.1.3-wip~dist/@webpm-client/doc/${entry.name}.js`
         ]
         const modules = [
             ...(parameters.modules || []),
@@ -102,7 +103,7 @@ export const setup = {
             modules,
             scripts,
         }).then(() => {
-            return window[`@youwol/webpm-client-doc/${entry.name}_APIv3`]
+            return window[`@webpm-client/doc/${entry.name}_APIv01`]
         })
     },
     getCdnDependencies(name?: string){

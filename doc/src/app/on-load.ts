@@ -1,7 +1,7 @@
-import { render, AnyVirtualDOM } from '@youwol/rx-vdom'
+import { render, AnyVirtualDOM } from 'rx-vdom'
 import { navigation } from './navigation'
-import { Router, Views } from '@youwol/mkdocs-ts'
-import { setup } from '../auto-generated'
+import { Router, DefaultLayout } from 'mkdocs-ts'
+
 export const router = new Router({
     navigation,
 })
@@ -41,19 +41,8 @@ export const logo: AnyVirtualDOM = {
 }
 document.getElementById('content').appendChild(
     render(
-        new Views.DefaultLayoutView({
+        new DefaultLayout.Layout({
             router,
-            name: 'WebPM',
-            topBanner: (params) =>
-                new Views.TopBannerClassicView({
-                    ...params,
-                    logo,
-                    badge: new Views.SourcesLink({
-                        href: 'https://github.com/youwol/webpm-client/',
-                        version: setup.version,
-                        name: '@youwol/webpm-client',
-                    }),
-                }),
         }),
     ),
 )
