@@ -38,9 +38,6 @@ export async function installPython(
     const modulesRequired = (pyodideInputs.modules ?? []).filter(
         (module) => !StateImplementation.importedPyModules.includes(module),
     )
-    if (modulesRequired.length === 0) {
-        return Promise.resolve()
-    }
 
     const onEvent =
         pyodideInputs.onEvent ??
