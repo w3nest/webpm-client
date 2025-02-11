@@ -222,8 +222,8 @@ export type MessageExit = {
       }
     | {
           error: false
-    result: unknown
-}
+          result: unknown
+      }
 )
 
 /**
@@ -287,13 +287,13 @@ export interface MainToWorkerMessage {
  * Represents the available `type` in {@link Message}.
  */
 export type MessageType =
-        | 'Execute'
-        | 'Exit'
-        | 'Start'
-        | 'Log'
-        | 'Data'
-        | 'MainToWorkerMessage'
-        | 'PostError'
+    | 'Execute'
+    | 'Exit'
+    | 'Start'
+    | 'Log'
+    | 'Data'
+    | 'MainToWorkerMessage'
+    | 'PostError'
     | 'CdnEvent'
 
 /**
@@ -335,7 +335,7 @@ export type Message =
               workerId: string
               taskId: string
           }
-}
+      }
 
 /**
  * Encapsulates arguments to be sent to a task's entry point (implementation function).
@@ -961,6 +961,9 @@ export class WorkersPool {
      * (installation & post-install tasks achieved).
      */
     async ready() {
+        if (Object.entries(this.workers$.value).length >= this.pool.startAt) {
+            return
+        }
         return new Promise<void>((resolve) => {
             this.workers$
                 .pipe(
