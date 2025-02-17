@@ -40,6 +40,7 @@ export type FileLocationString = string
  * </note>
  * @inline
  */
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export type LightLibraryQueryString = string | `${string}#${string}`
 
 /**
@@ -61,6 +62,7 @@ export type LightLibraryQueryString = string | `${string}#${string}`
  */
 export type LightLibraryWithAliasQueryString =
     | LightLibraryQueryString
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     | `${LightLibraryQueryString} as ${string}`
 
 /**

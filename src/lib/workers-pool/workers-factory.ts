@@ -309,7 +309,7 @@ export type MessageType =
 /**
  * Type mapping between {@link MessageType} and associated data structure.
  */
-export type MessageContent = {
+export interface MessageContent {
     Execute: MessageExecute
     Exit: MessageExit
     Start: MessageStart
@@ -576,6 +576,9 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
     }
 
     type InstallFunc = (args: unknown) => unknown
+    interface WorkerGlobalScope {
+        importScripts: (...params: unknown[]) => Promise<void>
+    }
     const deserializeFunction = (fct: string | InstallFunc) =>
         typeof fct === 'string'
             ? // eslint-disable-next-line @typescript-eslint/no-implied-eval,@typescript-eslint/no-unsafe-call
@@ -604,12 +607,11 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
         })
     }
     // @ts-expect-error need refactoring
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     self.customImportScripts = ['', 'anonymous'].includes(
         input.args.frontendConfiguration.crossOrigin ?? '',
     )
         ? importScriptsXMLHttpRequest
-        : self['importScripts']
+        : (self as unknown as WorkerGlobalScope).importScripts
 
     console.log('Install environment in worker', input)
 
@@ -981,7 +983,7 @@ export class WorkersPool {
                 params.pool?.stretchTo ??
                 Math.max(1, navigator.hardwareConcurrency - 1),
         }
-        this.reserve({ workersCount: this.pool.startAt ?? 0 }).subscribe()
+        this.reserve({ workersCount: this.pool.startAt }).subscribe()
     }
 
     /**
@@ -1014,8 +1016,7 @@ export class WorkersPool {
                 .pipe(
                     takeWhile(
                         (workers) =>
-                            Object.entries(workers).length <
-                            (this.pool.startAt ?? 1),
+                            Object.entries(workers).length < this.pool.startAt,
                     ),
                     last(),
                 )
@@ -1221,7 +1222,7 @@ export class WorkersPool {
                     channel$: this.workers$.value[idleWorkerId].channel$,
                 })
             }
-            if (this.requestedWorkersCount < (this.pool.stretchTo ?? 1)) {
+            if (this.requestedWorkersCount < this.pool.stretchTo) {
                 return this.createWorker$(ctx)
             }
             return undefined
