@@ -720,7 +720,7 @@ export class Client {
         const renderingWindow = inputs.renderingWindow ?? window
         const installedUrls = [
             ...renderingWindow.document.head.querySelectorAll('link'),
-        ].map((e) => e.href)
+        ].map((e) => decodeURIComponent(e.href))
 
         const getLinkElement = (url: string) => {
             return installedUrls.find((existUrl) => existUrl === url)
