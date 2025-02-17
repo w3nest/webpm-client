@@ -1414,5 +1414,7 @@ export class WorkersPool {
         Object.values(this.workers$.value).forEach(({ worker }) => {
             worker.terminate()
         })
+        this.startedWorkers$.next([])
+        this.workers$.next({})
     }
 }
