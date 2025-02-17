@@ -47,7 +47,8 @@ export class InstallView implements VirtualDOM<'div'> {
     public readonly mode$ = new BehaviorSubject<'events' | 'logs'>('events')
     public readonly eventsMgr = new EventsManager()
 
-    constructor() {
+    constructor(params: { eventsMgr?: EventsManager } = {}) {
+        Object.assign(this, params)
         const header = new InstallHeaderBar({
             eventsMgr: this.eventsMgr,
             mode$: this.mode$,

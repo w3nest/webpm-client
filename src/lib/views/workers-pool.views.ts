@@ -1,7 +1,7 @@
 import { VirtualDOM, ChildrenLike, sync$, RxHTMLElement } from 'rx-vdom'
 import { filter, map, shareReplay } from 'rxjs/operators'
 import type { WorkersPool } from '../workers-pool'
-import { combineLatest, Observable, ReplaySubject } from 'rxjs'
+import { combineLatest, Observable } from 'rxjs'
 import { InstallView } from './install.view'
 import { CdnEvent } from '../events.models'
 import { EventsManager } from './events-manager'
@@ -114,7 +114,9 @@ export class WorkerCard implements VirtualDOM<'div'> {
         ]
         this.connectedCallback = (elem) => {
             elem.ownSubscriptions(
-                params.cdnEvent$.subscribe((ev) => eventsMgr.event$.next(ev)),
+                params.cdnEvent$.subscribe((ev) => {
+                    eventsMgr.event$.next(ev)
+                }),
             )
         }
     }
