@@ -17,8 +17,8 @@ import { StateImplementation } from './state'
 import { PyodideInputs } from './inputs.models'
 
 export interface PythonIndexes {
-    urlPyodide: string
-    urlPypi: string
+    standardUrlPyodide: string
+    standardUrlPypi: string
 }
 
 function log(text: string, onEvent: (ev: CdnEvent) => void) {
@@ -69,10 +69,12 @@ export async function installPython(
             pyodideVersion = latest.tag_name
             log(`Found latest Pyodide version: ${pyodideVersion}`, onEvent)
         }
-        const indexURL = pyodideInputs.urlPyodide.replace(
-            '$VERSION',
-            pyodideVersion,
-        )
+        const indexURLBase = pyodideInputs.indexUrl
+            ? pyodideInputs.indexUrl
+            : pyodideInputs.standardUrlPyodide
+
+        const indexURL = indexURLBase.replace('$VERSION', pyodideVersion)
+
         log(`Install Pyodide from '${indexURL}'`, onEvent)
         onEvent(
             new FetchPyRuntimeEvent(pyodideVersion, `${indexURL}/pyodide.js`),
@@ -117,6 +119,7 @@ export async function installPython(
         onEvent(new InstallPyModuleEvent(module))
     })
 
+    const piPyUrl = pyodideInputs.standardUrlPypi
     const installModule = (module: string) => {
         if (module in pyodide._api.repodata_packages) {
             log(
@@ -125,17 +128,12 @@ export async function installPython(
             )
             return pyodide.loadPackage(module)
         }
-        const parameters = pyodideInputs.urlPypi.includes('https')
-            ? ''
-            : `, index_urls='${pyodideInputs.urlPypi}'`
-
-        log(
-            `> await micropip.install(requirements='${module}'${parameters})`,
-            onEvent,
-        )
+        const parameters = `, index_urls='${piPyUrl}'`
+        const cmd = `await micropip.install(requirements='${module}'${parameters})`
+        log(`> ${cmd}`, onEvent)
         return pyodide.runPythonAsync(`
 import micropip
-await micropip.install(requirements='${module}'${parameters})`)
+${cmd}`)
     }
 
     try {

@@ -357,8 +357,8 @@ export class Client {
         const pyodidePromise = sanitizedInputs.pyodide
             ? installPython({
                   ...pyodideInputs,
-                  urlPyodide: Client.BackendConfiguration.urlPyodide,
-                  urlPypi: Client.BackendConfiguration.urlPypi,
+                  standardUrlPyodide: Client.BackendConfiguration.urlPyodide,
+                  standardUrlPypi: Client.BackendConfiguration.urlPypi,
                   onEvent,
               })
             : Promise.resolve()

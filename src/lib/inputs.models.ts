@@ -226,30 +226,41 @@ export interface BackendInputs {
 }
 
 /**
- * Installer description for the pyodide runtime environment.
+ * Configuration options for installing the Pyodide runtime environment.
  */
 export interface PyodideInputs {
     /**
-     * Pyodide target version (no semver allowed).
+     * The target version of Pyodide (specified as a plain string, not semver).
      *
-     * If not provided, get the latest release tag from:
-     *
+     * If omitted, the latest release tag is automatically fetched from:
      * `https://api.github.com/repos/pyodide/pyodide/releases/latest`.
      *
      * <note level="warning">
-     * It is not possible to install multiple Pyodide versions, only a single one is allowed.
+     * Only one Pyodide version can be installed at a time.
      * </note>
      */
     version?: string
     /**
-     * Modules to install.
+     * An array of Python modules to install.
      */
     modules?: PyModule[]
 
-    /**
-     * Alias for the pyodide runtime (exposed as `pyodide`).
-     */
     pyodideAlias?: string
+
+    /**
+     * The index URL used to fetch Pyodide and its ported packages.
+     *
+     * If omitted, the `jsDelivr` CDN is used.
+     * If a custom URL is provided, any occurrence of the placeholder `$VERSION` will be replaced
+     * with the value specified in {@link PyodideInputs.version}.
+     *
+     * <note level="hint">
+     * If omitted and serving your application via the W3Nest local server, the indexUrl targets
+     * the proxy `/python/pyodide/$VERSION`. This configuration allows resources to be cached locally on the
+     * user's hard drive, while missing resources are fetched from the `jsDelivr` CDN.
+     * </note>
+     */
+    indexUrl?: string
 }
 
 /**
