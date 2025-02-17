@@ -84,7 +84,7 @@ export class PyEventsView implements VirtualDOM<'div'> {
  * The view for pyodide events targeting a specific module.
  * It uses {@link ItemView} with a single `install` phase.
  */
-class PyModuleView implements VirtualDOM<'div'> {
+export class PyModuleView implements VirtualDOM<'div'> {
     /**
      * Component's class name for CSS query.
      */

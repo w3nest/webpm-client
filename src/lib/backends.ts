@@ -228,6 +228,11 @@ export interface BackendClient {
     version: string
 
     /**
+     * Relative path of the W3Lab page pointing to the backend.
+     */
+    urlW3Lab: string
+
+    /**
      * Configuration.
      */
     config: {

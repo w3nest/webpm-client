@@ -18,44 +18,87 @@ import {
 } from '../events.models'
 import { filter, map, Observable, ReplaySubject, scan, take } from 'rxjs'
 
-const pyModuleEvents = [
+/**
+ * Events related to pyodide module installation.
+ */
+export const pyModuleEvents = [
     'InstallPyModuleEvent',
     'PyModuleLoadedEvent',
     'PyModuleErrorEvent',
 ] as const
 
+/**
+ * {@link pyModuleEvents} as type literal union.
+ */
 export type PyModuleEventType = (typeof pyModuleEvents)[number]
+/**
+ * {@link pyModuleEvents} as type union of {@link AllEvents}.
+ */
 export type PyModuleEvent = AllEvents[PyModuleEventType]
 
+/**
+ * Type guard for {@link PyModuleEvent}.
+ */
 function isPyModuleEvent(event: CdnEvent): event is PyModuleEvent {
     return pyModuleEvents.includes(event.step as PyModuleEventType)
 }
-const pyPyRuntimeEvents = [
+/**
+ * Events related to pyodide runtime installation.
+ */
+export const pyPyRuntimeEvents = [
     'FetchPyRuntimeEvent',
     'FetchedPyRuntimeEvent',
     'StartPyRuntimeEvent',
     'PyRuntimeReadyEvent',
 ] as const
 
+/**
+ * {@link pyModuleEvents} as type literal union.
+ */
 export type PyRuntimeEventType = (typeof pyPyRuntimeEvents)[number]
+
+/**
+ * {@link pyPyRuntimeEvents} as type union of {@link AllEvents}.
+ */
 export type PyRuntimeEvent = AllEvents[PyRuntimeEventType]
 
-function isPyRuntimeEvent(event: CdnEvent): event is PyRuntimeEvent {
+/**
+ * Type guard for {@link PyRuntimeEvent}.
+ */
+export function isPyRuntimeEvent(event: CdnEvent): event is PyRuntimeEvent {
     return pyPyRuntimeEvents.includes(event.step as PyRuntimeEventType)
 }
 
-function isConsoleEvent(event: CdnEvent): event is ConsoleEvent {
+/**
+ * Type guard for {@link ConsoleEvent}.
+ */
+export function isConsoleEvent(event: CdnEvent): event is ConsoleEvent {
     return event.step === 'ConsoleEvent'
 }
 
-const doneEvents = ['InstallDoneEvent', 'InstallErrorEvent'] as const
+/**
+ * Events related to installation done.
+ */
+export const doneEvents = ['InstallDoneEvent', 'InstallErrorEvent'] as const
+/**
+ * {@link doneEvents} as type literal union.
+ */
 export type DoneEventType = (typeof doneEvents)[number]
+/**
+ * {@link doneEvents} as type union of {@link AllEvents}.
+ */
 export type DoneEvents = AllEvents[DoneEventType]
 
-function isInstallDoneEvent(event: CdnEvent): event is DoneEvents {
+/**
+ * Type guard for {@link DoneEvents}.
+ */
+export function isInstallDoneEvent(event: CdnEvent): event is DoneEvents {
     return doneEvents.includes(event.step as DoneEventType)
 }
 
+/**
+ * Installation related events manager.
+ */
 export class EventsManager {
     public readonly event$ = new ReplaySubject<CdnEvent>()
 

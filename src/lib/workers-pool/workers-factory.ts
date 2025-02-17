@@ -22,10 +22,24 @@ import type * as WebpmClient from '../../lib'
 
 type WorkerId = string
 
+/**
+ * Interface specification for `Context` object.
+ */
 export interface ContextTrait {
+    /**
+     * Append a child context, usually wrapping a function call.
+     *
+     * @param name Name (usually the function name).
+     * @param cb The callback triggering the action.
+     * @returns The callback's return
+     */
     withChild: <T>(name: string, cb: (ctx: ContextTrait) => T) => T
     info: (text: string, data?: unknown) => void
 }
+
+/**
+ * Empty implementation of {@link ContextTrait}.
+ */
 export class NoContext implements ContextTrait {
     withChild<T>(_name: string, cb: (ctx: ContextTrait) => T): T {
         return cb(this)
@@ -39,29 +53,24 @@ export class NoContext implements ContextTrait {
 // noinspection JSValidateJSDoc
 /**
  * Any {@link MainModule.CdnEvent} emitted from a Worker ({@link WWorkerTrait}).
- * @category Events
  */
 export type CdnEventWorker = CdnEvent & {
     workerId: string
 }
 
-/**
- * @category Events
- */
 export function implementEventWithWorkerTrait(
     event: unknown,
 ): event is CdnEventWorker {
     return isCdnEvent(event) && 'workerId' in event
 }
 
-// noinspection JSValidateJSDoc
 /**
  * A special type of {@link MessageData} for {@link MainModule.CdnEvent}.
- * @category Worker's Message
  */
 export interface MessageCdnEvent {
     type: 'CdnEvent'
     workerId: string
+    taskId: string
     event: CdnEvent
 }
 
@@ -79,17 +88,11 @@ function isCdnEventMessage(message: Message): undefined | CdnEventWorker {
     return undefined
 }
 
-/**
- * @category Worker Environment
- */
 export interface WorkerFunction<T> {
     id: string
     target: T
 }
 
-/**
- * @category Worker Environment
- */
 export interface WorkerVariable<T> {
     id: string
     value: T
@@ -100,7 +103,7 @@ export interface WorkerVariable<T> {
  *
  * @typeParam TArgs Type of the entry point's arguments
  * @typeParam TReturn Type of the entry point's return
- * (emitted afterward using {@link MessageExit.result | MessageExit.result}).
+ * (emitted afterward using {@link MessageExit}).
  */
 export interface Task<TArgs = unknown, TReturn = unknown> {
     /**
@@ -108,20 +111,28 @@ export interface Task<TArgs = unknown, TReturn = unknown> {
      */
     title: string
     /**
-     * Entry point implementation, the value returned must follow
-     * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)
-     * @param args arguments of the entrypoint,  must follow
+     * Entry point implementation.
+     *
+     * <note level="warning">
+     * All variables referenced by the entry point should be available within the workers environment.
+     * </note>
+     *
+     * @param args arguments of the entrypoint, see {@link Task.args}.
+     * @returns the value returned must follow
      * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)
      */
     entryPoint: (args: TArgs) => TReturn | Promise<TReturn>
     /**
      * Arguments to forward to the entry point upon execution.
+     *
+     * Must follow
+     * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm)
      */
     args: TArgs
 }
 
 /**
- * @category Worker Environment
+ * Specifies worker environment.
  */
 export interface WorkerEnvironment {
     /**
@@ -146,7 +157,7 @@ export interface WorkerEnvironment {
  * Context available in {@link WWorkerTrait} to log info or send data.
  * All data must follow
  * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).
- * @category Worker Environment
+ *
  */
 export interface WorkerContext {
     /**
@@ -167,8 +178,8 @@ export interface WorkerContext {
 
     /**
      * If defined by the developer in its worker's implementation,
-     * every message send using {@link WorkersPool.sendData} will
-     * be forwarded to this callback.
+     * every message send using {@link WorkersPool.sendData} (from the main thread) will
+     * be intercepted by this callback.
      */
     onData?: (message: unknown) => void
 }
@@ -176,7 +187,6 @@ export interface WorkerContext {
 /**
  * Message send from the workers to the main thread when a task is started.
  *
- * @category Worker's Message
  */
 export interface MessageExecute {
     /**
@@ -199,8 +209,6 @@ export interface MessageExecute {
 
 /**
  * Message emitted from workers when a task is started.
- *
- * @category Worker's Message
  */
 export interface MessageStart {
     taskId: string
@@ -209,27 +217,35 @@ export interface MessageStart {
 
 /**
  * Message emitted from workers when a task is terminated.
- *
- * @category Worker's Message
  */
 export type MessageExit = {
+    /**
+     * Task ID.
+     */
     taskId: string
+    /**
+     * Worker ID.
+     */
     workerId: string
 } & (
     | {
           error: true
+          /**
+           * Data structure for failure.
+           */
           result: Error
       }
     | {
           error: false
+          /**
+           * Data structure for successful processing.
+           */
           result: unknown
       }
 )
 
 /**
  * Message emitted from workers when a log is sent (see {@link WorkerContext}).
- *
- * @category Worker's Message
  */
 export interface MessageLog {
     workerId: string
@@ -240,8 +256,6 @@ export interface MessageLog {
 
 /**
  * Message emitted from workers when a data is sent (see {@link WorkerContext}).
- *
- * @category Worker's Message
  */
 export interface MessageData {
     taskId: string
@@ -251,8 +265,6 @@ export interface MessageData {
 
 /**
  * Message emitted from workers when an error occurred.
- *
- * @category Worker's Message
  */
 export interface MessagePostError {
     taskId: string
@@ -263,8 +275,6 @@ export interface MessagePostError {
 /**
  * Message send from the main thread to a worker for a particular task.
  * See {@link WorkersPool.sendData}.
- *
- * @category Worker's Message
  */
 export interface MainToWorkerMessage {
     /**
@@ -307,17 +317,22 @@ export type MessageContent = {
     Data: MessageData
     MainToWorkerMessage: MainToWorkerMessage
     PostError: MessagePostError
-    CdnEvent: {
-        type: 'CdnEvent'
-        event: unknown
-        workerId: string
-        taskId: string
-    }
+    CdnEvent: MessageCdnEvent
 }
 /**
- * Messages exchanged between the main thread and the workers' thread.
+ * Messages exchanged between the main and the workers' thread.
  *
- * @category Worker's Message
+ * Emitted from the worker thread to the main thread:
+ * *  {@link MessageExecute}
+ * *  {@link MessageStart}
+ * *  {@link MessageCdnEvent}
+ * *  {@link MessageLog}
+ * *  {@link MessageData}
+ * *  {@link MessagePostError}
+ * *  {@link MessageExit}
+ *
+ * Emitted from the main thread to the worker thread:
+ * *  {@link MainToWorkerMessage}
  */
 export type Message =
     | { type: 'Execute'; data: MessageExecute }
@@ -327,33 +342,37 @@ export type Message =
     | { type: 'Data'; data: MessageData }
     | { type: 'MainToWorkerMessage'; data: MainToWorkerMessage }
     | { type: 'PostError'; data: MessagePostError }
-    | {
-          type: 'CdnEvent'
-          data: {
-              type: 'CdnEvent'
-              event: CdnEvent
-              workerId: string
-              taskId: string
-          }
-      }
+    | { type: 'CdnEvent'; data: MessageCdnEvent }
 
 /**
  * Encapsulates arguments to be sent to a task's entry point (implementation function).
- *
- * @category Worker Environment
  */
 export interface EntryPointArguments<TArgs> {
+    /**
+     * The arguments with witch the entry point is called.
+     *
+     * Should follow the
+     * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).
+     */
     args: TArgs
+    /**
+     * The task ID.
+     */
     taskId: string
+    /**
+     * The worker ID.
+     */
     workerId: string
+    /**
+     * The context, used for logging or sending data back to the main thread.
+     */
     context: WorkerContext
+    /**
+     * The worker scope.
+     */
     workerScope: Record<string, unknown>
 }
 
-/**
- * This function is exposed mostly because it is useful in terms of testing to bypass serialization in string.
- * @category Worker Environment
- */
 export function entryPointWorker(messageEvent: MessageEvent) {
     // The following interface avoid the interpreter to interpret self as 'Window':
     // in a worker 'self' is of type DedicatedWorkerGlobalScope.
@@ -531,8 +550,6 @@ export function entryPointWorker(messageEvent: MessageEvent) {
 
 /**
  * Message sent from the main thread to the workers to request installation of the {@link WorkerEnvironment}.
- *
- * @category Worker's Message
  */
 export interface MessageInstall {
     backendsPartitionId: string
@@ -573,8 +590,10 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
     }
 
     /**
-     * The function 'importScriptsXMLHttpRequest' is used in place of [importScripts](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/importScripts)
-     * when 'FrontendConfiguration.crossOrigin' is "anonymous". Using 'importScripts' fails in this case (request are blocked).
+     * The function 'importScriptsXMLHttpRequest' is used in place of
+     * [importScripts](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/importScripts)
+     * when 'FrontendConfiguration.crossOrigin' is "anonymous". Using 'importScripts' fails in this case
+     * (request are blocked).
      */
     function importScriptsXMLHttpRequest(...urls: string[]) {
         urls.forEach((url) => {
@@ -590,7 +609,7 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
         input.args.frontendConfiguration.crossOrigin ?? '',
     )
         ? importScriptsXMLHttpRequest
-        : self.importScripts
+        : self['importScripts']
 
     console.log('Install environment in worker', input)
 
@@ -739,11 +758,13 @@ export interface PoolSize {
 export interface WorkersPoolInput {
     /**
      * If provided, all events regarding installation are forwarded here.
-     * Otherwise {@link WorkersPool.cdnEvent$ | WorkersPool.cdnEvent$} is initialized and used.
+     * Otherwise {@link WorkersPool.cdnEvent$} is initialized and used.
      */
     cdnEvent$?: Subject<CdnEventWorker>
     /**
-     * Globals to be copied in workers' environment.
+     * Globals variable to be copied in workers' environment, can be variables or functions.
+     * Variables must be serializable using the structured clone algorithm, and functions can only reference
+     * symbols available within the workers.
      */
     globals?: Record<string, unknown>
     /**
@@ -756,11 +777,9 @@ export interface WorkersPoolInput {
     postInstallTasks?: Task[]
     /**
      * A factory that create a `Context` objects used for logging purposes.
-     * It serves as dependency injection; the `Context` class from the library
-     * [@youwol/logging](https://github.com/youwol/logging) is appropriate for that purpose.
      *
-     * @param name name of the root node of the context
-     * @return a `Context` object implementing {@link ContextTrait}
+     * @param name Name of the root node of the context.
+     * @returns a `Context` object implementing {@link ContextTrait}.
      */
     ctxFactory?: (name: string) => ContextTrait
 
@@ -796,7 +815,28 @@ export interface ScheduleInput<TArgs> {
 /**
  * Entry point to create workers pool.
  *
- * @category Getting Started
+ * It is constructed using {@link WorkersPool.constructor}, then task scheduling is achieved using
+ * {@link WorkersPool.schedule}.
+ *
+ * The Workers Pool Module efficiently manages Web Workers by dynamically allocating and scheduling tasks based
+ * on availability and resource constraints.
+ *
+ * **Task Scheduling:**
+ *
+ * *  When a task is submitted, the pool checks for **available workers**.
+ * *  If a worker is **idle**, it immediately picks up the task.
+ *
+ * **Worker Allocation:**
+ *
+ * *  If no workers are available but the pool has **not reached its maximum limit**, a new worker is created
+ *    to handle the task.
+ * *  If the pool has already **stretched to its maximum capacity**, the task is queued until a worker becomes
+ *    available.
+ *
+ * **Execution & Cleanup:**
+ *
+ * *  Once a worker completes a task, it is **either reused** for the next pending task or **remains idle**
+ *    until needed.
  */
 export class WorkersPool {
     static backendsPartitionId: string
@@ -895,6 +935,11 @@ export class WorkersPool {
         entryPoint: (d: EntryPointArguments<unknown>) => unknown
     }[] = []
 
+    /**
+     * Create an instance of worker pool.
+     *
+     * @param params Environment setup.
+     */
     constructor(params: WorkersPoolInput) {
         this.backgroundContext = params.ctxFactory?.('background management')
         this.cdnEvent$ = params.cdnEvent$ ?? new Subject<CdnEventWorker>()
@@ -960,7 +1005,7 @@ export class WorkersPool {
      * When this method is awaited, it ensures that `pool.startAt` workers are ready to be used
      * (installation & post-install tasks achieved).
      */
-    async ready() {
+    async ready(): Promise<void> {
         if (Object.entries(this.workers$.value).length >= this.pool.startAt) {
             return
         }
@@ -985,6 +1030,8 @@ export class WorkersPool {
      *
      * @param input task description
      * @param context context to log run-time info
+     * @returns Observable on the {@link Message} emitted during task execution. In any case, the last message sent is
+     * {@link MessageExit}.
      * @typeParam TArgs type of the entry point's argument
      */
     schedule<TArgs = unknown>(
@@ -1076,9 +1123,10 @@ export class WorkersPool {
      *     }
      * }
      * ```
-     * @param taskId target taskId
-     * @param args arguments to forward,
-     * should be valid regarding the [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).
+     * @param _p
+     * @param _p.taskId Target taskId.
+     * @param _p.data Data to send, should be valid regarding the
+     * [structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).
      */
     sendData({ taskId, data }: { taskId: string; data: unknown }) {
         const runningTask = this.runningTasks$.value.find(
@@ -1093,9 +1141,9 @@ export class WorkersPool {
     }
 
     /**
-     * Return the Web Workers proxy.
+     * @returns The Web Workers proxy ({@link WebWorkersBrowser} in real usage).
      */
-    getWebWorkersProxy() {
+    getWebWorkersProxy(): IWWorkerProxy {
         return WorkersPool.webWorkersProxy
     }
 

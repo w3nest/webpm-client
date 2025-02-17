@@ -10,7 +10,8 @@ import {
     getExpectedFullExportedSymbol,
     PARTITION_PREFIX,
 } from './utils'
-import { ChildrenLike, VirtualDOM } from './rx-vdom.types'
+import { ChildLike, ChildrenLike, VirtualDOM } from 'rx-vdom'
+
 import { setup } from '../auto-generated'
 import { installBackendClientDeps } from './backends'
 
@@ -18,7 +19,14 @@ import type { Observable } from 'rxjs'
 import type { ContextMessage } from '@w3nest/http-clients'
 import type * as HttpClients from '@w3nest/http-clients'
 import { CdnError } from './errors.models'
+
+/**
+ * Type alias for string used as library name.
+ */
 export type LibraryName = string
+/**
+ * Type alias for string used as version.
+ */
 export type Version = string
 
 /**
@@ -118,8 +126,6 @@ export class State {
 /**
  * Singleton object that gathers history of fetched modules, scripts & CSS.
  * It also acts as a cache store.
- *
- * This is essentially a 'friend' class used by {@link Client} which should not be exposed.
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class StateImplementation {
@@ -549,10 +555,11 @@ export class StateImplementation {
 
     /**
      *
-     * @param name name of the asset
-     * @param version version of the asset
-     * @param assetId id of the asset
-     * @param url original URL
+     * @param _p
+     * @param _p.name name of the asset
+     * @param _p.version version of the asset
+     * @param _p.assetId id of the asset
+     * @param _p.url original URL
      */
     static getPatchedUrl({
         name,
@@ -634,7 +641,7 @@ class ModulesView implements VirtualDOM<'div'> {
         importedBundles: Map<string, string[]>
     }) {
         this.children = Array.from(importedBundles.entries()).map(
-            ([k, versions]) => {
+            ([k, versions]): ChildLike => {
                 return {
                     tag: 'div',
                     class: 'd-flex align-items-center my-1 row',
@@ -648,6 +655,7 @@ class ModulesView implements VirtualDOM<'div'> {
                             tag: 'div',
                             class: 'd-flex align-items-center col',
                             children: versions.map((v) => ({
+                                tag: 'div',
                                 class: 'border rounded p-1 mx-2 d-flex align-items-center',
                                 children: [
                                     { tag: 'div', class: 'fas fa-tag mx-1' },

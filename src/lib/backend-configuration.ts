@@ -1,9 +1,29 @@
+function computeOrigin(
+    origin:
+        | {
+              secure?: boolean
+              hostname?: string
+              port?: number
+          }
+        | undefined,
+) {
+    if (origin === undefined) {
+        return ''
+    }
+
+    const secure = origin.secure ?? 'hostname' in origin
+
+    const hostname = origin.hostname ?? 'localhost'
+
+    const port = origin.port ?? ('hostname' in origin ? '' : 8080)
+
+    return `http${secure ? 's' : ''}://${hostname}${port ? ':' : ''}${String(port)}`
+}
+
 /**
- * Defines the target backend used by {@link Client}.
+ * Backend configuration, retrieved from w3nest cookie.
+ * See {@link backendConfiguration}.
  *
- * Should be constructed using {@link backendConfiguration}.
- *
- * @hidden
  */
 export interface BackendConfiguration {
     /**
@@ -35,34 +55,35 @@ export interface BackendConfiguration {
     readonly id?: string
 }
 
-function computeOrigin(
-    origin:
-        | {
-              secure?: boolean
-              hostname?: string
-              port?: number
-          }
-        | undefined,
-) {
-    if (origin === undefined) {
-        return ''
-    }
-
-    const secure = origin.secure ?? 'hostname' in origin
-
-    const hostname = origin.hostname ?? 'localhost'
-
-    const port = origin.port ?? ('hostname' in origin ? '' : 8080)
-
-    return `http${secure ? 's' : ''}://${hostname}${port ? ':' : ''}${String(port)}`
-}
-
+/**
+ * Cookie model set by W3Nest (either the local server or the remote one).
+ */
 export interface Cookie {
+    /**
+     * *  `local` : W3Nest local server
+     * *  `remote` : W3Nest remote server (`https://w3nest.org`).
+     */
     type: 'local' | 'remote'
+    /**
+     * Web Socket URL for data.
+     */
     wsDataUrl: string
+    /**
+     * Web Socket URL for logs.
+     */
     wsLogsUrl: string
+    /**
+     * Port (if applicable).
+     */
     port: number
+    /**
+     * Server Origin.
+     */
     origin: string
+
+    /**
+     * WebPM paths definition.
+     */
     webpm: {
         pathLoadingGraph: string
         pathResource: string
@@ -90,10 +111,13 @@ export function getLocalCookie(): Cookie | undefined {
 /**
  * Construct a backend configuration.
  *
- * @param pathLoadingGraph path of the end-point to query the loading graph
- * @param pathRawPackage path of the end-point to fetch the bundle of a package
- * @param origin origin of the backend
- * @param id id associated to the configuration
+ * @param _p
+ * @param _p.pathLoadingGraph Path of the end-point to query the loading graph.
+ * @param _p.pathResource Path of the end-point to fetch the bundle of a package.
+ * @param _p.origin Origin of the backend.
+ * @param _p.id Id associated to the configuration.
+ * @param _p.pathPypi Path to fetch PyPi module.
+ * @param _p.pathPyodide Path to fetch Pyodide resources.
  */
 export function backendConfiguration({
     pathLoadingGraph,

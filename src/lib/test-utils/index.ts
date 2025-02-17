@@ -13,6 +13,9 @@ export class NotCloneableData {
     public readonly notCloneable = true
 }
 
+/**
+ * Implementation of {@link WWorkerTrait} for testing purpose using Jest.
+ */
 export class WebWorkerJest implements WWorkerTrait {
     public readonly uid: string
     public readonly messages: Message[] = []
@@ -75,6 +78,9 @@ export class WebWorkerJest implements WWorkerTrait {
     }
 }
 
+/**
+ * Implementation of {@link IWWorkerProxy} for testing purpose using Jest.
+ */
 export class WebWorkersJest implements IWWorkerProxy {
     public readonly type = 'WebWorkersJest'
     static workers: Record<string, WebWorkerJest> = {}

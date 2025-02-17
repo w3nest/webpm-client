@@ -52,7 +52,7 @@ export class BackendEventsView implements VirtualDOM<'div'> {
  * The view for backend events targeting a specific backend.
  * It uses {@link ItemView} with `download`, `install` & `start` phases.
  */
-class BackendView implements VirtualDOM<'div'> {
+export class BackendView implements VirtualDOM<'div'> {
     /**
      * Component's class name for CSS query.
      */

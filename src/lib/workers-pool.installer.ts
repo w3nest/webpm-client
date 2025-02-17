@@ -3,7 +3,11 @@ import * as webpmClient from '.'
 import { backendConfiguration } from '.'
 import { InWorkerAction } from './workers-pool'
 
+/**
+ * Type definition of the module {@link WorkersPoolModule}.
+ */
 export type WorkersModule = typeof import('./workers-pool')
+
 export type TestUtilsModule = typeof import('./test-utils')
 
 function setupWorkersPoolModule(module: WorkersModule) {

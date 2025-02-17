@@ -6,38 +6,22 @@ export {
     installLoadingGraph,
     monitoring,
 } from './client'
-export { Monitoring, State } from './state'
-export * from './loader.view'
 export {
-    FetchScriptInputs,
-    InstallLoadingGraphInputs,
-    QueryLoadingGraphInputs,
-    FullLibraryQueryString,
-    LightLibraryQueryString,
-    ModuleSideEffectCallback,
-    ModuleSideEffectCallbackArgument,
-    ScriptInput,
-    CssInput,
-    FetchedScript,
-    CssSideEffectCallbackArgument,
-    CssSideEffectCallback,
-    ScriptSideEffectCallback,
-    ScriptSideEffectCallbackArgument,
-    LoadingGraph,
-    Library,
-    LightLibraryWithAliasQueryString,
-    EsmInputs,
-    BackendInputs,
-    PyModule,
-    PyodideInputs,
-    FileLocationString,
-    InstallInputs,
-} from './inputs.models'
+    Monitoring,
+    State,
+    StateImplementation,
+    LibraryName,
+    Version,
+} from './state'
+export * from './loader.view'
+export * from './inputs.models'
 export {
     backendConfiguration,
     BackendConfiguration,
     getLocalCookie,
+    Cookie,
 } from './backend-configuration'
+export { FrontendConfiguration } from './frontend-configuration'
 export * from './errors.models'
 export * from './events.models'
 export {
@@ -52,4 +36,4 @@ export * from './add-ons'
 export { BackendClient } from './backends'
 export * as WorkersPoolTypes from './workers-pool/index-types'
 export * as TestUtilsTypes from './test-utils/index-types'
-export { installViewsModule } from './views.installer'
+export { installViewsModule, ViewsModule } from './views.installer'

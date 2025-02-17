@@ -1,11 +1,13 @@
-import { VirtualDOM, ChildrenLike } from '../rx-vdom.types'
-import { filter, map } from 'rxjs/operators'
+import { VirtualDOM, ChildrenLike, sync$, RxHTMLElement } from 'rx-vdom'
+import { filter, map, shareReplay } from 'rxjs/operators'
 import type { WorkersPool } from '../workers-pool'
-import { combineLatest } from 'rxjs'
+import { combineLatest, Observable, ReplaySubject } from 'rxjs'
 import { InstallView } from './install.view'
+import { CdnEvent } from '../events.models'
+import { EventsManager } from './events-manager'
 
 /**
- * Displays installation progress in {@link WorkersPool}.
+ * Displays installation progress in {@link WorkersPoolModule.WorkersPool}.
  *
  * @category View
  */
@@ -30,22 +32,26 @@ export class WorkersPoolView implements VirtualDOM<'div'> {
     public readonly children: ChildrenLike
 
     constructor(params: { workersPool: WorkersPool }) {
+        const replayedEvents$ = params.workersPool.cdnEvent$.pipe(
+            shareReplay({ refCount: true }),
+        )
         this.children = [
             {
                 tag: 'div',
                 class: 'w-100 d-flex flex-grow-1 p-2 flex-wrap overflow-auto',
-                children: {
-                    policy: 'replace',
+                children: sync$({
+                    policy: 'sync',
                     source$: params.workersPool.startedWorkers$,
-                    vdomMap: (workerIds: string[]) => {
-                        return [...workerIds].map((workerId) => {
-                            return new WorkerCard({
-                                workerId,
-                                workersPool: params.workersPool,
-                            })
+                    vdomMap: (workerId: string) => {
+                        return new WorkerCard({
+                            workerId,
+                            workersPool: params.workersPool,
+                            cdnEvent$: replayedEvents$.pipe(
+                                filter((ev) => ev.workerId === workerId),
+                            ),
                         })
                     },
-                },
+                }),
             },
         ]
     }
@@ -94,16 +100,23 @@ export class WorkerCard implements VirtualDOM<'div'> {
      */
     public readonly workersPool: WorkersPool
 
-    constructor(params: { workerId: string; workersPool: WorkersPool }) {
+    public readonly connectedCallback: (elem: RxHTMLElement<'div'>) => void
+    constructor(params: {
+        workerId: string
+        workersPool: WorkersPool
+        cdnEvent$: Observable<CdnEvent>
+    }) {
         Object.assign(this, params)
-
-        const installView = new InstallView()
-        this.workersPool.cdnEvent$
-            .pipe(filter((ev) => ev.workerId === this.workerId))
-            .subscribe((ev) => {
-                installView.onEvent(ev)
-            })
-        this.children = [new WorkerCardTitleView(params), installView]
+        const eventsMgr = new EventsManager()
+        this.children = [
+            new WorkerCardTitleView(params),
+            new InstallView({ eventsMgr }),
+        ]
+        this.connectedCallback = (elem) => {
+            elem.ownSubscriptions(
+                params.cdnEvent$.subscribe((ev) => eventsMgr.event$.next(ev)),
+            )
+        }
     }
 }
 

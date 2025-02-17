@@ -101,7 +101,9 @@ export function install(
  * @param inputs Query inputs.
  * @returns The loading graph response from the server.
  */
-export function queryLoadingGraph(inputs: QueryLoadingGraphInputs) {
+export function queryLoadingGraph(
+    inputs: QueryLoadingGraphInputs,
+): Promise<LoadingGraph> {
     return new Client().queryLoadingGraph(inputs)
 }
 

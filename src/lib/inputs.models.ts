@@ -6,10 +6,9 @@ import { CdnEvent, CdnFetchEvent } from './events.models'
  *
  * Where:
  * *  `moduleName` is the name of the module containing the script
- * *  `version` is the version of the module
+ * *  `version` is the semver query
  * *  `rest-of-path` is the path of the script from the root module directory
  *
- * > For the time being, `version` defines a specific fixed version (not a semver query).
  *
  * E.g.: `codemirror#5.52.0~mode/javascript.min.js`
  *
@@ -17,49 +16,52 @@ import { CdnEvent, CdnFetchEvent } from './events.models'
 export type FileLocationString = string
 
 /**
- * A LightLibraryQueryString is a string that defines query of a library using format:
- * `{moduleName}#{semver}`
+ * A `LightLibraryQueryString` is a string format used to specify a library installation request.
  *
- * Where:
- * *  `moduleName` is the name of the module
- * *  `semver` any valid [semantic versioning specifiers](https://devhints.io/semver), not all
- * strings are however meaningful, **read below**
+ * The format can be one of the following:
  *
- * E.g.: `codemirror#^5.52`
+ * - `string`: The library name, implicitly targeting the latest available version.
+ * - `${string}#${string}`: A library name followed by a `#` and a **semantic versioning range**.
  *
- *  > When resolving the library query, there are two cases:
- *  > *  the query defines a fixed version: this particular version will be used
- *  > *  the query defines a range: only the major define in `semver` is relevant, the actual library
- *  > fetched is always the latest of the provided major.
+ * **Example Usage:**
+ *
+ * ```ts
+ * "codemirror#^5.52.0"
+ * ```
+ *
+ * In this example, `codemirror` is requested with the latest compatible version matching `^5.52.0`.
+ *
+ * <note level="warning">
+ * When specifying a semantic versioning range, it is strongly recommended to use an API-compatible range
+ * (i.e., using the `^` operator).
+ *
+ * This ensures that only a **single version** of the library is installed for a given API version (determined by
+ * the left-most non-zero digit), as multiple versions of the same API are **not allowed**.
+ * </note>
+ * @inline
  */
-export type LightLibraryQueryString = string
+export type LightLibraryQueryString = string | `${string}#${string}`
 
 /**
- * A LightLibraryQueryStringWithAlias is a {@link LightLibraryQueryString} with the addition of an optional alias:
- * `{moduleName}#{semver} as {alias}`
- * `codemirror#^5.52.0 as CM`
+ * A `LightLibraryWithAliasQueryString` extends {@link LightLibraryQueryString} by allowing an optional alias.
+ *
+ * The expected format:
+ * ```
+ * {moduleName}#{semver} as {alias}
+ * ```
+ *
+ * **Example Usage:**
+ * ```ts
+ * "codemirror#^5.52.0 as CM"
+ * ```
+ *
+ * - `codemirror#^5.52.0`: Specifies the module and its semantic versioning range.
+ * - `as CM`: Assigns an alias (`CM`) for easier reference.
+ * @inline
  */
-export type LightLibraryWithAliasQueryString = string
-
-/**
- * A FullLibraryQueryString is a string that defines query of a library using format:
- * `{moduleName}#{semver}`
- *
- * Where:
- * *  `moduleName` is the name of the module
- * *  `semver` any valid [semantic versioning specifiers](https://devhints.io/semver), see warning below.
- *
- * <note level="warning" label="Important">
- * It is recommended to use version ranges defined with the `^` operator, which signifies compatibility with
- * the specified version.
- * Using other symbols can lead to version conflicts at runtime.
- *
- * *Example:* If your project uses `libFoo` version `1.2.3`, `libBar` version `0.4.5`, and `libBaz` version `0.0.3`,
- * specify them as `libFoo#^1.2.3`, `libBar#^0.4.5`, and `libBaz#^0.0.3`, respectively.
- * <note>
-
- */
-export type FullLibraryQueryString = string
+export type LightLibraryWithAliasQueryString =
+    | LightLibraryQueryString
+    | `${LightLibraryQueryString} as ${string}`
 
 /**
  * A string interpreted as a python module specification.
@@ -170,12 +172,15 @@ export interface EsmInputs {
     /**
      * Specify side effects to execute when modules are installed.
      *
-     * The key is in the form `{libraryName}#{semver}` (see {@link FullLibraryQueryString}):
+     * The key is in the form `{libraryName}#{semver}`:
      * any module installed matching some keys will trigger execution
      * of associated side effects.
      *
      */
-    modulesSideEffects?: Record<string, ModuleSideEffectCallback>
+    modulesSideEffects?: Record<
+        LightLibraryQueryString,
+        ModuleSideEffectCallback
+    >
 
     /**
      * Provide aliases to exported symbols name of module.
@@ -206,6 +211,10 @@ export interface BackendInputs {
     modules: LightLibraryWithAliasQueryString[]
     /**
      * Configuration of the backend.
+     *
+     * A mapping with:
+     * *  Keys: backends names.
+     * *  Values: associated configuration.
      */
     configurations?: Record<string, BackendConfig>
     /**
@@ -221,7 +230,13 @@ export interface PyodideInputs {
     /**
      * Pyodide target version (no semver allowed).
      *
-     * If not provided, get the latest release tag from `https://api.github.com/repos/pyodide/pyodide/releases/latest`.
+     * If not provided, get the latest release tag from:
+     *
+     * `https://api.github.com/repos/pyodide/pyodide/releases/latest`.
+     *
+     * <note level="warning">
+     * It is not possible to install multiple Pyodide versions, only a single one is allowed.
+     * </note>
      */
     version?: string
     /**
@@ -347,22 +362,22 @@ export interface FetchScriptInputs {
 
 export interface InstallModulesInputs {
     /**
-     * See {@link InstallInputs.modules}
+     * See {@link EsmInputs.modules}
      */
     modules?: LightLibraryWithAliasQueryString[]
 
     /**
-     * See {@link InstallInputs.modulesSideEffects}
+     * See {@link EsmInputs.modulesSideEffects}
      */
     modulesSideEffects?: Record<string, ModuleSideEffectCallback>
 
     /**
-     * See {@link InstallInputs.usingDependencies}
+     * See {@link EsmInputs.usingDependencies}
      */
     usingDependencies?: LightLibraryQueryString[]
 
     /**
-     * See {@link InstallInputs.aliases}
+     * See {@link EsmInputs.aliases}
      */
     aliases?: Record<string, string | ((Window) => unknown)>
 
@@ -383,7 +398,7 @@ export interface InstallModulesInputs {
 
 export interface InstallScriptsInputs {
     /**
-     * See {@link InstallInputs.scripts}
+     * See {@link EsmInputs.scripts}
      */
     scripts: ScriptInput[]
     /**
@@ -396,7 +411,7 @@ export interface InstallScriptsInputs {
     onEvent?: (ev: CdnEvent) => void
 
     /**
-     * See {@link InstallInputs.aliases}
+     * See {@link EsmInputs.aliases}
      */
     aliases?: Record<string, string | ((WindowOrWorkerGlobalScope) => unknown)>
 }
@@ -561,19 +576,15 @@ export interface Library {
  *  *  retrieved ({@link queryLoadingGraph})
  *  *  used to import runtimes ({@link installLoadingGraph})
  *
- *
- * The structure is defined by the backend service - and mostly an implementation details here for the consumer.
- * It will likely change in future release, but backward compatibility will be preserved.
- *
- * @hidden
  */
 export interface LoadingGraph {
     /**
      *
      * List of javascript libraries to fetch by batch:
-     * -    `definition[i]` defines a batch of libraries that can be fetched in any order (or at the same time), provided
+     *
+     * *  `definition[i]` defines a batch of libraries that can be fetched in any order (or at the same time), provided
      * that all the libraries for the batches `j<i` have already been fetched
-     * -    `definition[i][j]` defines the j'th library for the batch i:
+     * *  `definition[i][j]` defines the j'th library for the batch i:
      * a tuple of [`id`, `cdn-url`] where `id` is the asset id and `cdn-url` the associated URL
      */
     definition: [string, string][][]

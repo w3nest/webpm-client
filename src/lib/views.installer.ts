@@ -1,6 +1,9 @@
 import { setup } from '../auto-generated'
 import * as webpmClient from '.'
 
+/**
+ * Type definition of the module {@link ViewsModule}.
+ */
 export type ViewsModule = typeof import('./views')
 
 /**

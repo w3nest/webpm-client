@@ -1,6 +1,3 @@
-/**
- * @category Events
- */
 import { LoadingGraphError } from './errors.models'
 
 /**
@@ -14,6 +11,9 @@ export type Topic =
     | 'CSS'
     | 'Worker'
 
+/**
+ * Type map for all events.
+ */
 export interface AllEvents {
     CdnMessageEvent: CdnMessageEvent
     CdnLoadingGraphQueryEvent: CdnLoadingGraphQueryEvent
@@ -46,22 +46,31 @@ export interface AllEvents {
     StartBackendEvent: StartBackendEvent
     BackendErrorEvent: BackendErrorEvent
 }
-
-const loadingGraphEventTypes = [
+/**
+ * Events related to loading graph resolution.
+ */
+export const loadingGraphEventTypes = [
     'CdnLoadingGraphQueryEvent',
     'CdnLoadingGraphResolvedEvent',
     'CdnLoadingGraphErrorEvent',
 ] as const
 
+/**
+ * {@link loadingGraphEventTypes} as type literal union.
+ */
 export type LoadingGraphEventType = (typeof loadingGraphEventTypes)[number]
-
+/**
+ * Type guard for {@link LoadingGraphEventType}.
+ */
 export function isLoadingGraphEvent(
     event: CdnEvent,
 ): event is AllEvents[LoadingGraphEventType] {
     return loadingGraphEventTypes.includes(event.step as LoadingGraphEventType)
 }
-
-const esmEventTypes = [
+/**
+ * Events related to CSS installation.
+ */
+export const esmEventTypes = [
     'StartEvent',
     'SourceLoadingEvent',
     'SourceLoadedEvent',
@@ -70,9 +79,13 @@ const esmEventTypes = [
     'UrlNotFoundEvent',
     'ParseErrorEvent',
 ] as const
-
+/**
+ * {@link esmEventTypes} as type literal union.
+ */
 export type EsmEventType = (typeof esmEventTypes)[number]
-
+/**
+ * Type guard for {@link EsmEventType}.
+ */
 export function isEsmEvent(event: CdnEvent): event is AllEvents[EsmEventType] {
     if (['UnauthorizedEvent', 'UrlNotFoundEvent'].includes(event.step)) {
         return (event as UnauthorizedEvent | UrlNotFoundEvent).url.endsWith(
@@ -81,16 +94,22 @@ export function isEsmEvent(event: CdnEvent): event is AllEvents[EsmEventType] {
     }
     return esmEventTypes.includes(event.step as EsmEventType)
 }
-
-const cssEventTypes = [
+/**
+ * Events related to CSS installation.
+ */
+export const cssEventTypes = [
     'CssLoadingEvent',
     'CssParsedEvent',
     'UnauthorizedEvent',
     'UrlNotFoundEvent',
 ] as const
-
+/**
+ * {@link cssEventTypes} as type literal union.
+ */
 export type CssEventType = (typeof cssEventTypes)[number]
-
+/**
+ * Type guard for {@link CssEventType}.
+ */
 export function isCssEvent(event: CdnEvent): event is AllEvents[CssEventType] {
     if (['UnauthorizedEvent', 'UrlNotFoundEvent'].includes(event.step)) {
         return (event as UnauthorizedEvent | UrlNotFoundEvent).url.endsWith(
@@ -99,8 +118,10 @@ export function isCssEvent(event: CdnEvent): event is AllEvents[CssEventType] {
     }
     return cssEventTypes.includes(event.step as CssEventType)
 }
-
-const pyEventTypes = [
+/**
+ * Events related to pyodide installation.
+ */
+export const pyEventTypes = [
     'FetchPyRuntimeEvent',
     'FetchedPyRuntimeEvent',
     'StartPyRuntimeEvent',
@@ -113,27 +134,46 @@ const pyEventTypes = [
     'PyEnvironmentErrorEvent',
 ] as const
 
+/**
+ * {@link pyEventTypes} as type literal union.
+ */
 export type PyEventType = (typeof pyEventTypes)[number]
 
+/**
+ * Type guard for {@link PyEventType}.
+ */
 export function isPyEvent(event: CdnEvent): event is AllEvents[PyEventType] {
     return pyEventTypes.includes(event.step as PyEventType)
 }
 
-const backendEventTypes = [
+/**
+ * Events related to backend installation.
+ */
+export const backendEventTypes = [
     'DownloadBackendEvent',
     'InstallBackendEvent',
     'StartBackendEvent',
     'BackendErrorEvent',
 ] as const
+
+/**
+ * {@link backendEventTypes} as type literal union.
+ */
 export type BackendEventType = (typeof backendEventTypes)[number]
 
+/**
+ * Type guard for {@link BackendEventType}.
+ */
 export function isBackendEvent(
     event: CdnEvent,
 ): event is AllEvents[BackendEventType] {
     return backendEventTypes.includes(event.step as BackendEventType)
 }
 
-const eventTypes = [
+/**
+ * All events.
+ */
+export const eventTypes = [
     'CdnMessageEvent',
     'InstallDoneEvent',
     'InstallErrorEvent',
@@ -145,26 +185,40 @@ const eventTypes = [
     ...backendEventTypes,
 ] as const
 
+/**
+ * {@link eventTypes} as type literal union.
+ */
 export type EventType = (typeof eventTypes)[number]
 
 /**
- * @category Events
+ * Type literal for event's status.
  */
 export type EventStatus = 'Pending' | 'Succeeded' | 'Failed' | 'None'
+
 /**
- * Base class of events.
- *
- * @category Events
+ * Base structure for all events.
  */
 export interface CdnEvent {
+    /**
+     * The step.
+     */
     step: EventType
+    /**
+     * Event's ID.
+     */
     id: string
+    /**
+     * Custom text.
+     */
     text: string
+    /**
+     * Event's status.
+     */
     status: EventStatus
 }
 
 /**
- * @category Events
+ * Type guard for {@link CdnEvent}.
  */
 export function isCdnEvent(event: unknown): event is CdnEvent {
     return eventTypes.includes((event as CdnEvent).step)
@@ -172,22 +226,21 @@ export function isCdnEvent(event: unknown): event is CdnEvent {
 
 /**
  * Generic custom CDN event.
- *
- * @category Events
  */
 export class CdnMessageEvent implements CdnEvent {
     public readonly step = 'CdnMessageEvent'
-    constructor(
-        public readonly id: string,
-        public readonly text: string,
-        public readonly status: EventStatus = 'None',
-    ) {}
+    public readonly id: string
+    public readonly text: string
+    public readonly status: EventStatus = 'None'
+    constructor(id: string, text: string, status: EventStatus = 'None') {
+        this.id = id
+        this.status = status
+        this.text = text
+    }
 }
 
 /**
- * Base class for CDN's HTTP request event
- *
- * @category Events
+ * Base class for CDN's HTTP request event.
  */
 export type CdnFetchEvent = CdnEvent & {
     id: string
@@ -199,8 +252,6 @@ export type CdnFetchEvent = CdnEvent & {
 
 /**
  * Event emitted when starting to fetch a script.
- *
- * @category Events
  */
 export class StartEvent implements CdnFetchEvent {
     public readonly step = 'StartEvent'
@@ -220,8 +271,6 @@ export class StartEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when a script's content is transferring over HTTP network.
- *
- * @category Events
  */
 export class SourceLoadingEvent implements CdnFetchEvent {
     public readonly step = 'SourceLoadingEvent'
@@ -242,8 +291,6 @@ export class SourceLoadingEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when a script's content transfer over HTTP network has completed.
- *
- * @category Events
  */
 export class SourceLoadedEvent implements CdnFetchEvent {
     public readonly step = 'SourceLoadedEvent'
@@ -264,8 +311,6 @@ export class SourceLoadedEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when a script's content has been parsed (installed).
- *
- * @category Events
  */
 export class SourceParsedEvent implements CdnFetchEvent {
     public readonly step = 'SourceParsedEvent'
@@ -285,8 +330,6 @@ export class SourceParsedEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when starting to install a style sheet.
- *
- * @category Events
  */
 export class CssLoadingEvent implements CdnFetchEvent {
     public readonly step = 'CssLoadingEvent'
@@ -306,8 +349,6 @@ export class CssLoadingEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when a style sheet has been added to the document.
- *
- * @category Events
  */
 export class CssParsedEvent implements CdnFetchEvent {
     public readonly step = 'CssParsedEvent'
@@ -327,8 +368,6 @@ export class CssParsedEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when an {@link Unauthorized} error occurred.
- *
- * @category Events
  */
 export class UnauthorizedEvent implements CdnFetchEvent {
     public readonly step = 'UnauthorizedEvent'
@@ -348,8 +387,6 @@ export class UnauthorizedEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when an {@link UrlNotFound} error occurred.
- *
- * @category Events
  */
 export class UrlNotFoundEvent implements CdnFetchEvent {
     public readonly step = 'UrlNotFoundEvent'
@@ -369,8 +406,6 @@ export class UrlNotFoundEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when an {@link SourceParsingFailed} error occurred.
- *
- * @category Events
  */
 export class ParseErrorEvent implements CdnFetchEvent {
     public readonly step = 'ParseErrorEvent'
@@ -390,8 +425,6 @@ export class ParseErrorEvent implements CdnFetchEvent {
 
 /**
  * Event emitted when querying the loading graph occurred.
- *
- * @category Events
  */
 export class CdnLoadingGraphQueryEvent implements CdnEvent {
     public readonly id = 'loading-graph-query'
@@ -402,8 +435,6 @@ export class CdnLoadingGraphQueryEvent implements CdnEvent {
 
 /**
  * Event emitted when querying the loading graph occurred.
- *
- * @category Events
  */
 export class CdnLoadingGraphResolvedEvent implements CdnEvent {
     public readonly id = 'loading-graph-resolved'
@@ -414,8 +445,6 @@ export class CdnLoadingGraphResolvedEvent implements CdnEvent {
 
 /**
  * Event emitted when an {@link LoadingGraphError} error occurred.
- *
- * @category Events
  */
 export class CdnLoadingGraphErrorEvent implements CdnEvent {
     public readonly id = 'loading-graph'
@@ -427,8 +456,6 @@ export class CdnLoadingGraphErrorEvent implements CdnEvent {
 
 /**
  * Event emitted when an installation is done ({@link install}).
- *
- * @category Events
  */
 export class InstallDoneEvent implements CdnEvent {
     public readonly id = 'InstallDoneEvent'
@@ -439,8 +466,6 @@ export class InstallDoneEvent implements CdnEvent {
 
 /**
  * Event emitted when an installation failed ({@link install}).
- *
- * @category Events
  */
 export class InstallErrorEvent implements CdnEvent {
     public readonly id = 'InstallErrorEvent'
@@ -451,34 +476,41 @@ export class InstallErrorEvent implements CdnEvent {
 
 /**
  * Base class for events related to backend.
- *
- * @category Events
  */
 export class BackendEvent implements CdnEvent {
     public readonly id: string
     public readonly text: string
     public readonly status: 'Pending' | 'Failed'
+    public readonly step:
+        | 'DownloadBackendEvent'
+        | 'InstallBackendEvent'
+        | 'StartBackendEvent'
+        | 'BackendErrorEvent'
+    public readonly name: string
+    public readonly version: string
+    public readonly title: string
+    public readonly event: string
+
     constructor(
-        public readonly step:
+        step:
             | 'DownloadBackendEvent'
             | 'InstallBackendEvent'
             | 'StartBackendEvent'
             | 'BackendErrorEvent',
-        public readonly name: string,
-        public readonly version: string,
-        public readonly title: string,
-        public readonly event: string,
+        name: string,
+        version: string,
+        title: string,
+        event: string,
     ) {
         this.id = `${name}_${version.replace('.', '-')}`
         this.text = `${name}#${version}: ${title}`
         this.status = event === 'failed' ? 'Failed' : 'Pending'
+        Object.assign(this, { step, name, version, title, event })
     }
 }
 
 /**
  * Events emitted when a backend is downloaded.
- *
- * @category Events
  */
 export class DownloadBackendEvent extends BackendEvent {
     public readonly event: 'started' | 'succeeded' | 'failed'
@@ -499,8 +531,6 @@ export class DownloadBackendEvent extends BackendEvent {
 }
 /**
  * Events emitted when a backend is installed.
- *
- * @category Events
  */
 export class InstallBackendEvent extends BackendEvent {
     public readonly event: 'started' | 'succeeded' | 'failed'
@@ -520,8 +550,6 @@ export class InstallBackendEvent extends BackendEvent {
 }
 /**
  * Events emitted when a backend is started.
- *
- * @category Events
  */
 export class StartBackendEvent extends BackendEvent {
     public readonly event: 'starting' | 'listening' | 'failed'
@@ -541,8 +569,6 @@ export class StartBackendEvent extends BackendEvent {
 }
 /**
  * Events emitted when a backend error has been caught.
- *
- * @category Events
  */
 export class BackendErrorEvent extends BackendEvent {
     public readonly detail: string
@@ -565,14 +591,10 @@ export class BackendErrorEvent extends BackendEvent {
 
 /**
  * Base class for Pyodide related event.
- *
- * @category Events
  */
 export type CdnPyEvent = CdnEvent
 /**
  * Event emitted when starting to fetch Pyodide runtime.
- *
- * @category Events
  */
 export class FetchPyRuntimeEvent implements CdnPyEvent {
     public readonly step = 'FetchPyRuntimeEvent'
@@ -589,8 +611,6 @@ export class FetchPyRuntimeEvent implements CdnPyEvent {
 }
 /**
  * Event emitted when Pyodide runtime's installation failed.
- *
- * @category Events
  */
 export class FetchedPyRuntimeEvent implements CdnPyEvent {
     public readonly step = 'FetchedPyRuntimeEvent'
@@ -607,8 +627,6 @@ export class FetchedPyRuntimeEvent implements CdnPyEvent {
 }
 /**
  * Event emitted when starting to install Pyodide runtime.
- *
- * @category Events
  */
 export class StartPyRuntimeEvent implements CdnPyEvent {
     public readonly step = 'StartPyRuntimeEvent'
@@ -623,8 +641,6 @@ export class StartPyRuntimeEvent implements CdnPyEvent {
 
 /**
  * Event emitted when the Pyodide runtime is ready.
- *
- * @category Events
  */
 export class PyRuntimeReadyEvent implements CdnPyEvent {
     public readonly step = 'PyRuntimeReadyEvent'
@@ -639,8 +655,6 @@ export class PyRuntimeReadyEvent implements CdnPyEvent {
 
 /**
  * Event emitted when starting to install Pyodide environment.
- *
- * @category Events
  */
 export class StartPyEnvironmentInstallEvent implements CdnPyEvent {
     public readonly step = 'StartPyEnvironmentInstallEvent'
@@ -655,8 +669,6 @@ export class StartPyEnvironmentInstallEvent implements CdnPyEvent {
 
 /**
  * Event emitted when starting to install a module.
- *
- * @category Events
  */
 export class InstallPyModuleEvent implements CdnPyEvent {
     public readonly step = 'InstallPyModuleEvent'
@@ -671,8 +683,6 @@ export class InstallPyModuleEvent implements CdnPyEvent {
 
 /**
  * Event emitted when a Pyodide module has been loaded.
- *
- * @category Events
  */
 export class PyModuleLoadedEvent implements CdnPyEvent {
     public readonly step = 'PyModuleLoadedEvent'
@@ -687,8 +697,6 @@ export class PyModuleLoadedEvent implements CdnPyEvent {
 
 /**
  * Event emitted when loading a Pyodide module failed.
- *
- * @category Events
  */
 export class PyModuleErrorEvent implements CdnPyEvent {
     public readonly step = 'PyModuleErrorEvent'
@@ -703,8 +711,6 @@ export class PyModuleErrorEvent implements CdnPyEvent {
 
 /**
  * Event emitted when the Pyodide environment is ready.
- *
- * @category Events
  */
 export class PyEnvironmentReadyEvent implements CdnPyEvent {
     public readonly step = 'PyEnvironmentReadyEvent'
@@ -719,8 +725,6 @@ export class PyEnvironmentReadyEvent implements CdnPyEvent {
 
 /**
  * Event emitted when installation of Pyodide environment failed.
- *
- * @category Events
  */
 export class PyEnvironmentErrorEvent implements CdnPyEvent {
     public readonly step = 'PyEnvironmentErrorEvent'
@@ -735,8 +739,6 @@ export class PyEnvironmentErrorEvent implements CdnPyEvent {
 
 /**
  * An event representing a log entry.
- *
- * @category Events
  */
 export class ConsoleEvent implements CdnPyEvent {
     public readonly id: string

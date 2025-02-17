@@ -1,5 +1,5 @@
 /**
- * Defines the client-side configuration of {@link Client}.
+ * Defines the client-side configuration.
  */
 export interface FrontendConfiguration {
     /**

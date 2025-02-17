@@ -11,10 +11,11 @@ export interface WWorkerTrait {
     uid: string
 
     /**
+     * Send a task execution request to the worker.
      *
-     * @param params.taskId task ID
-     * @param params.entryPoint function to execute
-     * @param params.args arguments to provide to the function     *
+     * @param params.taskId Task ID.
+     * @param params.entryPoint Function to execute.
+     * @param params.args Arguments to provide.
      */
     execute<T>(params: {
         taskId: string
@@ -23,25 +24,31 @@ export interface WWorkerTrait {
     })
 
     /**
-     * Send to the worker some data in the channel associated to `taskId`
+     * Send to the worker some data in the channel associated to `taskId`.
+     *
      * @param params.taskId task ID
      * @param params.data arguments to send
      */
     send(params: { taskId: string; data: unknown })
 
+    /**
+     * Terminate the worker.
+     */
     terminate()
 }
 
 export type InWorkerAction = ({ message, workerScope }) => void
 /**
- * Proxy for WebWorkers creation.
+ * Proxy interface for Web Workers creation.
  *
  * The default implementation used is the one provided by the browser ({@link WebWorkersBrowser}).
- * Can be also overriden for example for testing contexts.
  */
 export interface IWWorkerProxy {
     type: string
 
+    /**
+     * Create a worker.
+     */
     createWorker({
         onMessageWorker,
         onMessageMain,
@@ -50,9 +57,18 @@ export interface IWWorkerProxy {
         onMessageMain: (message) => unknown
     }): WWorkerTrait
 
+    /**
+     * Prepare a function to be send in a worker.
+     */
     serializeFunction(fct?: (...unknown: unknown[]) => unknown): string
 
+    /**
+     * Optional action to trigger before installing environment in a worker.
+     */
     onBeforeWorkerInstall?: InWorkerAction
+    /**
+     * Optional action to trigger after installing environment in a worker.
+     */
     onAfterWorkerInstall?: InWorkerAction
 }
 
@@ -111,6 +127,9 @@ export class WebWorkerBrowser implements WWorkerTrait {
     }
 }
 
+/**
+ * Implementation of {@link IWWorkerProxy} for browser environment.
+ */
 export class WebWorkersBrowser implements IWWorkerProxy {
     type = 'WebWorkersBrowser'
     createWorker({
@@ -136,7 +155,13 @@ export class WebWorkersBrowser implements IWWorkerProxy {
         })
     }
 
-    serializeFunction(fct?: (...unknown) => unknown) {
+    /**
+     * Serialize a given function as string.
+     *
+     * @param fct Function to serialize
+     * @returns Implementation
+     */
+    serializeFunction(fct?: (...unknown) => unknown): string {
         return `return ${String(fct)}`
     }
 }

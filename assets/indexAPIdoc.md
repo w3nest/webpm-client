@@ -7,5 +7,9 @@ thread and Web Workers.
 *  The {@link WorkersPoolModule} extends functionality by enabling component installation in Web Workers, as well as 
   task execution and monitoring.
 
+*  The {@link ViewsModule} provides components to visualize the installed resources or to track the progress of their 
+   installation.
+
+
 Use this documentation to explore the available modules, APIs, and best practices for integrating **webpm-client** 
 into your project.
