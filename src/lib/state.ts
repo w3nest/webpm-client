@@ -10,7 +10,6 @@ import {
     getExpectedFullExportedSymbol,
     PARTITION_PREFIX,
 } from './utils'
-import { ChildLike, ChildrenLike, VirtualDOM } from 'rx-vdom'
 
 import { setup } from '../auto-generated'
 import { installBackendClientDeps } from './backends'
@@ -28,57 +27,6 @@ export type LibraryName = string
  * Type alias for string used as version.
  */
 export type Version = string
-
-/**
- * Encapsulates installations data at the time of instance creation.
- *
- *  @category State
- */
-export class Monitoring {
-    /**
-     * Dictionary with key of form `${libName}#${libVersion}`
-     */
-    public readonly exportedSymbols: Record<
-        string,
-        { symbol: string; apiKey: string }
-    >
-    /**
-     *  Dictionary `libName->versions`.
-     */
-    public readonly importedBundles: Record<string, string[]>
-    /**
-     * Dictionary `libName->latest version`.
-     */
-    public readonly latestVersion: Record<string, string>
-    /**
-     * Create a VirtualDOM (see [rx-vdom](https://l.youwol.com/doc/@youwol/rx-vdom))
-     * representing the current state of installation (modules installed & available symbols).
-     */
-    public readonly view: VirtualDOM<'div'>
-
-    constructor() {
-        //this.exportedSymbols = { ...StateImplementation.getExportedSymbol }
-        this.importedBundles = [
-            ...StateImplementation.importedBundles.entries(),
-        ].reduce(
-            (acc, [k, v]) => ({
-                ...acc,
-                [k]: v,
-            }),
-            {},
-        )
-        this.latestVersion = [
-            ...StateImplementation.latestVersion.entries(),
-        ].reduce(
-            (acc, [k, v]) => ({
-                ...acc,
-                [k]: v,
-            }),
-            {},
-        )
-        this.view = StateImplementation.view()
-    }
-}
 
 /**
  * Provides extra-controls regarding dependencies and URL resolution.
@@ -584,128 +532,5 @@ export class StateImplementation {
         patcher: ({ name, version, assetId, url }) => string,
     ) {
         StateImplementation.urlPatcher = patcher
-    }
-
-    static view(): VirtualDOM<'div'> {
-        return {
-            tag: 'div',
-            class: 'StateView',
-            children: [
-                {
-                    tag: 'div',
-                    class: 'w-100 text-center',
-                    style: { fontSize: 'larger', fontWeight: 'bolder' },
-                    innerText: `${setup.name}#${setup.version}`,
-                },
-                {
-                    tag: 'div',
-                    style: { fontWeight: 'bolder' },
-                    innerText: 'Modules installed',
-                },
-                {
-                    tag: 'div',
-                    class: 'px-3 py-2 container',
-                    children: [
-                        new ModulesView({
-                            importedBundles:
-                                StateImplementation.importedBundles,
-                        }),
-                    ],
-                },
-                {
-                    tag: 'div',
-                    style: { fontWeight: 'bolder' },
-                    innerText: 'Available symbols',
-                },
-                {
-                    tag: 'div',
-                    class: 'px-3 py-2 container',
-                    children: [
-                        new SymbolsView({
-                            exportedSymbolsDict:
-                                StateImplementation.exportedSymbolsDict,
-                        }),
-                    ],
-                },
-            ],
-        }
-    }
-}
-
-class ModulesView implements VirtualDOM<'div'> {
-    public readonly tag = 'div'
-    public readonly children: ChildrenLike
-    constructor({
-        importedBundles,
-    }: {
-        importedBundles: Map<string, string[]>
-    }) {
-        this.children = Array.from(importedBundles.entries()).map(
-            ([k, versions]): ChildLike => {
-                return {
-                    tag: 'div',
-                    class: 'd-flex align-items-center my-1 row',
-                    children: [
-                        {
-                            tag: 'div',
-                            class: 'col-sm',
-                            innerText: k,
-                        },
-                        {
-                            tag: 'div',
-                            class: 'd-flex align-items-center col',
-                            children: versions.map((v) => ({
-                                tag: 'div',
-                                class: 'border rounded p-1 mx-2 d-flex align-items-center',
-                                children: [
-                                    { tag: 'div', class: 'fas fa-tag mx-1' },
-                                    { tag: 'div', innerText: v },
-                                ],
-                            })),
-                        },
-                    ],
-                }
-            },
-        )
-    }
-}
-
-class SymbolsView implements VirtualDOM<'div'> {
-    public readonly tag = 'div'
-    public readonly children: ChildrenLike
-    constructor({
-        exportedSymbolsDict,
-    }: {
-        exportedSymbolsDict: Record<string, { symbol: string; apiKey: string }>
-    }) {
-        this.children = Array.from(Object.entries(exportedSymbolsDict)).map(
-            ([k, symbol]) => {
-                const symbolKey = `${symbol.symbol}_APIv${symbol.apiKey}`
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                const aliases: Set<string> =
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    window[symbolKey]?.__yw_aliases__ || new Set()
-                return {
-                    tag: 'div',
-                    class: 'd-flex align-items-center my-1 row',
-                    children: [
-                        {
-                            tag: 'div',
-                            class: 'col-sm',
-                            innerText: k,
-                        },
-                        {
-                            tag: 'div',
-                            class: 'd-flex align-items-center col',
-                            children: [symbolKey, ...aliases].map((v) => ({
-                                tag: 'div',
-                                class: 'border rounded p-1 mx-2 d-flex align-items-center',
-                                children: [{ tag: 'div', innerText: v }],
-                            })),
-                        },
-                    ],
-                }
-            },
-        )
     }
 }

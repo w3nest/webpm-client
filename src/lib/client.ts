@@ -36,7 +36,7 @@ import {
     FetchErrors,
     LoadingGraphError,
 } from './errors.models'
-import { Monitoring, StateImplementation } from './state'
+import { StateImplementation } from './state'
 import { LoadingScreenView } from './loader.view'
 import { satisfies } from 'semver'
 import {
@@ -119,16 +119,6 @@ export function installLoadingGraph(inputs: InstallLoadingGraphInputs) {
      * Deprecated
      */
     return new Client().installLoadingGraph(inputs)
-}
-
-/**
- * Returns {@link Monitoring} object that encapsulates read-only access to the
- * environment state regarding installed resources at the time of call.
- *
- * @category Entry Points
- */
-export function monitoring() {
-    return new Monitoring()
 }
 
 /**
