@@ -29,6 +29,9 @@ interface Pyodide {
     loadPackage: (...modules: string[]) => Promise<void>
     runPythonAsync: (src: string) => Promise<unknown>
     version: string
+    _api: {
+        repodata_packages: Record<string, { name: string; version: string }>
+    }
 }
 export async function installPython(
     pyodideInputs: PyodideInputs & {
@@ -91,8 +94,11 @@ export async function installPython(
                 progressEvent: undefined,
             },
         ])
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-        globalThis.pyodide = await globalThis.loadPyodide({ indexURL })
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        const pyodide = (await globalThis.loadPyodide({
+            indexURL,
+        })) as unknown as Pyodide
+        globalThis.pyodide = pyodide
     }
     if (pyodideInputs.pyodideAlias) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -100,7 +106,6 @@ export async function installPython(
     }
 
     const pyodide = globalThis.pyodide as Pyodide
-
     const pyodideVersion = pyodide.version
     onEvent(new PyRuntimeReadyEvent(pyodideVersion))
     onEvent(new StartPyEnvironmentInstallEvent())
@@ -113,9 +118,21 @@ export async function installPython(
     })
 
     const installModule = (module: string) => {
+        if (module in pyodide._api.repodata_packages) {
+            log(
+                `Package ${module} part of Pyodide distribution, load using pyodide.loadPackage`,
+                onEvent,
+            )
+            return pyodide.loadPackage(module)
+        }
         const parameters = pyodideInputs.urlPypi.includes('https')
             ? ''
             : `, index_urls='${pyodideInputs.urlPypi}'`
+
+        log(
+            `> await micropip.install(requirements='${module}'${parameters})`,
+            onEvent,
+        )
         return pyodide.runPythonAsync(`
 import micropip
 await micropip.install(requirements='${module}'${parameters})`)
