@@ -1,5 +1,11 @@
 import { generateApiFiles } from 'mkdocs-ts/src/mkapi-backends/mkapi-typescript'
 
+const missingRefs = {
+    LightLibraryWithAliasQueryString:
+        '@nav/api/MainModule.LightLibraryWithAliasQueryString',
+    LightLibraryQueryString: '@nav/api/MainModule.LightLibraryQueryString',
+    PyModule: '@nav/api/MainModule.PyModule',
+}
 generateApiFiles({
     projectFolder: `${__dirname}/../../`,
     outputFolder: `${__dirname}/../assets/api`,
@@ -19,5 +25,20 @@ generateApiFiles({
             }
             return urls[name]
         },
+        'rx-vdom': ({ name }: { name: string }) => {
+            return `/apps/@rx-vdom/doc/latest?nav=/api.${name}`
+        },
+    },
+    extraDeclarationReferences: {
+        'webpm-client/MainModule.InstallInputs.esm': missingRefs,
+        'webpm-client/MainModule.InstallInputs.backends': missingRefs,
+        'webpm-client/MainModule.InstallInputs.pyodide': missingRefs,
+        'webpm-client/MainModule.EsmInputs.modules': missingRefs,
+        'webpm-client/MainModule.EsmInputs.modulesSideEffects': missingRefs,
+        'webpm-client/MainModule.EsmInputs.usingDependencies': missingRefs,
+        'webpm-client/MainModule.PyodideInputs.modules': missingRefs,
+        'webpm-client/MainModule.QueryLoadingGraphInputs.modules': missingRefs,
+        'webpm-client/MainModule.QueryLoadingGraphInputs.usingDependencies':
+            missingRefs,
     },
 })

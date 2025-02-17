@@ -9,15 +9,13 @@ export const navigation: AppNav = {
     routes: {
         '/install': {
             name: 'Install',
+            header: { icon: { tag: 'i', class: 'fas fa-hdd' } },
             layout: fromMd('how-to.install.md'),
         },
         '/publish': {
             name: 'Publish',
+            header: { icon: { tag: 'i', class: 'fas fa-upload' } },
             layout: fromMd('how-to.publish.md'),
-        },
-        '/py-youwol': {
-            name: 'Py YouWol',
-            layout: fromMd('how-to.py-youwol.md'),
         },
     },
 }

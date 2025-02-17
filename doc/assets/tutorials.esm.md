@@ -1,111 +1,247 @@
+
 # ESM Modules
 
-## Getting Started
+To install **ECMAScript Modules (ESM)**, use the <api-link target='install'></api-link> function and specify 
+the **<api-link target='InstallInputs.esm'></api-link>** attribute using one of the following:  
 
+- A list of **<api-link target='LightLibraryWithAliasQueryString'></api-link>** – A simple way to specify the modules.  
+- **<api-link target='EsmInputs'></api-link>** – Provides additional configuration options.  
 
-To install ECMAScript Modules (ESM), use the [install](@nav/api/MainModule.install) function with the `esm` attribute.
-Refer to the [InstallInputs](@nav/api/MainModule.InstallInputs) documentation for more details.
+---
 
-The following cell illustrates the installation of the Bootstrap module along with its CSS stylesheet:
+## **Example: Installing Bootstrap**  
 
-<js-cell>
-const { BS } = await webpm.install({
-    esm: ['bootstrap#^4.0.0 as BS'],
-    css: ['bootstrap#^4.0.0~bootstrap.min.css']
-})
-display(BS)
-</js-cell>
+The following example demonstrates how to install the **Bootstrap** module using
+<api-link target='LightLibraryWithAliasQueryString'></api-link>:  
 
-In this example, the latest compatible version of Bootstrap (matching `^4.0.0`) is installed, along with its associated 
-CSS (`bootstrap.min.css`). Additionally, all direct and indirect dependencies of Bootstrap are automatically fetched, 
-installed, and linked, ensuring they are at the latest versions compatible with the specified queries.
+<js-cell>  
+const { BS } = await webpm.install({  
+    esm: ['bootstrap#^5.3.3 as BS'],  
+    css: ['bootstrap#^5.3.3~bootstrap.min.css']  
+})  
+display(BS)  
+</js-cell>  
 
-<expandable title="Additional details" icon='fas fa-info-circle' mode="statefull">
-<br>
+**Explanation:**  
+- Installs the latest compatible version of Bootstrap (`^5.3.3`) along with its dependencies.  
+- The module is assigned the alias **`BS`** for easy reference.  
+- The Bootstrap stylesheet **`bootstrap.min.css`** is also installed.  
 
-The description of a dependency tree can be retrieved from the
-[queryLoadingGraph](@nav/api/MainModule.queryLoadingGraph) function:
+<note level="warning" title="Semantic Versioning">
+When specifying a semantic versioning range (e.g., `^5.3.3`) in the attribute `esm`, any valid
+<ext-link target="semver">NPM SemVer query</ext-link> can be used. However, it is strongly recommended to use an 
+**API-compatible range** (i.e., prefixed with `^`).  
 
-<js-cell>
-const graph = await webpm.queryLoadingGraph({modules:['bootstrap#^4.0.0']})
+This ensures that only **one version** of a library is installed per API version, where the API version is defined by
+the **left-most non-zero digit**.
+Having multiple versions of the same API is **not allowed**.  
 
-graph.lock.forEach((m) => {
-    display(new Views.Text(`*  Module \`${m.name}\` at version \`${m.version}\``))
-})
-</js-cell>
+For example:  
+✅ A runtime **can** have `bootstrap` installed in versions `5.x.y` and `4.x'.y'`.  
+❌ A runtime **cannot** have `bootstrap` installed in both `5.x.y` and `5.x'.y'`.  
 
-In a <a target="_blank" href="https://getbootstrap.com/docs/4.6/getting-started/download/#jsdelivr"> traditional setup 
-</a> with Bootstrap 4 from a CDN, you need to manually include each dependency (Bootstrap, jQuery, 
-and Popper.js) in the correct order using `script` tags. This manual process is not only cumbersome—requiring consumers 
-to understand Bootstrap’s dependencies and their specific loading sequence—but also non-scalable. 
-If a new dependency is introduced in a future release of Bootstrap 4, your application would need to be updated to 
-include it.
-
-The webpm client automates this process, handling dependency resolution and loading transparently. 
-When new compatible versions of Bootstrap, jQuery, or Popper.js are released, webpm will automatically use them, 
-including any additional dependencies, without requiring changes to your application. 
-This ensures seamless updates and reduces maintenance overhead.
-</expandable>
-
-Regular bootstrap code can now be used:
-
-
-<js-cell>
-let innerHTML = `
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Dropdown button
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item">Foo</a>
-        <a class="dropdown-item">Bar</a>
-        <a class="dropdown-item">Baz</a>
-    </div>
-</div>`
-
-display({tag:'div', innerHTML})
-</js-cell>
-
-
-The client efficiently manages the installation state to boost performance and minimize the number of modules 
-loaded. It ensures that existing compatible versions of modules are reused, reducing redundancy and saving resources.
-
-Consider the following example where bootstrap-select is installed. Since `bootstrap-select` depends on `bootstrap` and
-`jquery`, and both are already available in compatible versions, only `bootstrap-select` is installed and linked to the
-available `jquery` and `bootstrap` modules:
-
-<js-cell>
-const {BSelect} = await webpm.install({
-    esm: ['bootstrap-select#^1.13.18 as BSelect'],
-    css: ['bootstrap-select#^1.13.18~bootstrap-select.min.css']
-})
-innerHTML = `
-<select class="selectpicker" id="ex-select-picker">
-  <option>Foo</option>
-  <option>Bar</option>
-  <option>Baz</option>
-</select>
-`
-
-display({tag:'div', innerHTML})
-$('.selectpicker').selectpicker();
-</js-cell>
-
-<note level='info'>
-A package can define 'aliases' that become available upon installation. The symbol `$` used above
-is an alias provided when the `jquery` module is installed.
+Using `^` helps maintain compatibility while preventing conflicts caused by multiple API versions.  
 </note>
+ 
+When installing modules, **webpm-client** checks for previously installed modules and avoids redundant installations.  
 
-<note level='hint'>
-When resolving dependencies, it is possible that the same package is required with different major versions. 
-Webpm handles this scenario effectively by linking each instance of the package according to the specified version
-requirements.
+<note level='info' title="Loading Graph" mode="stateful" expandable='true'>  
+The <api-link target='queryLoadingGraph'></api-link> function allows to query dependency tree information :
+
+<js-cell>  
+const graph = await webpm.queryLoadingGraph({modules:['bootstrap#^5.3.3']})  
+
+graph.lock.forEach((m) => {  
+    display(new Views.Text(`* Module \`${m.name}\` at version \`${m.version}\``))  
+})  
+</js-cell>  
+
+Each installation request triggers **graph resolution**: if a compatible version of `@popperjs/core` is published, 
+it is automatically used. This ensures seamless updates with minimal maintenance.  
+
+</note>  
+
+Once installed, Bootstrap can be used in your code as usual:  
+
+<js-cell>  
+let innerHTML = `  
+<div class="dropdown">  
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+        Dropdown button  
+    </button>  
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
+        <a class="dropdown-item">Foo</a>  
+        <a class="dropdown-item">Bar</a>  
+        <a class="dropdown-item">Baz</a>  
+    </div>  
+</div>`  
+
+display({tag:'div', innerHTML})  
+</js-cell>  
+
+---
+
+## **Example: Installing `bootstrap-select`**  
+
+The following example installs **bootstrap-select**, which extends Bootstrap's functionality:  
+
+<js-cell>  
+const { BSelect } = await webpm.install({  
+    esm: ['bootstrap-select#^1.13.18 as BSelect'],  
+    css: ['bootstrap-select#^1.13.18~bootstrap-select.min.css']  
+})  
+
+innerHTML = `  
+<select class="selectpicker" id="ex-select-picker">  
+  <option>Foo</option>  
+  <option>Bar</option>  
+  <option>Baz</option>  
+</select>`  
+
+display({tag:'div', innerHTML})  
+$('.selectpicker').selectpicker();  
+</js-cell>  
+
+
+Since `bootstrap-select` depends on `bootstrap#^4.0.0`, two versions of Bootstrap are now available. 
+**webpm-client** ensures that consuming modules are correctly linked to the appropriate version.  
+
+
+<note level='info'>  
+Modules can define **aliases** that become available upon installation.  
+For example, the **`$`** symbol in the code above is an alias provided when the **`jquery`** module is installed.  
+</note>  
+
+
+The library provide an add on module <api-link target="ViewsModule"></api-link> (that needs to be explicitly installed)
+providing a couple of useful views to display the current environment and installation events.
+
+For instance, to monitor the actual runtime environment: 
+
+<js-cell cell-id="monitoring">  
+const ViewsMdle = await webpm.installViewsModule()  
+display(new ViewsMdle.RuntimeView())  
+</js-cell>  
+
+<note level='info'>  
+Note that the ESM module `bootstrap` is installed at two versions. 
+</note>  
+
+---
+
+## Advanced Usage
+
+When specifying the `esm` attributes, you can leverage <api-link target='EsmInputs'></api-link> to configure additional 
+options. In this example, we demonstrate a more complex scenario involving dynamic plugins—often a challenge due 
+to dependency resolution issues (e.g., handling `peerDependencies`).
+
+To illustrate, let’s build a low-code application. First, we install the core layers of our low-code engine:
+
+<js-cell>
+const {VSF} = await ViewsMdle.installWithUI({
+    esm:{ 
+        modules:[
+            '@youwol/vsf-core#^0.3.3 as VSF', 
+        ],
+        usingDependencies: [
+            'rxjs#^6.0.0'
+        ],
+        modulesSideEffects: {
+            '@youwol/vsf-core#0.3.x': () => display("Side effects VSF core")
+        },
+        scripts: [
+            // Dummy example
+            'codemirror#5.52.0~mode/javascript.min.js'
+        ],
+    },
+    display: (view) => display(view)
+})
+</js-cell>
+
+**Key Points:**
+
+*  **Progress Feedback:**
+The <api-link target="installWithUI"></api-link> function is a variant of <api-link target="install"></api-link>
+that provides a visual progress indicator via its display parameter. Expand the **Installation successful** box above
+to see details of what has been installed.
+
+*  **Dependency Resolution:**
+Although the natural resolution for rxjs might select a version in the `7.x` range, using the `usingDependencies` 
+attribute forces version `6.5.5`. This should only be done in rare cases, as it might lead to incompatibilities.
+
+*  **Side Effects:**
+A side effect callback has been defined—triggered upon installing any module that matches the given semver query. 
+Leveraging the <api-link target="ModuleSideEffectCallback"></api-link> signature, you can, for example, await an 
+initialization step before proceeding with the rest of the loading graph.
+
+*  **Script Loading:**
+The scripts attribute allows you to load additional JavaScript files after all ESM modules have been installed. 
+These scripts are not considered during dependency resolution.
+
+Now, let’s construct a low-code application:
+
+<js-cell>
+let project = new VSF.Projects.ProjectState()
+
+const flow = 
+// Load a geometry
+"(of#of)>>(torusKnot#geom)" + 
+// Re-mesh it
+">>(fromThree#convIn)>>(uniformRemeshing#remesh)>>(toThree#convOut)" +
+// Display the remeshed geometry
+">>(viewer#viewer)"
+
+project = await project.with({
+    toolboxes:["@youwol/vsf-three", '@youwol/vsf-pmp', '@youwol/vsf-rxjs'],
+    workflow: {
+        branches:[flow],
+        configurations:{
+            // You can play with edge factor between e.g. 0.1 - 1
+            remesh: { edgeFactor: 0.7 }
+        }
+    }
+})
+display(
+    // viewPortOnly is provided by the Notebook engine: the view is not displayed if not in the view port. 
+    Views.Layouts.viewPortOnly({
+        content: project.instancePool.inspector().getModule('viewer').html()
+    })
+)
+</js-cell>
+
+<note level="question" title="What is it?" expandable="true">
+This low code application generates a <ext-link target="torus-knot">3D torus knot</ext-link>, applies re-meshing using
+the <ext-link target="pmp">PMP C++ library</ext-link> (ported to <ext-link target="wasm">WASM</ext-link>), 
+and renders the final visualization with <ext-link target="three">three.js</ext-link>.
+
+Run the following cell below to display a 3D view of the flowchart:
+
+<js-cell>
+const { Canvas } = await ViewsMdle.installWithUI({
+    esm: ['@youwol/vsf-canvas#^0.3.1 as Canvas'],
+    display
+})
+display({ 
+    tag: 'div', 
+    class: 'w-100',
+    style: { height: '300px' }, 
+    children: [
+        new Canvas.Renderer3DView({
+            project$: rxjs.of(project), 
+            workflowId: 'main'
+        })
+    ]
+})
+</js-cell>
+
 </note>
+**Additional Notes:**
 
+Each module (e.g., `of`, `torusKnot`, `fromThree`) comes with its own dependencies, which {{webpm-client}} 
+dynamically installs at runtime. 
 
-## Advanced Usages
-
-The `esm` attribute can be provided as an object rather than a simple list of modules. 
-This allows for additional configuration options during installation. 
-For detailed information on the available options, please refer to the 
-[API documentation](@nav/api/MainModule.EsmInputs).
+A typical challenge arises when multiple modules depend on the same resource—such as `vsf-core` in this example—which
+is already present in the runtime environment. To handle this, {{webpm-client}} uses intelligent dependency resolution. 
+Even if different modules trigger the installation of `vsf-core` at various times, only a single instance is loaded
+and linked. 
+This approach prevents conflicts, reduces memory overhead, and ensures a **consistent, reliable execution environment**.

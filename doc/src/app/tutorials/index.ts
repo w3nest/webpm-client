@@ -16,6 +16,9 @@ export const navigation: AppNav = {
     routes: {
         '/esm': {
             name: 'ESM Modules',
+            header: {
+                icon: { tag: 'i', class: 'fab fa-js' },
+            },
             layout: ({ router }) =>
                 new NotebookModule.NotebookPage({
                     url: url('tutorials.esm.md'),
@@ -25,6 +28,9 @@ export const navigation: AppNav = {
         },
         '/pyodide': {
             name: 'Pyodide',
+            header: {
+                icon: { tag: 'i', class: 'fab fa-python' },
+            },
             layout: ({ router }) =>
                 new NotebookModule.NotebookPage({
                     url: url('tutorials.pyodide.md'),
@@ -34,6 +40,9 @@ export const navigation: AppNav = {
         },
         '/backends': {
             name: 'Backends',
+            header: {
+                icon: { tag: 'i', class: 'fas fa-network-wired' },
+            },
             layout: ({ router }) =>
                 new NotebookModule.NotebookPage({
                     url: url('tutorials.backends.md'),
@@ -43,6 +52,9 @@ export const navigation: AppNav = {
         },
         '/workers': {
             name: 'Workers Pool',
+            header: {
+                icon: { tag: 'i', class: 'fas fa-cogs' },
+            },
             layout: ({ router }) =>
                 new NotebookModule.NotebookPage({
                     url: url('tutorials.workers.md'),
@@ -50,7 +62,7 @@ export const navigation: AppNav = {
                     options: notebookOptions,
                 }),
         },
-        '/events': {
+        /* '/events': {
             name: 'Events & Loading Screen',
             layout: ({ router }) =>
                 new NotebookModule.NotebookPage({
@@ -58,6 +70,6 @@ export const navigation: AppNav = {
                     router,
                     options: notebookOptions,
                 }),
-        },
+        }, */
     },
 }

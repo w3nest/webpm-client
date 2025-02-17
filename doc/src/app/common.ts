@@ -9,10 +9,14 @@ import {
     ContextTrait,
     ConsoleReporter,
     InMemoryReporter,
+    GlobalMarkdownViews,
 } from 'mkdocs-ts'
 import { AnyVirtualDOM } from 'rx-vdom'
 import { setup } from '../auto-generated'
 import { DebugMode } from './config.debug'
+import { ApiLink, CrossLink, ExtLink, GitHubLink } from './md-widgets'
+import { companionNodes$ } from './on-load'
+import { SearchView } from './how-to/search.view'
 
 export const project = {
     name: 'webpm-client',
@@ -24,6 +28,7 @@ export const url = (restOfPath: string) => `../assets/${restOfPath}`
 export const placeholders = {
     '{{project}}': project.name,
     '{{webpm-version}}': setup.version,
+    '{{webpm-client}}': '**`@w3nest/webpm-client`**',
 }
 
 export function fromMd(file: string) {
@@ -78,4 +83,23 @@ export function createRootContext({
         labels,
         callstack: [],
     })
+}
+
+GlobalMarkdownViews.factory = {
+    ...GlobalMarkdownViews.factory,
+    'api-link': (elem: HTMLElement) => new ApiLink(elem),
+    'ext-link': (elem: HTMLElement) => new ExtLink(elem),
+    'cross-link': (elem: HTMLElement) => new CrossLink(elem),
+    'github-link': (elem: HTMLElement) => new GitHubLink(elem),
+    'split-api': () => ({
+        tag: 'i',
+        class: 'mkdocs-inv',
+        children: [
+            DefaultLayout.splitCompanionAction({
+                path: '/api',
+                companionNodes$,
+            }),
+        ],
+    }),
+    'search-resource': () => new SearchView(),
 }

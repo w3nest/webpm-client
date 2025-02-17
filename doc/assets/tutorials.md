@@ -1,31 +1,22 @@
 # Tutorials
 
+Our tutorials offer **hands-on, interactive examples** that demonstrate how to effectively leverage the library. 
+Each tutorial is presented in a **notebook format**, providing you with step-by-step guidance on the key features 
+of {{webpm-client}}.
 
-These tutorials showcase how to use the library, providing practical, hands-on examples in notebook format. 
-The **webpm** variable referenced in the cells is initialized when including the following script tag in your 
-`index.html` file:
+Every tutorial centers on the core functionality of the **<api-link target='install'></api-link>** method, 
+offering practical examples to help you integrate and use the library efficiently. Explore topics such as:
 
-`<script src="https://webpm.org/^3.0.0/webpm-client.js"></script>`
+- **[ESM Modules](@nav/tutorials/esm):** Learn how to install and utilize ECMAScript Modules (ESM) in your project.
+- **[Pyodide](@nav/tutorials/pyodide):** Discover how to set up a Python runtime in your browser and install Python modules seamlessly.
+- **[Backends](@nav/tutorials/backends):** Explore deploying backend microservices using the **W3Nest** solution.
+- **[Web Workers](@nav/tutorials/web-workers):** Master managing worker pools to offload heavy computations and boost performance.
 
+<note level="hint" title="Hints">
+- Many **API links** are integrated throughout the tutorials (e.g., <api-link target='install'></api-link>). 
+  For an enhanced viewing experience on larger screens, toggle a **split view** using this button:
+  <split-api></split-api> (also accessible from the navigation side-panel).
 
-Each tutorial focuses on specific features of the library, offering simple and straightforward examples to help 
-you understand and implement various functionalities. 
-
-The topics covered include:
-*  **[ESM Modules](@nav/tutorials/esm):** Learn how to install ECMAScript Modules (ESM) and leverage their functionality
-   within your projects.
-*  **[Pyodide](@nav/tutorials/pyodide):** Discover how to set up the Python runtime and install Python modules to run 
-   directly in your web browser.
-*  **[Backends](@nav/tutorials/backends):** Understand how to deploy backend microservices using the py-youwol solution 
-   to extend your web applications.
-*  **[Web Workers](@nav/tutorials/web-workers):** Use of web workers to create and manage worker pools, offloading 
-   computations to dedicated threads for improved performance.
-*  **[Events & Loading Screen](@nav/tutorials/events):** Provides feedbacks regarding downloading & installation events.
-
-
-
-For more comprehensive scenarios and real-world applications,
-explore our gallery <a target="_blank" href="/applications/@youwol/gallery/latest">here</a>,
-which demonstrates how to integrate the library into complex projects.
-
-
+- The notebook format, provided by <ext-link target="mkdocs-ts">mkdocs-ts</ext-link>, exemplifies a typical need
+  for on-the-fly installation because dependencies can only be resolved at runtime.
+</note>
