@@ -3,7 +3,7 @@ node_modules
 dist/
 coverage/
 junit.xml
-cdn.zip
+webpm.zip
 /src/tests/.html-outputs/*
 !/src/tests/.html-outputs/index.html
 __pycache__

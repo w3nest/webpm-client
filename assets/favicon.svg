@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2705.13 2856.17">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #010101;
+      }
+    </style>
+  </defs>
+  <g id="Cloud_Download_Icon" data-name="Cloud Download Icon">
+    <g id="Layer_1-2" data-name="Layer 1">
+      <path fill="darkviolet" stroke="darkviolet"  d="m2705.13,1362.94c0-280.39-221.88-509.59-499.55-520.7C2199.31,376.36,1819.93,0,1352.56,0S505.82,375.56,499.55,841.4C221.87,852.52,0,1082.67,0,1363.07s227.43,526.82,509.95,526.82h406.53c96.38,0,326.68,116.15,326.68,609.8h-184.33l290.38,356.49,290.38-356.49h-178.64c0-493.65,234.42-609.8,326.68-609.8h406.53c283-.03,510.97-242.71,510.97-526.97v.02Z"/>
+    </g>
+  </g>
+</svg>
