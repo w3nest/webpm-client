@@ -274,12 +274,24 @@ export class StateImplementation {
         aliases: Record<string, string | ((Window) => unknown)>,
         executingWindow: WindowOrWorkerGlobalScope,
     ) {
+        type Module = Record<string, unknown> & {
+            __yw_aliases__?: Set<string>
+        }
+        type MaybeModule = Module | undefined
         Object.entries(aliases).forEach(([alias, original]) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const pointed: { __yw_aliases__?: Set<string> } | undefined =
-                typeof original == 'string'
-                    ? executingWindow[original]
-                    : original(executingWindow)
+            let pointed: MaybeModule = undefined
+            if (typeof original == 'string') {
+                const pathOffset = original.startsWith('@') ? 2 : 1
+                const root = original.split('/').slice(0, pathOffset).join('/')
+                const path = original.split('/').slice(pathOffset)
+                const rootModule = executingWindow[root] as MaybeModule
+                pointed = path.reduce(
+                    (acc, e) => acc && acc[e],
+                    rootModule,
+                ) as MaybeModule
+            } else {
+                pointed = original(executingWindow) as MaybeModule
+            }
             if (!pointed) {
                 console.warn('can not create alias', { alias, original })
                 return
@@ -290,7 +302,6 @@ export class StateImplementation {
             if (!pointed.__yw_aliases__) {
                 pointed.__yw_aliases__ = new Set()
             }
-
             pointed.__yw_aliases__.add(alias)
         })
     }
