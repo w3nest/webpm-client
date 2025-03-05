@@ -3,7 +3,7 @@
     "documentation": {
         "sections": [
             {
-                "content": "# @w3nest/webpm-client\n\nLibrary for dynamic npm's libraries installation from W3 Nest ecosystem.\n\nThis library is part of the hybrid cloud/local ecosystem\n[YouWol](https://platform.youwol.com/apps/@youwol/platform/latest).\n\n## Links\n\n<!-- no user guide provided -->\n\n[Developers documentation](https://platform.youwol.com/apps/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc)\n\n[Package on npm](https://www.npmjs.com/package/@w3nest/webpm-client)\n\n[Source on GitHub](https://github.com/w3nest/webpm-client)\n\n# Installation, Build, Test\n\nTo install the required dependencies:\n\n ```shell\nyarn\n``` \n\n---\n\nTo build for development:\n\n ```shell\nyarn build:dev\n``` \n\nTo build for production:\n\n ```shell\nyarn build:prod\n``` \n\n---\n\nTests require [py-youwol](https://l.youwol.com/doc/py-youwol) to run on port 2001 using the configuration defined [here](https://github.com/youwol/integration-tests-conf).\n\nTo run tests:\n\n ```shell\nyarn test\n``` \n\nCoverage can be evaluated using:\n\n ```shell\nyarn test-coverage\n``` \n\n---\n\nTo generate code's documentation:\n\n ```shell\nyarn doc\n```",
+                "content": "The **webpm-client** library provides a powerful and flexible way to manage and install components in both the main\nthread and Web Workers.\n\n*  The primary entry point is  <mkapi-api-link nav=\"@nav/api/MainModule\" semantic=\"module\"> MainModule</mkapi-api-link> , which serves as the core module for installing components in the main \n   thread.\n\n*  The  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule\" semantic=\"module\"> WorkersPoolModule</mkapi-api-link>  extends functionality by enabling component installation in Web Workers, as well as \n  task execution and monitoring.\n\n*  The  <mkapi-api-link nav=\"@nav/api/ViewsModule\" semantic=\"module\"> ViewsModule</mkapi-api-link>  provides components to visualize the installed resources or to track the progress of their \n   installation.\n\n\nUse this documentation to explore the available modules, APIs, and best practices for integrating **webpm-client** \ninto your project.",
                 "contentType": "markdown",
                 "semantic": {
                     "role": "",
@@ -40,6 +40,24 @@
         },
         {
             "name": "index.ts",
+            "path": "src/lib/views/index.ts",
+            "documentation": {
+                "sections": [
+                    {
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        },
+                        "content": "This module provides UI components for visualizing installed resources and tracking real-time\ninstallation progress.\n\n<note level=\"warning\">\nThis module is **not included by default** in the main library.\nIt must be explicitly installed using .\n</note>\n\n\nKey components include:\n- : A convenient wrapper around  that integrates a visual progress\n  indicator.\n- : Displays a snapshot of currently installed resources.\n- : Provides a dynamic visualization of a .\n\nAdditionally, this module offers components for building **custom views**, allowing tailored\nmonitoring and interaction with installed resources.",
+                        "contentType": "markdown"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "index.ts",
             "path": "src/lib/workers-pool/index.ts",
             "documentation": {
                 "sections": [
@@ -50,7 +68,7 @@
                             "attributes": {},
                             "relations": {}
                         },
-                        "content": "Add-on module of the library that handles resources installation in\n[Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).\n\nThis add-on module is loaded using  from the main module.",
+                        "content": "Add-on module enhancing [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)\nmanagement by automating environment setup, handling task scheduling, and managing resources efficiently.\n\n<note level=\"warning\">\nThis module is **not included by default** in the main library.\nConsumers must install it explicitly using .\n</note>\n\nThe main entry point of the module is .",
                         "contentType": "markdown"
                     }
                 ]
@@ -69,6 +87,18 @@
             "path": "webpm-client.MainModule",
             "navPath": "@nav/api/MainModule",
             "isLeaf": false
+        },
+        {
+            "name": "ViewsModule",
+            "semantic": {
+                "role": "module",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            },
+            "path": "webpm-client.ViewsModule",
+            "navPath": "@nav/api/ViewsModule",
+            "isLeaf": true
         },
         {
             "name": "WorkersPoolModule",

@@ -21,9 +21,9 @@ externals = {
     "rxjs": "^7.5.6",
     # `@w3nest/http-primitives` is only used for typing & test, not in dev. dependencies to let consuming packages
     # have it in their `node_modules`.
-    "@w3nest/http-clients": "^0.1.0",
+    "@w3nest/http-clients": "^0.1.5",
     # For the Views module
-    "rx-vdom": "^0.1.1",
+    "rx-vdom": "^0.1.3",
 }
 config = ProjectConfig(
     path=project_folder,

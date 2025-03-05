@@ -1,7 +1,8 @@
 /* eslint-disable */
 const runTimeDependencies = {
     "externals": {
-        "@w3nest/http-clients": "^0.1.0",
+        "@w3nest/http-clients": "^0.1.5",
+        "rx-vdom": "^0.1.3",
         "rxjs": "^7.5.6"
     },
     "includedInBundle": {
@@ -13,6 +14,11 @@ const externals = {
         "commonjs": "@w3nest/http-clients",
         "commonjs2": "@w3nest/http-clients",
         "root": "@w3nest/http-clients_APIv01"
+    },
+    "rx-vdom": {
+        "commonjs": "rx-vdom",
+        "commonjs2": "rx-vdom",
+        "root": "rx-vdom_APIv01"
     },
     "rxjs": {
         "commonjs": "rxjs",
@@ -33,22 +39,37 @@ const exportedSymbols = {
         "apiKey": "01",
         "exportedSymbol": "@w3nest/http-clients"
     },
+    "rx-vdom": {
+        "apiKey": "01",
+        "exportedSymbol": "rx-vdom"
+    },
     "rxjs": {
         "apiKey": "7",
         "exportedSymbol": "rxjs"
     }
 }
 
-const mainEntry : {entryFile: string,loadDependencies:string[]} = {
+const mainEntry: { entryFile: string; loadDependencies: string[] } =
+    {
     "entryFile": "./index.ts",
     "loadDependencies": []
 }
 
-const secondaryEntries : {[k:string]:{entryFile: string, name: string, loadDependencies:string[]}}= {
+const secondaryEntries: {
+    [k: string]: { entryFile: string; name: string; loadDependencies: string[] }
+} = {
     "testUtils": {
         "entryFile": "./lib/test-utils/index.ts",
         "loadDependencies": [],
         "name": "testUtils"
+    },
+    "views": {
+        "entryFile": "./lib/views/index.ts",
+        "loadDependencies": [
+            "rxjs",
+            "rx-vdom"
+        ],
+        "name": "views"
     },
     "workersPool": {
         "entryFile": "./lib/workers-pool/index.ts",
@@ -60,78 +81,102 @@ const secondaryEntries : {[k:string]:{entryFile: string, name: string, loadDepen
 }
 
 const entries = {
-     '@w3nest/webpm-client': './index.ts',
-    ...Object.values(secondaryEntries).reduce( (acc,e) => ({...acc, [`@w3nest/webpm-client/${e.name}`]:e.entryFile}), {})
+    '@w3nest/webpm-client': './index.ts',
+    ...Object.values(secondaryEntries).reduce(
+        (acc, e) => ({ ...acc, [e.name]: e.entryFile }),
+        {},
+    ),
 }
 export const setup = {
-    name:'@w3nest/webpm-client',
-        assetId:'QHczbmVzdC93ZWJwbS1jbGllbnQ=',
-    version:'0.1.3-wip',
-    shortDescription:"Library for dynamic npm's libraries installation from W3 Nest ecosystem.",
-    developerDocumentation:'https://platform.youwol.com/apps/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc',
-    npmPackage:'https://www.npmjs.com/package/@w3nest/webpm-client',
-    sourceGithub:'https://github.com/w3nest/webpm-client',
-    userGuide:'',
-    apiVersion:'01',
+    name: '@w3nest/webpm-client',
+    assetId: 'QHczbmVzdC93ZWJwbS1jbGllbnQ=',
+    version: '0.1.4',
+    webpmPath: '/api/assets-gateway/webpm/resources/QHczbmVzdC93ZWJwbS1jbGllbnQ=/0.1.4',
+    apiVersion: '01',
     runTimeDependencies,
     externals,
     exportedSymbols,
     entries,
     secondaryEntries,
-    getDependencySymbolExported: (module:string) => {
+    getDependencySymbolExported: (module: string) => {
         return `${exportedSymbols[module].exportedSymbol}_APIv${exportedSymbols[module].apiKey}`
     },
 
-    installMainModule: ({cdnClient, installParameters}:{
-        cdnClient:{install:(_:unknown) => Promise<WindowOrWorkerGlobalScope>},
+    installMainModule: ({
+        cdnClient,
+        installParameters,
+    }: {
+        cdnClient: {
+            install: (_: unknown) => Promise<WindowOrWorkerGlobalScope>
+        }
         installParameters?
     }) => {
         const parameters = installParameters || {}
         const scripts = parameters.scripts || []
         const modules = [
             ...(parameters.modules || []),
-            ...mainEntry.loadDependencies.map( d => `${d}#${runTimeDependencies.externals[d]}`)
+            ...mainEntry.loadDependencies.map(
+                (d) => `${d}#${runTimeDependencies.externals[d]}`,
+            ),
         ]
-        return cdnClient.install({
-            ...parameters,
-            modules,
-            scripts,
-        }).then(() => {
-            return window[`@w3nest/webpm-client_APIv01`]
-        })
+        return cdnClient
+            .install({
+                ...parameters,
+                modules,
+                scripts,
+            })
+            .then(() => {
+                return window[`@w3nest/webpm-client_APIv01`]
+            })
     },
-    installAuxiliaryModule: ({name, cdnClient, installParameters}:{
-        name: string,
-        cdnClient:{install:(_:unknown) => Promise<WindowOrWorkerGlobalScope>},
+    installAuxiliaryModule: ({
+        name,
+        cdnClient,
+        installParameters,
+    }: {
+        name: string
+        cdnClient: {
+            install: (_: unknown) => Promise<WindowOrWorkerGlobalScope>
+        }
         installParameters?
     }) => {
         const entry = secondaryEntries[name]
-        if(!entry){
-            throw Error(`Can not find the secondary entry '${name}'. Referenced in template.py?`)
+        if (!entry) {
+            throw Error(
+                `Can not find the secondary entry '${name}'. Referenced in template.py?`,
+            )
         }
         const parameters = installParameters || {}
         const scripts = [
             ...(parameters.scripts || []),
-            `@w3nest/webpm-client#0.1.3-wip~dist/@w3nest/webpm-client/${entry.name}.js`
+            `@w3nest/webpm-client#0.1.4~dist/${entry.name}.js`,
         ]
         const modules = [
             ...(parameters.modules || []),
-            ...entry.loadDependencies.map( d => `${d}#${runTimeDependencies.externals[d]}`)
+            ...entry.loadDependencies.map(
+                (d) => `${d}#${runTimeDependencies.externals[d]}`,
+            ),
         ]
-        return cdnClient.install({
-            ...parameters,
-            modules,
-            scripts,
-        }).then(() => {
-            return window[`@w3nest/webpm-client/${entry.name}_APIv01`]
-        })
+        return cdnClient
+            .install({
+                ...parameters,
+                modules,
+                scripts,
+            })
+            .then(() => {
+                return window[`@w3nest/webpm-client_APIv01`][`${entry.name}`]
+            })
     },
-    getCdnDependencies(name?: string){
-        if(name && !secondaryEntries[name]){
-            throw Error(`Can not find the secondary entry '${name}'. Referenced in template.py?`)
+    getCdnDependencies(name?: string) {
+        if (name && !secondaryEntries[name]) {
+            throw Error(
+                `Can not find the secondary entry '${name}'. Referenced in template.py?`,
+            )
         }
-        const deps = name ? secondaryEntries[name].loadDependencies : mainEntry.loadDependencies
+        const deps = name
+            ? secondaryEntries[name].loadDependencies
+            : mainEntry.loadDependencies
 
-        return deps.map( d => `${d}#${runTimeDependencies.externals[d]}`)
-    }
+        return deps.map((d) => `${d}#${runTimeDependencies.externals[d]}`)
+    },
 }

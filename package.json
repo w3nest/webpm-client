@@ -1,15 +1,15 @@
 {
     "name": "@w3nest/webpm-client",
     "description": "Library for dynamic npm's libraries installation from W3 Nest ecosystem.",
-    "version": "0.1.3-wip",
+    "version": "0.1.4",
     "author": "reinisch.gui@gmail.com",
     "homepage": "https://github.com/w3nest/webpm-client#README.md",
-    "main": "dist/@w3nest/webpm-client.js",
+    "main": "./dist/@w3nest/webpm-client.js",
     "types": "src/index.ts",
     "scripts": {
         "clean": "del-cli dist",
         "setup": "python .w3nest/setup.py",
-        "build": "yarn build:dev",
+        "build": "yarn build:prod",
         "pre-build": "yarn clean",
         "build:dev": "yarn pre-build && webpack --mode development",
         "build:prod": "yarn pre-build && webpack --mode production",
@@ -22,15 +22,57 @@
         "doc": "typedoc",
         "publish-npm-public": "yarn build:prod && yarn test-coverage && yarn publish --access public"
     },
+    "exports": {
+        ".": {
+            "default": "./dist/@w3nest/webpm-client.js",
+            "types": "./src/index.ts",
+            "webpm": {
+                "dependencies": [],
+                "aliases": [
+                    "webpm"
+                ]
+            }
+        },
+        "./workersPool": {
+            "default": "./dist/workersPool.js",
+            "types": "./src/lib/workers-pool/index.ts",
+            "webpm": {
+                "dependencies": [
+                    "rxjs"
+                ],
+                "aliases": []
+            }
+        },
+        "./testUtils": {
+            "default": "./dist/testUtils.js",
+            "types": "./src/lib/test-utils/index.ts",
+            "webpm": {
+                "dependencies": [],
+                "aliases": []
+            }
+        },
+        "./views": {
+            "default": "./dist/views.js",
+            "types": "./src/lib/views/index.ts",
+            "webpm": {
+                "dependencies": [
+                    "rxjs",
+                    "rx-vdom"
+                ],
+                "aliases": []
+            }
+        }
+    },
     "dependencies": {
-        "@w3nest/http-clients": "^0.1.0",
+        "@w3nest/http-clients": "^0.1.5",
+        "rx-vdom": "^0.1.3",
         "rxjs": "^7.5.6",
         "semver": "^7.3.4"
     },
     "devDependencies": {
         "@jest/test-sequencer": "^29.5.0",
         "@types/jest": "^29.5.4",
-        "@types/node": "^22.9.0",
+        "@types/node": "^22.13.4",
         "@types/webpack": "^5.28.5",
         "@w3nest/http-clients": "^0.1.0",
         "brotli": "^1.3.2",
@@ -45,21 +87,23 @@
         "prettier": "^3.2.5",
         "prettier-plugin-properties": "^0.3.0",
         "ts-jest": "^29.2.5",
-        "ts-loader": "9.5.1",
+        "ts-loader": "9.5.2",
         "ts-node": "10.9.2",
-        "tsx": "4.19.2",
-        "typedoc": "^0.26.11",
-        "typescript": "5.6.3",
+        "tsx": "^4.19.2",
+        "typedoc": "^0.27.7",
+        "typescript": "5.7.3",
         "typescript-eslint": "8.14.0",
         "util": "^0.12.5",
-        "webpack": "^5.96.1",
+        "webpack": "^5.98.0",
         "webpack-bundle-analyzer": "^4.10.2",
-        "webpack-cli": "5.1.4"
+        "webpack-cli": "6.0.1"
     },
     "webpm": {
-        "dependencies": {},
-        "aliases": [
-            "webpm"
-        ]
+        "kind": "esm",
+        "dependencies": {
+            "@w3nest/http-clients": "^0.1.5",
+            "rx-vdom": "^0.1.3",
+            "rxjs": "^7.5.6"
+        }
     }
 }

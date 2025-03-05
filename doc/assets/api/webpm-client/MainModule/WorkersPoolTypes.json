@@ -3,7 +3,7 @@
     "documentation": {
         "sections": [
             {
-                "content": "This module export in the  [MainModule](@nav/api/MainModule)  the types included in the module  [WorkersPoolModule](@nav/api/WorkersPoolModule) \n(types only, no implementation).\n\nIt serves as helper when working with typescript, e.g.:\n ```ts\nimport { installWorkersPoolModule, WorkersType } from '@youwol/webpm-client'\n\nasync function foo(){\n     const WPModule = await installWorkersPoolModule()\n     const pool : WorkersType.WorkersPool = new WPModule.WorkersPool({})\n}\n``` \n\nSee  [installWorkersPoolModule](@nav/api/MainModule.installWorkersPoolModule) .",
+                "content": "This module export in the  <mkapi-api-link nav=\"@nav/api/MainModule\" semantic=\"module\">MainModule</mkapi-api-link>  the types included in the module  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule\" semantic=\"module\">WorkersPoolModule</mkapi-api-link> \n(types only, no implementation).\n\nIt serves as helper when working with typescript, e.g.:\n ```ts\nimport { installWorkersPoolModule, WorkersType } from '@youwol/webpm-client'\n\nasync function foo(){\n     const WPModule = await installWorkersPoolModule()\n     const pool : WorkersType.WorkersPool = new WPModule.WorkersPool({})\n}\n``` \n\nSee  <mkapi-api-link nav=\"@nav/api/MainModule.installWorkersPoolModule\" semantic=\"function\">installWorkersPoolModule</mkapi-api-link> .",
                 "contentType": "markdown",
                 "semantic": {
                     "role": "",
