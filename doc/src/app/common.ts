@@ -17,6 +17,7 @@ import { DebugMode } from './config.debug'
 import { ApiLink, CrossLink, ExtLink, GitHubLink } from './md-widgets'
 import { companionNodes$ } from './on-load'
 import { SearchView } from './how-to/search.view'
+import { firstValueFrom } from 'rxjs'
 
 export const project = {
     name: 'webpm-client',
@@ -60,7 +61,9 @@ export const notebookOptions = {
         placeholders,
     },
 }
-await NotebookModule.SnippetEditorView.fetchCmDependencies$('javascript')
+await firstValueFrom(
+    NotebookModule.SnippetEditorView.fetchCmDependencies$('javascript'),
+)
 
 Context.Enabled = DebugMode
 export const inMemReporter = new InMemoryReporter()
@@ -74,6 +77,7 @@ export function createRootContext({
     threadName: string
     labels: Label[]
 }): ContextTrait {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!DebugMode) {
         return new NoContext()
     }

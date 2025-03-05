@@ -42,8 +42,9 @@ export class SearchInput implements VirtualDOM<'div'> {
                         },
                         class: 'flex-grow-1',
                         placeholder: 'Search packages',
-                        onchange: (ev) => {
-                            item$.next(ev.target['value'])
+                        onchange: (ev: MouseEvent) => {
+                            const target = ev.target as HTMLInputElement
+                            item$.next(target.value)
                         },
                     },
                 ],
@@ -69,11 +70,15 @@ export class SearchView implements VirtualDOM<'div'> {
 }
 
 function isUnauthorized(resp: unknown): boolean {
-    type T = { status: number }
+    interface T {
+        status: number
+    }
     return (resp as T).status === 403
 }
 function isNotFound(resp: unknown): boolean {
-    type T = { status: number }
+    interface T {
+        status: number
+    }
     return (resp as T).status === 404
 }
 export class ResultsView implements VirtualDOM<'div'> {
@@ -105,6 +110,7 @@ export class ResultsView implements VirtualDOM<'div'> {
                     if ('versions' in resp) {
                         return new PackageView(resp.versions)
                     }
+                    return { tag: 'div' }
                 },
             }),
         ]

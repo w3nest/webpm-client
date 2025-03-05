@@ -7,7 +7,10 @@ export class ApiLink implements VirtualDOM<'a'> {
     public readonly href: string
 
     constructor(elem: HTMLElement) {
-        const target = elem.getAttribute('target')!
+        const target = elem.getAttribute('target')
+        if (!target) {
+            return
+        }
         const navs = {
             install: '@nav/api/MainModule.install',
             LightLibraryWithAliasQueryString:
@@ -66,7 +69,7 @@ export class ApiLink implements VirtualDOM<'a'> {
                 '@nav/api/MainModule.installWorkersPoolModule',
         }
 
-        const classes = {
+        const classes: Record<string, string> = {
             install: 'mkapi-role-function',
             LightLibraryWithAliasQueryString: 'mkapi-role-type-alias',
             EsmInputs: 'mkapi-role-interface',
@@ -106,11 +109,17 @@ export class ApiLink implements VirtualDOM<'a'> {
             'EntryPointArguments.context': 'mkapi-role-attribute',
             installWorkersPoolModule: 'mkapi-role-function',
         }
-        this.href = navs[target]
+        if (!(target in navs)) {
+            return
+        }
+        this.href = navs[target as keyof typeof navs]
         this.children = [
             {
                 tag: 'i',
-                innerText: elem.textContent === '' ? target : elem.textContent,
+                innerText:
+                    !elem.textContent || elem.textContent === ''
+                        ? target
+                        : elem.textContent,
                 class: `mkapi-semantic-flag ${classes[target]}`,
             },
             {
@@ -130,7 +139,10 @@ export class ExtLink implements VirtualDOM<'a'> {
     public readonly target = '_blank'
 
     constructor(elem: HTMLElement) {
-        const target = elem.getAttribute('target')!
+        const target = elem.getAttribute('target')
+        if (!target) {
+            return
+        }
         const navs = {
             w3nest: '/apps/@w3nest/doc/latest',
             'w3nest/how-to/publish':
@@ -161,11 +173,14 @@ export class ExtLink implements VirtualDOM<'a'> {
             wasm: 'https://webassembly.org/',
             three: 'https://threejs.org/',
         }
-        this.href = navs[target]
+        if (!(target in navs)) {
+            return
+        }
+        this.href = navs[target as keyof typeof navs]
         this.children = [
             {
                 tag: 'i',
-                innerText: elem.textContent,
+                innerText: elem.textContent ?? '',
             },
             {
                 tag: 'i',
@@ -184,18 +199,24 @@ export class GitHubLink implements VirtualDOM<'a'> {
     public readonly target = '_blank'
 
     constructor(elem: HTMLElement) {
-        const target = elem.getAttribute('target')!
+        const target = elem.getAttribute('target')
+        if (!target) {
+            return
+        }
         const navs = {
             'webpm-doc': 'https://github.com/w3nest/webpm/blob/main/doc',
             'webpm-externals': 'https://github.com/w3nest/webpm-externals',
             'publish-package':
                 'https://github.com/youwol/cdn-externals/issues/new?template=request_package_integration.yml',
         }
-        this.href = navs[target]
+        if (!(target in navs)) {
+            return
+        }
+        this.href = navs[target as keyof typeof navs]
         this.children = [
             {
                 tag: 'i',
-                innerText: elem.textContent,
+                innerText: elem.textContent ?? '',
             },
             {
                 tag: 'i',
@@ -213,7 +234,11 @@ export class CrossLink implements VirtualDOM<'a'> {
     public readonly href: string
 
     constructor(elem: HTMLElement) {
-        const target = elem.getAttribute('target')!
+        const target = elem.getAttribute('target')
+
+        if (!target) {
+            return
+        }
         const navs = {
             tutorials: '@nav/tutorials',
             'how-to': '@nav/how-to',
@@ -222,11 +247,14 @@ export class CrossLink implements VirtualDOM<'a'> {
             api: '@nav/api',
             workers: '@nav/tutorials/workers',
         }
-        this.href = navs[target]
+        if (!(target in navs)) {
+            return
+        }
+        this.href = navs[target as keyof typeof navs]
         this.children = [
             {
                 tag: 'i',
-                innerText: elem.textContent,
+                innerText: elem.textContent ?? '',
             },
             {
                 tag: 'i',

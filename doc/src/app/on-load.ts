@@ -73,4 +73,4 @@ const app = new DefaultLayout.LayoutWithCompanion(
     ctx,
 )
 
-document.getElementById('content').appendChild(render(app))
+document.body.appendChild(render(app))

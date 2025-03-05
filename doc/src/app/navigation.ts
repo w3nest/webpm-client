@@ -1,4 +1,4 @@
-import { AppNav, icon, NotebookModule, notebookOptions, url } from './common'
+import { AppNav, NotebookModule, notebookOptions, url } from './common'
 
 import { navigation as navHowTo } from './how-to'
 import { navigation as navTutorial } from './tutorials'
