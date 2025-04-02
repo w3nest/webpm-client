@@ -38,15 +38,17 @@ if (scriptSrc) {
         })
         // We are not sure whether backends have been installed under the auto-generated default partition ID.
         // Worst case scenario we got a 404.
-        const url = ywCookie.webpm.pathBackendUninstall.replace(
-            '%UID%',
-            cdnClient.Client.backendsPartitionId,
-        )
-        window.addEventListener('beforeunload', () => {
-            fetch(url, { method: 'DELETE', keepalive: true }).catch(() => {
-                /*No OP*/
+        if (ywCookie.webpm.pathBackendUninstall) {
+            const url = ywCookie.webpm.pathBackendUninstall.replace(
+                '%UID%',
+                cdnClient.Client.backendsPartitionId,
+            )
+            window.addEventListener('beforeunload', () => {
+                fetch(url, { method: 'DELETE', keepalive: true }).catch(() => {
+                    /*No OP*/
+                })
             })
-        })
+        }
     } else {
         // !!TO REMOVE!!, only cookie mechanism allowed soon to avoid sync request
         // Using a synchronous request here is on purpose: the objective is to provide a module fully initialized.
