@@ -12,7 +12,11 @@ import { CircularDependencies, DependenciesError } from './errors.models'
 
 export function sanitizeCssId(id: string) {
     return (
-        'cdn-client_' + id.replace('/', '-').replace('.', '-').replace('@', '')
+        'cdn-client_' +
+        id
+            .replace(/\//g, '-') // replace all '/' with '-'
+            .replace(/\./g, '-') // replace all '.' with '-'
+            .replace(/@/g, '') // remove all '@'
     )
 }
 
