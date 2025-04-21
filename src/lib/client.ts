@@ -45,10 +45,8 @@ import {
     onHttpRequestLoad,
     sanitizeModules,
     parseResourceId,
-    installAliases,
     isInstanceOfWindow,
     extractInlinedAliases,
-    extractModulesToInstall,
     normalizeBackendInputs,
     PARTITION_PREFIX,
     normalizeEsmInputs,
@@ -214,16 +212,9 @@ export class Client {
         )
         StateImplementation.fetchedLoadingGraph.set(
             key,
-            fetch(request)
-                .then((resp) => resp.json())
-                .then((resp: LoadingGraph | CdnError) => {
-                    if ('lock' in resp) {
-                        resp.lock.forEach((lock) => {
-                            lock.exportedSymbol = lock.name
-                        })
-                    }
-                    return resp
-                }),
+            fetch(request).then(
+                (resp) => resp.json() as Promise<CdnError | LoadingGraph>,
+            ),
         )
         return finalize()
     }
@@ -247,12 +238,6 @@ export class Client {
         const assetId = parts[1]
         const version = parts[2]
         name ??= parts[parts.length - 1]
-        url = StateImplementation.getPatchedUrl({
-            name,
-            version,
-            assetId,
-            url,
-        })
         const importedScript = StateImplementation.importedScripts.get(url)
         if (importedScript) {
             const { progressEvent } = await importedScript
@@ -369,6 +354,11 @@ export class Client {
             backendInputs.modules,
             `${PARTITION_PREFIX}${backendPartition}`,
         )
+        const aliases = {
+            ...esmInputs.aliases,
+            ...esmInlinedAliases,
+            ...backendInlinedAliases,
+        }
 
         const modulesPromise = this.installModules({
             modules: [...esmInputs.modules, ...backendInputs.modules],
@@ -376,11 +366,7 @@ export class Client {
             backendsPartitionId: backendPartition,
             modulesSideEffects: esmInputs.modulesSideEffects,
             usingDependencies: esmInputs.usingDependencies,
-            aliases: {
-                ...esmInputs.aliases,
-                ...esmInlinedAliases,
-                ...backendInlinedAliases,
-            },
+            aliases: {},
             executingWindow,
             onEvent,
         })
@@ -407,7 +393,11 @@ export class Client {
                 if (loadingScreen) {
                     loadingScreen.done()
                 }
-                return executingWindow
+                const mappedAliases = StateImplementation.extractAliases(
+                    aliases,
+                    executingWindow,
+                )
+                return { ...executingWindow, ...mappedAliases }
             },
             (error: unknown) => {
                 onEvent(new InstallErrorEvent())
@@ -433,7 +423,7 @@ export class Client {
         const log = (text: string, level: 'Info' | 'Error' = 'Info') => {
             onEvent(new ConsoleEvent(level, 'LoadingGraph', text))
         }
-        const all = inputs.loadingGraph.lock
+        const locks = inputs.loadingGraph.lock
             .map((pack) => [pack.id, pack])
             .reduce<
                 Record<string, Library>
@@ -447,45 +437,42 @@ export class Client {
             )
         })
         const graph_fronts = inputs.loadingGraph.definition.map((layer) =>
-            layer.filter((l) => all[l[0]].type !== 'backend'),
+            layer.filter((l) => locks[l[0]].kind === 'esm'),
         )
         const graph_backs = inputs.loadingGraph.definition.map((layer) =>
-            layer.filter((l) => all[l[0]].type === 'backend'),
+            layer.filter((l) => locks[l[0]].kind === 'backend'),
         )
         const executingWindow = inputs.executingWindow ?? window
-
-        StateImplementation.updateExportedSymbolsDict(
-            inputs.loadingGraph.lock,
-            inputs.backendsPartitionId,
-        )
 
         const packagesSelected = graph_fronts
             .flat()
             .map(([assetId, cdn_url]) => {
                 const version = cdn_url.split('/')[1]
-                const asset = inputs.loadingGraph.lock.find(
+                const lib = inputs.loadingGraph.lock.find(
                     (asset) =>
                         asset.id === assetId && asset.version === version,
                 )
-                if (!asset) {
+                if (!lib) {
                     throw Error(
                         `Can not find expected asset ${assetId} in loading graph`,
                     )
                 }
                 const url = `${Client.BackendConfiguration.urlResource}/${cdn_url}`
-                log(`Entry point ${asset.name}#${asset.version} : ${url}`)
+                log(`Entry point ${lib.name}#${lib.version} : ${url}`)
                 return {
                     assetId,
                     url,
-                    name: asset.name,
-                    version: asset.version,
+                    name: lib.name,
+                    version: lib.version,
+                    apiKey: lib.apiKey,
                 }
             })
-            .filter(({ name, version, url, assetId }) => {
+            .filter(({ name, version, url, apiKey, assetId }) => {
                 const existCompatible =
-                    StateImplementation.isCompatibleVersionInstalled(
+                    StateImplementation.isCompatibleEsmInstalled(
                         name,
                         version,
+                        apiKey,
                     )
                 log(
                     `Compatible version found in runtime for ${name}#${version}: ${String(existCompatible)}`,
@@ -553,8 +540,17 @@ export class Client {
                     }: {
                         htmlScriptElement?: HTMLScriptElement
                     }) => {
+                        const lock = inputs.loadingGraph.lock.find(
+                            (l) =>
+                                l.name === origin.name &&
+                                l.version === origin.version,
+                        )
+                        if (!lock) {
+                            throw Error('Implementation error')
+                        }
                         await applyModuleSideEffects({
                             origin,
+                            lib: lock,
                             htmlScriptElement,
                             executingWindow,
                             userSideEffects,
@@ -569,9 +565,6 @@ export class Client {
             })
 
         await addScriptElements(sources, executingWindow, inputs.onEvent)
-        if (inputs.aliases) {
-            installAliases(inputs.aliases, executingWindow)
-        }
     }
 
     private async installBackends(
@@ -599,26 +592,15 @@ export class Client {
             (() => {
                 /*No OP*/
             })
-        const usingDependencies = [
-            ...StateImplementation.getPinedDependencies(),
-            ...(inputs.usingDependencies ?? []),
-        ]
+        const usingDependencies = inputs.usingDependencies ?? []
         inputs.modules ??= []
-
-        const inputsModules = extractModulesToInstall(inputs.modules)
+        const inputsModules = inputs.modules
         const modules = sanitizeModules(inputsModules)
-        const alreadyInstalled = modules.every(({ name, version }) => {
-            const latestInstalled = StateImplementation.latestVersion.get(name)
-            return latestInstalled
-                ? // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                  satisfies(latestInstalled.replace('-wip', ''), version)
-                : false
-        })
+        const alreadyInstalled = modules.every(({ name, version }) =>
+            StateImplementation.isEsmSatisfied(name, version),
+        )
 
         if (alreadyInstalled) {
-            if (inputs.aliases) {
-                installAliases(inputs.aliases, inputs.executingWindow ?? window)
-            }
             return undefined
         }
 
@@ -695,10 +677,7 @@ export class Client {
             (d) => !(d instanceof ErrorEvent),
         )
 
-        await addScriptElements(sources, inputs.executingWindow, inputs.onEvent)
-        if (inputs.aliases) {
-            installAliases(inputs.aliases, executingWindow)
-        }
+        await addScriptElements(sources, executingWindow, inputs.onEvent)
         return sources.map(({ assetId, url, name, content }) => {
             return { assetId, url, assetName: name, src: content }
         })
@@ -736,12 +715,6 @@ export class Client {
             })
             .map((elem) => ({ ...elem, ...parseResourceId(elem.location) }))
             .map(({ assetId, version, name, url, sideEffects }) => {
-                url = StateImplementation.getPatchedUrl({
-                    name,
-                    version,
-                    assetId,
-                    url,
-                })
                 return { assetId, version, name, url, sideEffects }
             })
             .filter(({ assetId, version, name, url }) => {

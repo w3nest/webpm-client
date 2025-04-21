@@ -35,7 +35,9 @@ export async function installBackendClientDeps(): Promise<{
     http: typeof HttpClients
 }> {
     const { http } = (await install({
-        modules: ['@w3nest/http-clients#^0.1.1 as http'],
+        modules: [
+            `@w3nest/http-clients#${setup.runTimeDependencies.externals['@w3nest/http-clients']} as http`,
+        ],
     })) as unknown as Install
     return { http } as unknown as { http: typeof HttpClients }
 }
@@ -85,7 +87,10 @@ export async function installBackends({
     const installKey = `${setup.name}-${setup.version}:${installId}`
     let error: BackendErrorEvent | undefined
 
-    const rxjs = (window as unknown as { rxjs: typeof rxjsModuleType }).rxjs
+    const { rxjs } = (await install({
+        esm: [`rxjs#${setup.runTimeDependencies.externals.rxjs} as rxjs`],
+    })) as unknown as { rxjs: typeof rxjsModuleType }
+
     interface Message {
         name: string
         version: string
@@ -201,15 +206,12 @@ export async function installBackends({
                         window: executingWindow,
                         webpmClient,
                         wsData$,
-                    }) as { name: string; version: string }
+                    }) as BackendClient
                 }),
             )
         })
         .then((backends) => {
-            StateImplementation.registerImportedModules(
-                backends,
-                executingWindow,
-            )
+            StateImplementation.registerEsmModules(backends, executingWindow)
         })
 }
 
@@ -217,6 +219,11 @@ export async function installBackends({
  * Backend client.
  */
 export interface BackendClient {
+    /**
+     * Backend's name.
+     */
+    name: string
+
     /**
      * Base URL of the service.
      */
@@ -226,6 +233,16 @@ export interface BackendClient {
      * Version of the service
      */
     version: string
+
+    /**
+     * Version's number.
+     */
+    versionNumber: number
+
+    /**
+     * API key.
+     */
+    apiKey: string
 
     /**
      * Relative path of the W3Lab page pointing to the backend.
@@ -241,9 +258,9 @@ export interface BackendClient {
     }
 
     /**
-     * The name of the symbol in the global scope pointing to the client.
+     * The export path pointing to the client.
      */
-    exportedSymbol: string
+    exportPath: string[]
 
     /**
      * Encapsulating partition Id.

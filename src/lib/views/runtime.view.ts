@@ -54,8 +54,8 @@ class EsmView implements VirtualDOM<'div'> {
             }
         }
         this.children = Array.from(
-            Dependencies.webpm.StateImplementation.importedBundles.entries(),
-        ).map(([k, versions]: [string, string[]]) => {
+            Dependencies.webpm.StateImplementation.esModules.entries(),
+        ).map(([k, versions]) => {
             return {
                 tag: 'div',
                 class: 'd-flex align-items-center',
@@ -77,7 +77,7 @@ class EsmView implements VirtualDOM<'div'> {
                     {
                         tag: 'div',
                         class: 'd-flex align-items-center',
-                        children: versions.map(versionView),
+                        children: versions.map((v) => versionView(v.version)),
                     },
                 ],
             }

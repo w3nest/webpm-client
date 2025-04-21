@@ -5,7 +5,7 @@ export {
     queryLoadingGraph,
     installLoadingGraph,
 } from './client'
-export { State, StateImplementation, LibraryName, Version } from './state'
+export { StateImplementation, LibraryName, Version } from './state'
 export * from './loader.view'
 export * from './inputs.models'
 export {

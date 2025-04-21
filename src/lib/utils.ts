@@ -10,6 +10,7 @@ import {
     QueryLoadingGraphInputs,
     PyodideInputs,
     CssSideEffectCallback,
+    Library,
 } from './inputs.models'
 import {
     CdnEvent,
@@ -26,12 +27,12 @@ import { UrlNotFound, SourceParsingFailed, Unauthorized } from './errors.models'
 import { StateImplementation } from './state'
 import { sanitizeCssId } from './utils.view'
 import { Client } from './client'
-import { parse } from 'semver'
 import {
     InstallInputsDeprecated,
     isDeprecatedInputs,
     upgradeInstallInputs,
 } from './inputs.models.deprecated'
+import { setup } from '../auto-generated'
 
 const Status200 = 200
 const Status401 = 401
@@ -90,11 +91,14 @@ export function sanitizeModules(
         if (typeof e !== 'string') {
             return [...acc, e]
         }
+        const base = e.split(' as ')[0]
         return [
             ...acc,
             {
-                name: e.includes('#') ? e.split('#')[0] : e,
-                version: e.includes('#') ? e.split('#')[1] : 'latest',
+                name: base.includes('#') ? base.split('#')[0] : base,
+                version: base.includes('#')
+                    ? base.split('#')[1].replace('latest', '*')
+                    : '*',
             },
         ]
     }, [])
@@ -124,168 +128,54 @@ export function parseResourceId(resourceId: string): {
     return { name, version, path, assetId, url }
 }
 
-export function patchExportedSymbolForBackwardCompatibility(
-    origin: FetchedScript,
-    executingWindow: WindowOrWorkerGlobalScope,
-): unknown {
-    /**
-     * Those symbols can be removed when no applications/libraries are using them anymore.
-     * See property 'externals' in the files 'auto-generated.ts'.
-     */
-    const exportedSymbols = {
-        lodash: '_',
-        three: 'THREE',
-        typescript: 'ts',
-        'three-trackballcontrols': 'TrackballControls',
-        codemirror: 'CodeMirror',
-        'highlight.js': 'hljs',
-        'plotly.js': 'Plotly',
-        'plotly.js-gl2d-dist': 'Plotly',
-        jquery: '$',
-        'popper.js': 'Popper',
-        'reflect-metadata': 'Reflect',
-        'js-beautify': 'js_beautify',
-        mathjax: 'Mathjax',
-        '@tweenjs/tween.js': 'TWEEN',
-        '@youwol/potree': 'Potree',
-    }
-
-    const regularExported = getRegularFullExportedSymbol(
-        origin.name,
-        origin.version,
-    )
-    /**
-     * All 4 variables below corresponds to deprecated symbols
-     */
-    const deprecatedExportedName = getInstalledFullExportedSymbol(
-        origin.name,
-        origin.version,
-    )
-    const symbolBase = StateImplementation.getExportedSymbol(
-        origin.name,
-        origin.version,
-    ).symbol
-    const aliasExportedName = getFullExportedSymbolAlias(
-        origin.name,
-        origin.version,
-    )
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const explicitOldExportedName =
-        exportedSymbols[origin.name] &&
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        `${exportedSymbols[origin.name]}_APIv${getApiKey(origin.version)}`
-
-    if (
-        !executingWindow[regularExported] &&
-        explicitOldExportedName &&
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        executingWindow[explicitOldExportedName]
-    ) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        executingWindow[regularExported] =
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            executingWindow[explicitOldExportedName]
-    }
-
-    if (
-        !executingWindow[regularExported] &&
-        !executingWindow[deprecatedExportedName] &&
-        !executingWindow[symbolBase]
-    ) {
-        console.warn(
-            `Can not find exported symbol of library ${origin.name}#${origin.version} in current scope`,
-            {
-                exportedName: deprecatedExportedName,
-                aliasExportedName,
-                symbolBase,
-            },
-        )
-        return
-    }
-    if (executingWindow[regularExported]) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        executingWindow[deprecatedExportedName] =
-            executingWindow[regularExported]
-        if (explicitOldExportedName) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-            executingWindow[explicitOldExportedName] =
-                executingWindow[regularExported]
-        }
-    }
-    if (!executingWindow[regularExported]) {
-        console.warn('The export symbol of the package is deprecated', {
-            deprecatedExportedName,
-            name: origin.name,
-            version: origin.version,
-        })
-        if (
-            executingWindow[symbolBase] &&
-            !executingWindow[deprecatedExportedName]
-        ) {
-            console.warn(
-                `Package "${origin.name}#${origin.version}" export symbol "${symbolBase}" with no API version`,
-            )
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        window[regularExported] =
-            executingWindow[deprecatedExportedName] ||
-            executingWindow[aliasExportedName] ||
-            executingWindow[symbolBase]
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    executingWindow[aliasExportedName] = executingWindow[regularExported]
-
-    if (!executingWindow[regularExported]) {
-        console.log('applyModuleSideEffects error', {
-            exportedName: regularExported,
-            symbolBase,
-            aliasExportedName,
-        })
-        console.warn(
-            `Can not find exported symbol of library ${origin.name}#${origin.version} in current context`,
-            {
-                exportedName: regularExported,
-                aliasExportedName,
-                symbolBase,
-                contextKeys: Object.keys(window),
-            },
-        )
-        return
-    }
-
-    return executingWindow[regularExported]
-}
-
 export async function applyModuleSideEffects({
     origin,
     htmlScriptElement,
+    lib,
     executingWindow,
     userSideEffects,
     onEvent,
 }: {
     origin: FetchedScript
     htmlScriptElement?: HTMLScriptElement
+    lib: Library
     executingWindow: WindowOrWorkerGlobalScope
     userSideEffects: ModuleSideEffectCallback[]
     onEvent: (CdnEvent) => void
 }) {
-    const module = patchExportedSymbolForBackwardCompatibility(
-        origin,
+    type Module = Record<string, unknown>
+    type MaybeModule = Module | undefined
+    const module = lib.exportPath.reduce(
+        (acc: MaybeModule, e) => (acc ? acc[e] : undefined),
         executingWindow,
-    )
+    ) as MaybeModule
     if (!module) {
+        console.error(`Module ${origin.name} not found`, {
+            executingWindow,
+            exportPath: lib.exportPath,
+        })
         return
     }
-    // @ts-expect-error To be refactored
+
     module.__yw_set_from_version__ = origin.version
+    StateImplementation.registerEsmModules(
+        [
+            {
+                name: origin.name,
+                version: lib.version,
+                exportPath: lib.exportPath,
+                aliases: lib.aliases,
+                versionNumber: lib.versionNumber,
+                apiKey: lib.apiKey,
+            },
+        ],
+        executingWindow,
+    )
 
-    StateImplementation.registerImportedModules([origin], executingWindow)
-
-    // This is when this instance of webpm-client is installing either @youwol/webpm-client or @youwol/cdn-client
+    // This is when this instance of webpm-client is installing
     // => the configuration needs to be propagated
-    // The configuration is initially set by the root script of '@youwol/webpm-client'.
-    if (['@youwol/webpm-client'].includes(origin.name)) {
+    // The configuration is initially set by the root script of '@w3nest/webpm-client'.
+    if ([setup.name].includes(origin.name)) {
         const installedClient = (module as { Client: typeof Client }).Client
         installedClient.FrontendConfiguration = Client.FrontendConfiguration
         installedClient.BackendConfiguration = Client.BackendConfiguration
@@ -477,128 +367,28 @@ export function getUrlBase(name: string, version: string) {
     return `${Client.BackendConfiguration.urlResource}/${assetId}/${version}`
 }
 
-/**
- * Return the regular exported symbol name of a library (including API version).
- * Warning: Valid only for already installed package.
- *
- * @param name name of the library
- * @param version version of the library
- */
-export function getRegularFullExportedSymbol(name: string, version: string) {
-    const exported = StateImplementation.getExportedSymbol(name, version)
-    return `${name}_APIv${exported.apiKey}`
-}
-
-/**
- * Return the full exported symbol name of a library (including API version).
- * Warning: Valid only for already installed package.
- *
- * @param name name of the library
- * @param version version of the library
- */
-export function getInstalledFullExportedSymbol(name: string, version: string) {
-    const exported = StateImplementation.getExportedSymbol(name, version)
-    return `${exported.symbol}_APIv${exported.apiKey}`
-}
-
-/**
- * Return the full (expected) exported symbol name of a library (including API version)
- *
- * @param name name of the library
- * @param version version of the library
- */
-export function getExpectedFullExportedSymbol(name: string, version: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const parsed = parse(version) as {
-        major: number
-        minor: number
-        patch: string
-    }
-    return `${name}_APIv${String(parsed.major)}${
-        parsed.major === 0 ? String(parsed.minor) : ''
-    }${parsed.major === 0 && parsed.minor === 0 ? parsed.patch : ''}`
-}
-
-/**
- * Return the API key from a version.
- *
- * @param version version (conform to semver)
- */
-export function getApiKey(version: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const parsed = parse(version) as {
-        major: number
-        minor: number
-        patch: string
-    }
-    return `${String(parsed.major)}${parsed.major === 0 ? String(parsed.minor) : ''}${
-        parsed.major === 0 && parsed.minor === 0 ? parsed.patch : ''
-    }`
-}
-
-/**
- * Return the alias (using '#') of full exported symbol name of a library (including API version)
- *
- * @param name name of the library
- * @param version version of the library
- */
-export function getFullExportedSymbolAlias(name: string, version: string) {
-    return getInstalledFullExportedSymbol(name, version).replace('_APIv', '#')
-}
-
-export function installAliases(
-    aliases: Record<string, string | ((Window) => unknown)>,
-    executingWindow: WindowOrWorkerGlobalScope,
-) {
-    StateImplementation.installAliases(aliases, executingWindow)
-}
-
 export function isInstanceOfWindow(
     scope: WindowOrWorkerGlobalScope,
 ): scope is Window {
     return (scope as { document?: unknown }).document !== undefined
 }
 
-export function extractModulesToInstall(
-    modules: LightLibraryWithAliasQueryString[],
-) {
-    return modules.map((module) => module.split(' as ')[0])
-}
-
 export function extractInlinedAliases(
     modules: LightLibraryWithAliasQueryString[],
     suffix = '',
 ) {
-    const getKey = (module: string) => {
-        const key = module.split(' as ')[0].trim()
-        if (!key.includes('#')) {
-            return key
-        }
-        let version = key.split('#')[1].trim()
-        if (version === 'x' || version === '*' || version === 'latest') {
-            return key.split('#')[0].trim()
-        }
-        if (version.startsWith('~') || version.startsWith('^')) {
-            version = version.substring(1)
-        }
-        return `${key.split('#')[0].trim()}_APIv${getApiKey(version)}`
-    }
-    const getValue = (module: string) => {
-        return module.split(' as ')[1].trim()
-    }
-
     return modules
         .filter((module) => module.includes(' as '))
-        .reduce(
-            (acc, module) => ({
+        .reduce((acc, module) => {
+            const alias = module.split(' as ')[1].trim()
+            const pointer = module.split(' as ')[0].trim()
+            const name = pointer.split('#')[0]
+            const semver = pointer.includes('#') ? pointer.split('#')[1] : '*'
+            return {
                 ...acc,
-                [getValue(module)]: getKey(module).replace(
-                    '_APIv',
-                    `${suffix}_APIv`,
-                ),
-            }),
-            {},
-        )
+                [alias]: `${name}${suffix}#${semver}`,
+            }
+        }, {})
 }
 
 export const PARTITION_PREFIX = '%p-'

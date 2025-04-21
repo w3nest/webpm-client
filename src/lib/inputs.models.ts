@@ -152,20 +152,15 @@ export interface EsmInputs {
      * coming from the relevant element (if any).
      * This in turn disables multiple versions installation for the provided library
      *
-     * Here is a fictive example of installing a module `@youwol/fictive-package` with 2 versions `0.x` & `1.x`:
-     * *  the version `0.x` linked to `rxjs#6.x`
-     * *  the version `1.x` linked to `rxjs#7.x`
+     * **Example**:
      *
-     * When executed, the following snippet overrides the actual versions resolution of rxjs and always uses `rxjs#6.5.5`
-     * (which will probably break at installation of `@youwol/fictive-package#1.x` as the two versions of RxJS are not
-     * compatible).
      * ```
-     * import {install} from `@youwol/webpm-client`
+     * import { install } from `@w3nest/webpm-client`
      *
      * await install({
      *     esm:{
-     *         modules: [`@youwol/fictive-package#0.x`, `@youwol/fictive-package#1.x`],
-     *         usingDependencies: ['rxjs#6.5.5']
+     *         modules: [`fictive-package#0.x`, `fictive-package#1.x`],
+     *         usingDependencies: ['depA#0.1.2']
      *     }
      * })
      * ```
@@ -271,6 +266,7 @@ export type ModuleInput =
           name: string
           version: string
           sideEffects?: (Window) => void
+          alias: string
       }
     | string
 
@@ -550,34 +546,39 @@ export interface Library {
     id: string
 
     /**
-     * name of the library, e.g. @youwol/webpm-client
+     * name of the library, e.g. '@w3nest/webpm-client'
      */
     name: string
 
     /**
-     * Version of the library, e.g. 0.0.0
+     * Version of the library, e.g. '0.1.2'.
      */
     version: string
 
     /**
-     * Type of the library.
+     * Version number.
      */
-    type: 'js/wasm' | 'backend'
+    versionNumber: number
 
     /**
-     * Name of the exported symbol
-     */
-    exportedSymbol: string
-
-    /**
-     * Uid of the API version
+     * API key.
      */
     apiKey: string
 
     /**
-     * List of aliases
+     * Module's kind.
+     */
+    kind: 'esm' | 'webapp' | 'pyodide' | 'backend'
+
+    /**
+     * List of aliases.
      */
     aliases: string[]
+
+    /**
+     * Module's export path in global scope.
+     */
+    exportPath: string[]
 }
 
 /**
