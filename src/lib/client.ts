@@ -82,15 +82,16 @@ export function getBackendsPartitionUID() {
  *
  * Install resources; see documentation provided for {@link InstallInputs}.
  *
- * @category Getting Started
- * @category Entry Points
  * @param inputs
+ * @typeParam T Type expectation on the returned global scope.
  *
  */
-export function install(
+export function install<T = unknown>(
     inputs: InstallInputsDeprecated | InstallInputs,
-): Promise<WindowOrWorkerGlobalScope> {
-    return new Client().install(inputs)
+): Promise<WindowOrWorkerGlobalScope & T> {
+    return new Client().install(inputs) as unknown as Promise<
+        WindowOrWorkerGlobalScope & T
+    >
 }
 
 /**
