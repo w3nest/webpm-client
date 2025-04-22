@@ -23,6 +23,8 @@ externals_deps = {
     "mkdocs-ts": "^0.3.0",
     "@w3nest/webpm-client": f"^{pkg_json_webpm['version'].replace('-wip', '')}",
     "rxjs": "^7.5.6",
+    "@w3nest/http-clients": "^0.1.5",
+    "rx-vdom": "^0.1.3",
 }
 in_bundle_deps = {}
 dev_deps = {}
@@ -40,7 +42,7 @@ config = ProjectConfig(
     ),
     bundles=Bundles(
         mainModule=MainModule(
-            entryFile="./main.ts", loadDependencies=list(externals_deps.keys())
+            entryFile="app/main.ts", loadDependencies=list(externals_deps.keys())
         )
     ),
     inPackageJson={
@@ -55,7 +57,6 @@ template_folder = project_folder / ".w3nest" / ".template"
 generate_template(config=config, dst_folder=template_folder)
 
 files = [
-    Path("src") / "auto-generated.ts",
     "README.md",
     ".gitignore",
     ".npmignore",
@@ -65,17 +66,3 @@ files = [
 ]
 for file in files:
     copyfile(src=template_folder / file, dst=project_folder / file)
-
-
-# Generate TS API files
-# print("Generate TS API files")
-""" shell_command = (
-    "cd ./node_modules/@youwol/mkdocs-ts && "
-    "node ./bin/index.js "
-    "--project ../../../.. "
-    "--nav /api "
-    "--out ../../../assets/api"
-)
-# Execute the shell command
-subprocess.run(shell_command, shell=True)
- """

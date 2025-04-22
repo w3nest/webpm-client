@@ -36,7 +36,7 @@ config = ProjectConfig(
         runTime=RunTimeDeps(externals=externals, includedInBundle={"semver": "^7.3.4"}),
         devTime={
             "brotli": "^1.3.2",
-            "@w3nest/http-clients": "^0.1.0",
+            "@w3nest/http-clients": "^0.1.5",
             "util": "^0.12.5",
             "@jest/test-sequencer": "^29.5.0",
         },
@@ -70,7 +70,6 @@ template_folder = project_folder / ".w3nest" / ".template"
 generate_template(config=config, dst_folder=template_folder)
 
 files = [
-    Path("src") / "auto-generated.ts",
     "README.md",
     "package.json",
     # "tsconfig.json",  added '"exclude": ["./webpm-client-doc"]'
