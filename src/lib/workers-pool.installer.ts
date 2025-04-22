@@ -1,8 +1,7 @@
-import { setup } from '../auto-generated'
 import * as webpmClient from '.'
 import { backendConfiguration } from '.'
 import { InWorkerAction } from './workers-pool'
-
+import pkgJson from '../../package.json'
 /**
  * Type definition of the module {@link WorkersPoolModule}.
  */
@@ -42,17 +41,13 @@ function setupWorkersPoolModule(module: WorkersModule) {
  * @category WorkersPool
  */
 export async function installWorkersPoolModule(): Promise<WorkersModule> {
-    return await setup
-        .installAuxiliaryModule({
-            name: 'workersPool',
-            cdnClient: webpmClient,
-            installParameters: {
-                executingWindow: window,
-            },
+    return await webpmClient
+        .install<{ wpModule: WorkersModule }>({
+            esm: [`${pkgJson.name}/workersPool#${pkgJson.version} as wpModule`],
         })
-        .then((module: WorkersModule) => {
-            setupWorkersPoolModule(module)
-            return module
+        .then(({ wpModule }) => {
+            setupWorkersPoolModule(wpModule)
+            return wpModule
         })
 }
 
@@ -65,13 +60,13 @@ export async function installTestWorkersPoolModule({
 } = {}): Promise<WorkersModule> {
     return await Promise.all([
         installWorkersPoolModule(),
-        setup.installAuxiliaryModule({
-            name: 'testUtils',
-            cdnClient: webpmClient,
-            installParameters: {
-                executingWindow: window,
-            },
-        }),
+        webpmClient
+            .install<{ testModule: TestUtilsModule }>({
+                esm: [
+                    `${pkgJson.name}/testUtils#${pkgJson.version} as testModule`,
+                ],
+            })
+            .then(({ testModule }) => testModule),
     ]).then(([module, test]: [WorkersModule, TestUtilsModule]) => {
         module.WorkersPool.webWorkersProxy = new test.WebWorkersJest({
             globalEntryPoint: module.entryPointWorker,
