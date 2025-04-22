@@ -32,7 +32,7 @@ import {
     isDeprecatedInputs,
     upgradeInstallInputs,
 } from './inputs.models.deprecated'
-import { setup } from '../auto-generated'
+import pkgJson from '../../package.json'
 
 const Status200 = 200
 const Status401 = 401
@@ -175,7 +175,7 @@ export async function applyModuleSideEffects({
     // This is when this instance of webpm-client is installing
     // => the configuration needs to be propagated
     // The configuration is initially set by the root script of '@w3nest/webpm-client'.
-    if ([setup.name].includes(origin.name)) {
+    if ([pkgJson.name].includes(origin.name)) {
         const installedClient = (module as { Client: typeof Client }).Client
         installedClient.FrontendConfiguration = Client.FrontendConfiguration
         installedClient.BackendConfiguration = Client.BackendConfiguration

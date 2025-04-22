@@ -1,6 +1,6 @@
 import { attr$, ChildrenLike, VirtualDOM } from 'rx-vdom'
 import { Observable, Subject } from 'rxjs'
-import { setup } from '../../auto-generated'
+import pkgJson from '../../../package.json'
 import type { Topic } from '..'
 /**
  * Toggle button to display `items` or `logs` view within {@link InstallView}.
@@ -54,14 +54,15 @@ export interface Phase {
     source$: Observable<PhaseStatus>
     icon: string
 }
+const webpmPath = `/api/assets-gateway/webpm/resources/${window.btoa(pkgJson.name)}/${pkgJson.version}`
 
 export const imageTopics: Record<Topic, string> = {
-    LoadingGraph: `${setup.webpmPath}/assets/fa-thumbtack.svg`,
-    ESM: `${setup.webpmPath}/assets/JavaScript-logo.png`,
-    Python: `${setup.webpmPath}/assets/Python-logo-notext.svg`,
-    Backend: `${setup.webpmPath}/assets/fa-network-wired.svg`,
-    CSS: `${setup.webpmPath}/assets/fa-css3-alt.svg`,
-    Worker: `${setup.webpmPath}/assets/fa-cog.svg`,
+    LoadingGraph: `${webpmPath}/assets/fa-thumbtack.svg`,
+    ESM: `${webpmPath}/assets/JavaScript-logo.png`,
+    Python: `${webpmPath}/assets/Python-logo-notext.svg`,
+    Backend: `${webpmPath}/assets/fa-network-wired.svg`,
+    CSS: `${webpmPath}/assets/fa-css3-alt.svg`,
+    Worker: `${webpmPath}/assets/fa-cog.svg`,
 }
 /**
  * Generic view for a given target (ESM module, backend, CSS resource, pyodide module, *etc.*).

@@ -1,5 +1,5 @@
 import { AnyVirtualDOM, ChildrenLike, VirtualDOM } from 'rx-vdom'
-import { setup } from '../../auto-generated'
+import pkgJson from '../../../package.json'
 import { imageTopics } from './common.view'
 import { Dependencies } from '.'
 
@@ -16,7 +16,7 @@ export class RuntimeView implements VirtualDOM<'div'> {
                 tag: 'div',
                 class: 'w-100 text-center',
                 style: { fontSize: 'larger', fontWeight: 'bolder' },
-                innerText: `${setup.name}#${setup.version}`,
+                innerText: `${pkgJson.name}#${pkgJson.version}`,
             },
             new EsmView(),
         ]

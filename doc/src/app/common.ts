@@ -12,12 +12,12 @@ import {
     GlobalMarkdownViews,
 } from 'mkdocs-ts'
 import { AnyVirtualDOM } from 'rx-vdom'
-import { setup } from '../auto-generated'
 import { DebugMode } from './config.debug'
 import { ApiLink, CrossLink, ExtLink, GitHubLink } from './md-widgets'
 import { companionNodes$ } from './on-load'
 import { SearchView } from './how-to/search.view'
 import { firstValueFrom } from 'rxjs'
+import pkgJson from '../../package.json'
 
 export const project = {
     name: 'webpm-client',
@@ -28,7 +28,7 @@ export const url = (restOfPath: string) => `../assets/${restOfPath}`
 
 export const placeholders = {
     '{{project}}': project.name,
-    '{{webpm-version}}': setup.version,
+    '{{webpm-version}}': pkgJson.version,
     '{{webpm-client}}': '**`@w3nest/webpm-client`**',
 }
 

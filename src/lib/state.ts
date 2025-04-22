@@ -1,6 +1,6 @@
 import { LoadingGraph, FetchedScript } from './inputs.models'
 import { gt, gte, satisfies } from 'semver'
-import { setup } from '../auto-generated'
+import pkgJson from '../../package.json'
 import { installBackendClientDeps } from './backends'
 
 import type { Observable } from 'rxjs'
@@ -36,12 +36,12 @@ export class StateImplementation {
         }[]
     >([
         [
-            setup.name,
+            pkgJson.name,
             [
                 {
-                    version: setup.version,
-                    apiKey: setup.apiVersion,
-                    exportPath: [setup.name],
+                    version: pkgJson.version,
+                    apiKey: pkgJson.webpack.apiVersion,
+                    exportPath: [pkgJson.name],
                     versionNumber: 0,
                 },
             ],
@@ -124,17 +124,15 @@ export class StateImplementation {
         version: string,
         apiKey: string,
     ): boolean {
-        if (name === setup.name) {
-            const symbol = `${setup.name}_APIv${setup.apiVersion}`
+        if (name === pkgJson.name) {
+            const symbol = `${pkgJson.name}_APIv${pkgJson.webpack.apiVersion}`
             const alreadyHere = (window as unknown as never)[symbol] as
-                | {
-                      setup: { version: string }
-                  }
+                | { version: string }
                 | undefined
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const compatibleInstalled: boolean | undefined =
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                alreadyHere && gte(alreadyHere.setup.version, version)
+                alreadyHere && gte(alreadyHere.version, version)
             return compatibleInstalled ?? false
         }
         const module = StateImplementation.esModules.get(name)

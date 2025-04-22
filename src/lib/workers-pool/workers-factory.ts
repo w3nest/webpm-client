@@ -9,7 +9,7 @@ import {
     WebWorkersBrowser,
     WWorkerTrait,
 } from './web-worker.proxy'
-import { setup } from '../../auto-generated'
+import pkgJson from '../../../package.json'
 import { BackendConfiguration } from '../backend-configuration'
 import { FrontendConfiguration } from '../frontend-configuration'
 import {
@@ -1265,7 +1265,7 @@ export class WorkersPool {
             const cdnPackage = '@w3nest/webpm-client'
             const cdnUrl = `${
                 WorkersPool.BackendConfiguration.urlResource
-            }/${getAssetId(cdnPackage)}/${setup.version}/dist/${cdnPackage}.js`
+            }/${getAssetId(cdnPackage)}/${pkgJson.version}/dist/${cdnPackage}.js`
 
             const proxy = WorkersPool.webWorkersProxy
             const staticOnBefore = proxy.onBeforeWorkerInstall

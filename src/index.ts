@@ -7,10 +7,8 @@
  * @module MainModule
  */
 export * from './lib'
-export { setup } from './auto-generated'
 import * as cdnClient from './lib'
-import { setup } from './auto-generated'
-
+import pkgJson from '../package.json'
 // In a worker, globalThis.document is undefined
 //      -> no config initialization here.
 //      -> it is propagated when calling 'installWorkersPoolModule'.
@@ -72,17 +70,17 @@ if (scriptSrc) {
     }
 }
 
-if (!globalThis[setup.name]) {
+if (!globalThis[pkgJson.name]) {
     /**
      * Cdn client is particular: when imported from a `<script>` element its installation has not been managed
      * by the library itself, and the (latest) version exposed with the original library name has not been set.
      * This is why the following line is needed.
      */
-    globalThis[setup.name] = { ...cdnClient, setup }
+    globalThis[pkgJson.name] = cdnClient
     /**
      * For the initial install, aliases have to be installed explicitly.
      * They are coming from the file `template.py`, but are for now not available in auto-generated (hence duplication).
      */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    globalThis.webpm = globalThis[setup.name]
+    globalThis.webpm = globalThis[pkgJson.name]
 }

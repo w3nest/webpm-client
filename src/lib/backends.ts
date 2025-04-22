@@ -2,7 +2,6 @@ import { BackendConfig, LoadingGraph } from './inputs.models'
 import { BackendException, LocalYouwolRequired } from './errors.models'
 import { StateImplementation } from './state'
 import { Client, install } from './client'
-import { setup } from '../auto-generated'
 import {
     BackendErrorEvent,
     BackendEvent,
@@ -14,7 +13,7 @@ import {
 } from './events.models'
 import type * as rxjsModuleType from 'rxjs'
 import { getLocalCookie } from './backend-configuration'
-
+import pkgJson from '../../package.json'
 import type * as HttpClients from '@w3nest/http-clients'
 
 export interface BackendInstallResponse {
@@ -29,17 +28,17 @@ export interface BackendsGraphInstallResponse {
 }
 
 interface Install {
-    http: { WebSocketClient: (d: unknown) => void }
+    http: typeof HttpClients
 }
 export async function installBackendClientDeps(): Promise<{
     http: typeof HttpClients
 }> {
-    const { http } = (await install({
+    const { http } = await install<Install>({
         modules: [
-            `@w3nest/http-clients#${setup.runTimeDependencies.externals['@w3nest/http-clients']} as http`,
+            `@w3nest/http-clients#${pkgJson.dependencies['@w3nest/http-clients']} as http`,
         ],
-    })) as unknown as Install
-    return { http } as unknown as { http: typeof HttpClients }
+    })
+    return { http }
 }
 
 type ContextMessage<T> = HttpClients.ContextMessage<T>
@@ -84,11 +83,11 @@ export async function installBackends({
     const wsLogUrl = `ws://localhost:${String(ywLocalCookie.port)}/${ywLocalCookie.wsLogsUrl}`
     const wsLog$ = await StateImplementation.getWebSocket(wsLogUrl)
     const installId = `webpm-${String(Math.floor(Math.random() * Math.pow(10, 9)))}`
-    const installKey = `${setup.name}-${setup.version}:${installId}`
+    const installKey = `${pkgJson.name}-${pkgJson.version}:${installId}`
     let error: BackendErrorEvent | undefined
 
     const { rxjs } = (await install({
-        esm: [`rxjs#${setup.runTimeDependencies.externals.rxjs} as rxjs`],
+        esm: [`rxjs#${pkgJson.dependencies.rxjs} as rxjs`],
     })) as unknown as { rxjs: typeof rxjsModuleType }
 
     interface Message {
