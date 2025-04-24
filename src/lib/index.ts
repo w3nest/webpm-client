@@ -7,6 +7,7 @@ export {
 } from './client'
 export { StateImplementation, LibraryName, Version } from './state'
 export * from './loader.view'
+export * from './loading-screen.view'
 export * from './inputs.models'
 export {
     backendConfiguration,

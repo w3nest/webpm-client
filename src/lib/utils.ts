@@ -434,7 +434,7 @@ export function normalizeEsmInputs(inputs: InstallInputs): EsmInputs {
     }
 }
 
-export function normalizePyodideInputs(inputs: InstallInputs): EsmInputs {
+export function normalizePyodideInputs(inputs: InstallInputs): PyodideInputs {
     const emptyInstaller = {
         modules: [],
     }

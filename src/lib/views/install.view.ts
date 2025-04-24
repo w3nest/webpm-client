@@ -5,6 +5,7 @@ import {
     attr$,
     child$,
     EmptyDiv,
+    render,
 } from 'rx-vdom'
 import { BehaviorSubject, delay, take } from 'rxjs'
 import { EventsManager } from './events-manager'
@@ -17,6 +18,7 @@ import { LogsView } from './logs.view'
 import { LoadingGraphEventsView } from './loading-graph.view'
 import { CdnEvent } from '../events.models'
 
+type ExpandedMode = 'auto' | 'expanded' | 'collapsed'
 /**
  * A virtual DOM component that displays the installation process of various dependencies
  * (ESM, Pyodide, Backend, and CSS) with real-time updates.
@@ -47,11 +49,14 @@ export class InstallView implements VirtualDOM<'div'> {
     public readonly mode$ = new BehaviorSubject<'events' | 'logs'>('events')
     public readonly eventsMgr = new EventsManager()
 
-    constructor(params: { eventsMgr?: EventsManager } = {}) {
+    constructor(
+        params: { eventsMgr?: EventsManager; expandedMode?: ExpandedMode } = {},
+    ) {
         Object.assign(this, params)
         const header = new InstallHeaderBar({
             eventsMgr: this.eventsMgr,
             mode$: this.mode$,
+            expandedMode: params.expandedMode,
         })
         this.children = [
             header,
@@ -59,7 +64,8 @@ export class InstallView implements VirtualDOM<'div'> {
                 tag: 'div',
                 class: attr$({
                     source$: header.expanded$,
-                    vdomMap: (expanded) => (expanded ? 'p-1' : 'd-none'),
+                    vdomMap: (expanded) =>
+                        expanded ? 'p-1 bg-light overflow-auto' : 'd-none',
                 }),
                 children: [
                     child$({
@@ -101,6 +107,10 @@ export class InstallView implements VirtualDOM<'div'> {
     onEvent(ev: CdnEvent) {
         this.eventsMgr.event$.next(ev)
     }
+
+    toHTML(): HTMLElement {
+        return render(this)
+    }
 }
 
 /**
@@ -123,9 +133,11 @@ export class InstallHeaderBar implements VirtualDOM<'div'> {
     constructor({
         eventsMgr,
         mode$,
+        expandedMode,
     }: {
         eventsMgr: EventsManager
         mode$: BehaviorSubject<'events' | 'logs'>
+        expandedMode?: ExpandedMode
     }) {
         const baseClass = `${InstallHeaderBar.CssSelector} p-1 w-100 d-flex border-bottom align-items-center`
         this.class = attr$({
@@ -138,14 +150,21 @@ export class InstallHeaderBar implements VirtualDOM<'div'> {
             untilFirst: 'mkdocs-bg-info',
             wrapper: (d) => `${d} ${baseClass}`,
         })
-
-        eventsMgr.installDoneEvent$
-            .pipe(take(1), delay(1000))
-            .subscribe((ev) => {
-                if (ev.step === 'InstallDoneEvent') {
-                    this.expanded$.next(false)
-                }
-            })
+        if (expandedMode === undefined || expandedMode == 'auto') {
+            eventsMgr.installDoneEvent$
+                .pipe(take(1), delay(1000))
+                .subscribe((ev) => {
+                    if (ev.step === 'InstallDoneEvent') {
+                        this.expanded$.next(false)
+                    }
+                })
+        }
+        if (expandedMode == 'collapsed') {
+            this.expanded$.next(false)
+        }
+        if (expandedMode == 'expanded') {
+            this.expanded$.next(true)
+        }
         this.children = [
             {
                 tag: 'i',

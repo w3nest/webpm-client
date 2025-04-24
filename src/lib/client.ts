@@ -29,6 +29,7 @@ import {
     CssParsedEvent,
     CdnLoadingGraphQueryEvent,
     CdnLoadingGraphResolvedEvent,
+    StartInstallEvent,
 } from './events.models'
 import {
     CdnError,
@@ -339,7 +340,9 @@ export class Client {
         const esmInlinedAliases = extractInlinedAliases(esmInputs.modules)
         const pyodideInputs = normalizePyodideInputs(sanitizedInputs)
         const backendInputs = normalizeBackendInputs(sanitizedInputs)
-
+        onEvent(
+            new StartInstallEvent(esmInputs, pyodideInputs, backendInputs, css),
+        )
         const pyodidePromise = sanitizedInputs.pyodide
             ? installPython({
                   ...pyodideInputs,
@@ -622,7 +625,7 @@ export class Client {
         try {
             onEvent(new CdnLoadingGraphQueryEvent())
             const loadingGraph = await this.queryLoadingGraph(body)
-            onEvent(new CdnLoadingGraphResolvedEvent())
+            onEvent(new CdnLoadingGraphResolvedEvent(loadingGraph))
             await this.installLoadingGraph({
                 loadingGraph,
                 modulesSideEffects,

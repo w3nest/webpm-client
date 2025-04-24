@@ -238,7 +238,7 @@ export interface PyodideInputs {
     /**
      * An array of Python modules to install.
      */
-    modules?: PyModule[]
+    modules: PyModule[]
 
     pyodideAlias?: string
 
@@ -532,9 +532,6 @@ export interface QueryLoadingGraphInputs {
     /**
      * This property allows to resolve loading graph, including some libraries that may not exist
      * in target database.
-     *
-     * Essentially used within py-youwol to couple loading graphs local/remote.
-     * See py-youwol source code regarding the generation of this property from a list of libraries.
      */
     extraIndex?: string
 }

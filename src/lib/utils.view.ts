@@ -1,7 +1,9 @@
 import {
+    AllEvents,
     BackendErrorEvent,
     CdnEvent,
     CdnLoadingGraphErrorEvent,
+    ErrorEventType,
     ParseErrorEvent,
     SourceLoadedEvent,
     SourceLoadingEvent,
@@ -25,6 +27,34 @@ function setErrorCssProperties(div: HTMLDivElement) {
     div.style.setProperty('color', 'orange')
 }
 
+export function displayError(
+    contentDiv: HTMLDivElement,
+    event: AllEvents[ErrorEventType],
+) {
+    setErrorCssProperties(contentDiv)
+    if (event instanceof CdnLoadingGraphErrorEvent) {
+        if (event.error instanceof DependenciesError) {
+            contentDiv.appendChild(dependenciesErrorView(event.error))
+        }
+        if (event.error instanceof CircularDependencies) {
+            contentDiv.appendChild(circularDependenciesView(event.error))
+        }
+        return
+    }
+    const errorDiv = document.createElement('div')
+    setErrorCssProperties(errorDiv)
+    if (event instanceof UnauthorizedEvent) {
+        errorDiv.textContent = `> ${event.id} : You don't have permission to access this resource.`
+    }
+    if (event instanceof ParseErrorEvent) {
+        errorDiv.textContent = `> ${event.id} : an error occurred while parsing the source`
+    }
+    if (event instanceof BackendErrorEvent) {
+        errorDiv.textContent = `> ${event.id} : ${event.detail}`
+    }
+    contentDiv.appendChild(errorDiv)
+}
+
 export function insertLoadingGraphError(
     contentDiv: HTMLDivElement,
     event: CdnLoadingGraphErrorEvent,
@@ -42,13 +72,13 @@ export function insertLoadingGraphError(
 export function dependenciesErrorView(error: DependenciesError) {
     const errorDiv = document.createElement('div')
     const innerHTML = error.detail.errors
-        .map(({ query, fromPackage }) => {
+        .map(({ query }) => {
             return `
-        <li> <b>${query}</b>: requested by ${fromPackage.name} with version ${fromPackage.version}</li>
+        <li> <b>${query}</b></li>
         `
         })
         .reduce((acc, e) => acc + e, '')
-    errorDiv.innerHTML = `Some dependencies do not exist in the CDN
+    errorDiv.innerHTML = `Dependencies not found:
     ${innerHTML}
     `
     return errorDiv

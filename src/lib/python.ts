@@ -38,7 +38,7 @@ export async function installPython(
         onEvent?: (cdnEvent: CdnEvent) => void
     } & PythonIndexes,
 ) {
-    const modulesRequired = (pyodideInputs.modules ?? []).filter(
+    const modulesRequired = pyodideInputs.modules.filter(
         (module) => !StateImplementation.pyModules.includes(module),
     )
 

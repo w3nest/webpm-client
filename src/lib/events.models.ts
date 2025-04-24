@@ -1,4 +1,11 @@
 import { LoadingGraphError } from './errors.models'
+import {
+    BackendInputs,
+    EsmInputs,
+    CssInput,
+    LoadingGraph,
+    PyodideInputs,
+} from './inputs.models'
 
 /**
  * Available topics when installing components.
@@ -175,6 +182,7 @@ export function isBackendEvent(
  */
 export const eventTypes = [
     'CdnMessageEvent',
+    'StartInstallEvent',
     'InstallDoneEvent',
     'InstallErrorEvent',
     'ConsoleEvent',
@@ -189,6 +197,33 @@ export const eventTypes = [
  * {@link eventTypes} as type literal union.
  */
 export type EventType = (typeof eventTypes)[number]
+
+/**
+ * Error events.
+ */
+export const errorEventTypes = [
+    'UnauthorizedEvent',
+    'UrlNotFoundEvent',
+    'ParseErrorEvent',
+    'PyModuleErrorEvent',
+    'BackendErrorEvent',
+    'InstallErrorEvent',
+    'CdnLoadingGraphErrorEvent',
+] as const
+
+/**
+ * {@link errorEventTypes} as type literal union.
+ */
+export type ErrorEventType = (typeof errorEventTypes)[number]
+
+/**
+ * Type guard for {@link ErrorEventType}.
+ */
+export function isErrorEvent(
+    event: CdnEvent,
+): event is AllEvents[ErrorEventType] {
+    return errorEventTypes.includes(event.step as ErrorEventType)
+}
 
 /**
  * Type literal for event's status.
@@ -250,6 +285,21 @@ export type CdnFetchEvent = CdnEvent & {
     version: string
 }
 
+/**
+ * Event emitted when starting to install.
+ */
+export class StartInstallEvent implements CdnEvent {
+    public readonly step = 'StartInstallEvent'
+    public readonly id = 'StartInstallEvent'
+    public readonly text = 'Start install'
+    public readonly status = 'None'
+    constructor(
+        public readonly esm: EsmInputs,
+        public readonly pyodide: PyodideInputs,
+        public readonly backends: BackendInputs,
+        public readonly css: CssInput[],
+    ) {}
+}
 /**
  * Event emitted when starting to fetch a script.
  */
@@ -441,6 +491,11 @@ export class CdnLoadingGraphResolvedEvent implements CdnEvent {
     public readonly step = 'CdnLoadingGraphResolvedEvent'
     public readonly text = 'Loading graph resolved'
     public readonly status = 'Pending'
+    public readonly response: LoadingGraph
+
+    constructor(public readonly resp: LoadingGraph) {
+        this.response = resp
+    }
 }
 
 /**
