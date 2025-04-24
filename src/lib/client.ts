@@ -76,9 +76,10 @@ export function getBackendsPartitionUID() {
 
 /**
  *
- * Install resources; see documentation provided for {@link InstallInputs}.
+ * Install resources.
  *
- * @param inputs
+ * @param inputs Refer to the documentation of {@link InstallInputs}.
+ * @returns The global scope.
  * @typeParam T Type expectation on the returned global scope.
  *
  */
@@ -91,9 +92,9 @@ export function install<T = unknown>(
 }
 
 /**
- * Query the loading graph of modules, the direct & indirect dependencies as well as their relation.
+ * Query loading graph.
  *
- * @param inputs Query inputs.
+ * @param inputs Refer to the documentation of {@link QueryLoadingGraphInputs}.
  * @returns The loading graph response from the server.
  */
 export function queryLoadingGraph(
@@ -149,7 +150,7 @@ export class Client {
     }
 
     /**
-     * Query a loading graph provided a list of modules, see {@link QueryLoadingGraphInputs}.
+     * Query a loading graph. provided a list of modules, see {@link QueryLoadingGraphInputs}.
      *
      * @param inputs
      *
@@ -292,9 +293,10 @@ export class Client {
     }
 
     /**
-     * Install a various set of modules, scripts & stylesheets; see documentation in {@link InstallInputs}.
+     * Install a various set of resources.
      *
-     * @param inputs
+     * @param inputs Refer to the documentation of {@link InstallInputs}.
+     * @returns The global scope.
      */
     install(inputs: InstallInputs): Promise<WindowOrWorkerGlobalScope> {
         const sanitizedInputs = inputs
@@ -377,12 +379,12 @@ export class Client {
     }
 
     /**
-     * Install a loading graph; see {@link InstallLoadingGraphInputs}.
+     * Install a loading graph.
      *
      * Loading graph can be retrieved using {@link Client.queryLoadingGraph} or
      * {@link queryLoadingGraph}.
      *
-     * @param inputs
+     * @param inputs Refer to {@link InstallLoadingGraphInputs}.
      */
     async installLoadingGraph(inputs: InstallLoadingGraphInputs) {
         const onEvent =

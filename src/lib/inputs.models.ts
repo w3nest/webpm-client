@@ -573,12 +573,7 @@ export interface Library {
 
 /**
  * Provides necessary information to correctly install & link a set of resources.
- * It serves a purpose similar to the usual [lockFiles](https://developerexperience.io/articles/lockfile)
- * found in packages managers.
- *
- * Loading graphs can be:
- *  *  retrieved ({@link queryLoadingGraph})
- *  *  used to import runtimes ({@link installLoadingGraph})
+ * It is the response returned by the webpm backend.
  *
  */
 export interface LoadingGraph {

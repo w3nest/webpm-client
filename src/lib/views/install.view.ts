@@ -18,7 +18,13 @@ import { LogsView } from './logs.view'
 import { LoadingGraphEventsView } from './loading-graph.view'
 import { CdnEvent } from '../events.models'
 
-type ExpandedMode = 'auto' | 'expanded' | 'collapsed'
+/**
+ * Initial expanded mode for {@link InstallView} widget.
+ *
+ * The value `auto` means expanded until the installation finished successfully (with 1s delay).
+ */
+export type ExpandedMode = 'auto' | 'expanded' | 'collapsed'
+
 /**
  * A virtual DOM component that displays the installation process of various dependencies
  * (ESM, Pyodide, Backend, and CSS) with real-time updates.
@@ -49,6 +55,13 @@ export class InstallView implements VirtualDOM<'div'> {
     public readonly mode$ = new BehaviorSubject<'events' | 'logs'>('events')
     public readonly eventsMgr = new EventsManager()
 
+    /**
+     * Initialize a new instance.
+     *
+     * @param params
+     * @param params.eventsMgr Allow to provide an explicit events manager if needed.
+     * @param params.expandedMode Initial expanded mode, default to `auto`
+     */
     constructor(
         params: { eventsMgr?: EventsManager; expandedMode?: ExpandedMode } = {},
     ) {
