@@ -118,13 +118,6 @@ export interface InstallInputs {
      * @param event event emitted
      */
     onEvent?: (event: CdnEvent) => void
-
-    /**
-     * If `true`: loading screen is displayed and cover the all screen
-     *
-     * For a granular control of the loading screen display see {@link LoadingScreenView}
-     */
-    displayLoadingScreen?: boolean
 }
 /**
  * Specifies the installation of ESM modules.

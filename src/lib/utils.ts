@@ -25,7 +25,6 @@ import {
 } from './events.models'
 import { UrlNotFound, SourceParsingFailed, Unauthorized } from './errors.models'
 import { StateImplementation } from './state'
-import { sanitizeCssId } from './utils.view'
 import { Client } from './client'
 import pkgJson from '../../package.json'
 
@@ -464,7 +463,6 @@ export interface InstallInputsNormalized {
     css?: InstallInputs['css']
     executingWindow?: InstallInputs['executingWindow']
     onEvent?: InstallInputs['onEvent']
-    displayLoadingScreen?: InstallInputs['displayLoadingScreen']
 }
 
 export function normalizeInstallInputs(
@@ -574,4 +572,14 @@ export function appendStyleSheet({
             resolveCb(link)
         }
     })
+}
+
+function sanitizeCssId(id: string) {
+    return (
+        'webpm-client_' +
+        id
+            .replace(/\//g, '-') // replace all '/' with '-'
+            .replace(/\./g, '-') // replace all '.' with '-'
+            .replace(/@/g, '') // remove all '@'
+    )
 }

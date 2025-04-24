@@ -5,12 +5,22 @@ import {
     StartInstallEvent,
     CdnLoadingGraphResolvedEvent,
 } from './events.models'
-import { displayError } from './utils.view'
 import { installViewsModule } from './views.installer'
 import type { InstallView as DetailsView } from './views'
 import { LoadingGraph } from './inputs.models'
+
+import {
+    AllEvents,
+    BackendErrorEvent,
+    CdnLoadingGraphErrorEvent,
+    ErrorEventType,
+    ParseErrorEvent,
+    UnauthorizedEvent,
+} from './events.models'
+import { CircularDependencies, DependenciesError } from './errors.models'
+
 /**
- * Specify loading screen display options, see {@link LoadingScreen}.
+ * Specifies loading screen display options, see {@link LoadingScreen}.
  */
 export interface DisplayOptions {
     /**
@@ -266,4 +276,74 @@ export class LoadingScreen {
             }, 1000)
         }, this.options.minimumDisplayTime - elapsed)
     }
+}
+
+export function displayError(
+    contentDiv: HTMLDivElement,
+    event: AllEvents[ErrorEventType],
+) {
+    contentDiv.style.setProperty('font-size', 'larger')
+    contentDiv.style.setProperty('color', 'orange')
+    if (event instanceof CdnLoadingGraphErrorEvent) {
+        if (event.error instanceof DependenciesError) {
+            contentDiv.appendChild(dependenciesErrorView(event.error))
+        }
+        if (event.error instanceof CircularDependencies) {
+            contentDiv.appendChild(circularDependenciesView(event.error))
+        }
+        return
+    }
+    const errorDiv = document.createElement('div')
+    if (event instanceof UnauthorizedEvent) {
+        errorDiv.textContent = `> ${event.id} : You don't have permission to access this resource.`
+    }
+    if (event instanceof ParseErrorEvent) {
+        errorDiv.textContent = `> ${event.id} : an error occurred while parsing the source`
+    }
+    if (event instanceof BackendErrorEvent) {
+        errorDiv.textContent = `> ${event.id} : ${event.detail}`
+    }
+    contentDiv.appendChild(errorDiv)
+}
+
+export function dependenciesErrorView(error: DependenciesError) {
+    const errorDiv = document.createElement('div')
+    const innerHTML = error.detail.errors
+        .map(({ query }) => {
+            return `
+        <li> <b>${query}</b></li>
+        `
+        })
+        .reduce((acc, e) => acc + e, '')
+    errorDiv.innerHTML = `Dependencies not found:
+    ${innerHTML}
+    `
+    return errorDiv
+}
+
+export function circularDependenciesView(error: CircularDependencies) {
+    const errorDiv = document.createElement('div')
+    const innerHTML = Object.entries(error.detail.packages)
+        .map(([name, dependenciesError]) => {
+            return `
+        <li> <b>${name}</b>: problem with following dependencies 
+        <ul>
+        ${listView(dependenciesError.map((d) => `${d.name}#${d.version}`))}
+        </ul>
+        </li>
+        `
+        })
+        .reduce((acc, e) => acc + e, '')
+    errorDiv.innerHTML = `Circular dependencies found
+    ${innerHTML}
+    `
+    return errorDiv
+}
+
+function listView(list: string[]) {
+    return list
+        .map((path) => {
+            return `<li> ${path}</li>`
+        })
+        .reduce((acc, e) => acc + e, '')
 }

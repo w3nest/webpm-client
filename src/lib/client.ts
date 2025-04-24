@@ -34,7 +34,6 @@ import {
     LoadingGraphError,
 } from './errors.models'
 import { StateImplementation } from './state'
-import { LoadingScreenView } from './loader.view'
 import { satisfies } from 'semver'
 import {
     addScriptElements,
@@ -302,16 +301,8 @@ export class Client {
 
         const css = inputs.css ?? []
         const executingWindow = inputs.executingWindow ?? globalThis
-        const display = sanitizedInputs.displayLoadingScreen ?? false
-        let loadingScreen: LoadingScreenView | undefined = undefined
-        if (display) {
-            loadingScreen = new LoadingScreenView()
-            loadingScreen.render()
-        }
+
         const onEvent = (ev: CdnEvent) => {
-            if (loadingScreen) {
-                loadingScreen.next(ev)
-            }
             sanitizedInputs.onEvent?.(ev)
         }
         const esmInputs = normalizeEsmInputs(sanitizedInputs)
@@ -372,9 +363,6 @@ export class Client {
         return Promise.all([scriptsPromise, cssPromise, pyodidePromise]).then(
             () => {
                 onEvent(new InstallDoneEvent())
-                if (loadingScreen) {
-                    loadingScreen.done()
-                }
                 const mappedAliases = StateImplementation.extractAliases(
                     aliases,
                     executingWindow,
