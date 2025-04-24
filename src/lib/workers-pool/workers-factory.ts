@@ -12,11 +12,6 @@ import {
 import pkgJson from '../../../package.json'
 import { BackendConfiguration } from '../backend-configuration'
 import { FrontendConfiguration } from '../frontend-configuration'
-import {
-    InstallInputsDeprecated,
-    isDeprecatedInputs,
-    upgradeInstallInputs,
-} from '../inputs.models.deprecated'
 import { InstallInputs } from '../inputs.models'
 import type * as WebpmClient from '../../lib'
 
@@ -772,7 +767,7 @@ export interface WorkersPoolInput {
     /**
      * Installation to proceed in the workers.
      */
-    install?: InstallInputs | InstallInputsDeprecated
+    install?: InstallInputs
     /**
      * A list of tasks to execute in workers after installation is completed.
      */
@@ -972,9 +967,7 @@ export class WorkersPool {
                     id,
                     target,
                 })),
-            cdnInstallation: isDeprecatedInputs(installArgs)
-                ? upgradeInstallInputs(installArgs)
-                : installArgs,
+            cdnInstallation: installArgs,
             postInstallTasks: params.postInstallTasks ?? [],
         }
         this.pool = {

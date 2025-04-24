@@ -11,11 +11,7 @@ import {
     BackendConfig,
     InstallInputs,
 } from './inputs.models'
-import {
-    InstallInputsDeprecated,
-    isDeprecatedInputs,
-    upgradeInstallInputs,
-} from './inputs.models.deprecated'
+
 import {
     SourceLoadedEvent,
     SourceLoadingEvent,
@@ -88,7 +84,7 @@ export function getBackendsPartitionUID() {
  *
  */
 export function install<T = unknown>(
-    inputs: InstallInputsDeprecated | InstallInputs,
+    inputs: InstallInputs,
 ): Promise<WindowOrWorkerGlobalScope & T> {
     return new Client().install(inputs) as unknown as Promise<
         WindowOrWorkerGlobalScope & T
@@ -105,20 +101,6 @@ export function queryLoadingGraph(
     inputs: QueryLoadingGraphInputs,
 ): Promise<LoadingGraph> {
     return new Client().queryLoadingGraph(inputs)
-}
-
-export function fetchScript(inputs: FetchScriptInputs): Promise<FetchedScript> {
-    /**
-     * Deprecated.
-     */
-    return new Client().fetchScript(inputs)
-}
-
-export function installLoadingGraph(inputs: InstallLoadingGraphInputs) {
-    /**
-     * Deprecated
-     */
-    return new Client().installLoadingGraph(inputs)
 }
 
 /**
@@ -311,16 +293,12 @@ export class Client {
     }
 
     /**
-     * Install a various set of modules, scripts & stylesheets; see documentation in {@link InstallInputsDeprecated}.
+     * Install a various set of modules, scripts & stylesheets; see documentation in {@link InstallInputs}.
      *
      * @param inputs
      */
-    install(
-        inputs: InstallInputs | InstallInputsDeprecated,
-    ): Promise<WindowOrWorkerGlobalScope> {
-        const sanitizedInputs = isDeprecatedInputs(inputs)
-            ? upgradeInstallInputs(inputs)
-            : inputs
+    install(inputs: InstallInputs): Promise<WindowOrWorkerGlobalScope> {
+        const sanitizedInputs = inputs
 
         const css = inputs.css ?? []
         const executingWindow = inputs.executingWindow ?? globalThis

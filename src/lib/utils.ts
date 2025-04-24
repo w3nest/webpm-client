@@ -27,11 +27,6 @@ import { UrlNotFound, SourceParsingFailed, Unauthorized } from './errors.models'
 import { StateImplementation } from './state'
 import { sanitizeCssId } from './utils.view'
 import { Client } from './client'
-import {
-    InstallInputsDeprecated,
-    isDeprecatedInputs,
-    upgradeInstallInputs,
-} from './inputs.models.deprecated'
 import pkgJson from '../../package.json'
 
 const Status200 = 200
@@ -473,11 +468,9 @@ export interface InstallInputsNormalized {
 }
 
 export function normalizeInstallInputs(
-    inputs: InstallInputs | InstallInputsDeprecated,
+    inputs: InstallInputs,
 ): InstallInputsNormalized {
-    const sanitizedInputs = isDeprecatedInputs(inputs)
-        ? upgradeInstallInputs(inputs)
-        : inputs
+    const sanitizedInputs = inputs
 
     return {
         ...sanitizedInputs,

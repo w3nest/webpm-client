@@ -1,10 +1,4 @@
-export {
-    Client,
-    install,
-    fetchScript,
-    queryLoadingGraph,
-    installLoadingGraph,
-} from './client'
+export { Client, install, queryLoadingGraph } from './client'
 export { StateImplementation, LibraryName, Version } from './state'
 export * from './loader.view'
 export * from './loading-screen.view'

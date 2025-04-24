@@ -34,7 +34,7 @@ export async function installBackendClientDeps(): Promise<{
     http: typeof HttpClients
 }> {
     const { http } = await install<Install>({
-        modules: [
+        esm: [
             `@w3nest/http-clients#${pkgJson.dependencies['@w3nest/http-clients']} as http`,
         ],
     })
