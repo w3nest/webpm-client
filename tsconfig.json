@@ -14,7 +14,7 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "paths": {
-            "@rxVDomConfig": ["./rx-vdom.config"]
+            "@rxVDomConfig": ["./rx-vdom.config"],
         },
         "strictNullChecks": true
     },
