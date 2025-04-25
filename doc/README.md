@@ -1,6 +1,6 @@
 # @webpm-client/doc
 
-Documentation of @w3nest/webpm-client
+Doc. app for WebPM client usage
 
 This library is part of the hybrid cloud/local ecosystem
 [YouWol](https://platform.youwol.com/apps/@youwol/platform/latest).
