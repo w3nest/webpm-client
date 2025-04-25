@@ -118,6 +118,10 @@ Now, let's schedule a task using <api-link target="WorkersPool.schedule"></api-l
 <api-link target="Message"></api-link> emitted during execution:
 
 <js-cell>
+const { rxjs } = await webpm.install({
+    esm:['rxjs#^7.8.1 as rxjs']
+})
+
 const message$ = workersPool.schedule({
     title: 'PI approx.', 
     entryPoint, 
@@ -158,10 +162,6 @@ accessible via <api-link target="EntryPointArguments.context"></api-link>.
 Now, let's demonstrate the **scalability** of the worker pool by scheduling **1,000 tasks in parallel**:
 
 <js-cell>
-const { rxjs } = await webpm.install({
-    esm:['rxjs#^7.5.6 as rxjs']
-})
-
 const results$ = new rxjs.Subject()
 
 // this function will be called upon a click on a button define in the next cell

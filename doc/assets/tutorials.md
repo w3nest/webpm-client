@@ -10,13 +10,10 @@ offering practical examples to help you integrate and use the library efficientl
 - **[ESM Modules](@nav/tutorials/esm):** Learn how to install and utilize ECMAScript Modules (ESM) in your project.
 - **[Pyodide](@nav/tutorials/pyodide):** Discover how to set up a Python runtime in your browser and install Python modules seamlessly.
 - **[Backends](@nav/tutorials/backends):** Explore deploying backend microservices using the **W3Nest** solution.
-- **[Web Workers](@nav/tutorials/web-workers):** Master managing worker pools to offload heavy computations and boost performance.
+- **[Web Workers](@nav/tutorials/web-workers):** Consume worker pools to offload heavy computations and boost performance.
 
 <note level="hint" title="Hints">
-- Many **API links** are integrated throughout the tutorials (e.g., <api-link target='install'></api-link>). 
-  For an enhanced viewing experience on larger screens, toggle a **split view** using this button:
-  <split-api></split-api> (also accessible from the navigation side-panel).
-
-- The notebook format, provided by <ext-link target="mkdocs-ts">mkdocs-ts</ext-link>, exemplifies a typical need
-  for on-the-fly installation because dependencies can only be resolved at runtime.
+Many **API links** are integrated throughout the tutorials (e.g., <api-link target='install'></api-link>). 
+For an enhanced viewing experience on larger screens, toggle a **split view** using this button:
+<split-api></split-api> (also accessible from the navigation side-panel).
 </note>

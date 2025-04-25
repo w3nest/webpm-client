@@ -153,9 +153,7 @@ If <api-link target='PyodideInputs.indexUrl'></api-link> is omitted:
 The following cell illustrates these configurations. Note that it serves only as an example, because at this point
 a `pyodide` instance has already been initialized.
 
-<js-cell>
-const { installWithUI } = await webpm.installViewsModule()
-
+```javascript
 const { pyodide } = await installWithUI({
     pyodide: {
         version: '0.27.2',
@@ -165,7 +163,7 @@ const { pyodide } = await installWithUI({
     },
     display
 })
-</js-cell>
+```
 
 
 
@@ -176,9 +174,7 @@ Python semantic versioning can be applied to specify the desired version of a pa
 
 
 <js-cell>
-const { installWithUI } = await webpm.installViewsModule()
-
-const { pyodide } = await installWithUI({
+await installWithUI({
     pyodide: {modules: ["snowballstemmer==2.1.0"]},
     display
 })
