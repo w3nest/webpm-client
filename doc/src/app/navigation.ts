@@ -5,6 +5,7 @@ import { navigation as navTutorial } from './tutorials'
 import { apiNav } from './api'
 
 import { AnyVirtualDOM } from 'rx-vdom'
+import { DefaultLayout } from 'mkdocs-ts'
 
 export const logo: AnyVirtualDOM = {
     tag: 'img',
@@ -19,6 +20,7 @@ export const navigation: AppNav = {
     name: 'WebPM',
     header: {
         icon: logo,
+        wrapperClass: `${DefaultLayout.NavHeaderView.DefaultWrapperClass} border-bottom p-1`,
     },
     layout: ({ router }) =>
         new NotebookModule.NotebookPage({

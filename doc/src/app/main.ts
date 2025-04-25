@@ -1,6 +1,6 @@
 import './style.css'
 export {}
-import * as webpmClient from '@w3nest/webpm-client'
+import { install, LoadingScreen } from '@w3nest/webpm-client'
 
 import { DebugMode } from './config.debug'
 
@@ -8,9 +8,15 @@ import pkgJson from '../../package.json'
 // eslint-disable-next-line @typescript-eslint/dot-notation
 window['mkdocsConfig'] = { enableContextual: DebugMode }
 
-const mkdocsVersion = pkgJson.dependencies['mkdocs-ts']
+const loadingScreen = new LoadingScreen({
+    logo: '../assets/favicon.svg',
+    name: pkgJson.name,
+    description: pkgJson.description,
+})
 
-await webpmClient.install({
+const mkdocsVersion = pkgJson.webpm.dependencies['mkdocs-ts']
+
+await install({
     esm: [`${pkgJson.name}#${pkgJson.version}`],
     css: [
         'bootstrap#^5.3.3~bootstrap.min.css',
@@ -19,7 +25,7 @@ await webpmClient.install({
         `mkdocs-ts#${mkdocsVersion}~assets/notebook.css`,
         `mkdocs-ts#${mkdocsVersion}~assets/ts-typedoc.css`,
     ],
-    displayLoadingScreen: true,
+    onEvent: (ev) => loadingScreen.next(ev),
 })
-
+loadingScreen.done()
 await import('./on-load')

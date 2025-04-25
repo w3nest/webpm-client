@@ -3,6 +3,7 @@ import { navigation } from './navigation'
 import { Router, DefaultLayout, MdWidgets } from 'mkdocs-ts'
 import { createRootContext, inMemReporter } from './common'
 import { BehaviorSubject } from 'rxjs'
+import { AuthBadge } from '@w3nest/ui-tk/Badges'
 
 const ctx = createRootContext({
     threadName: 'App',
@@ -68,7 +69,14 @@ const app = new DefaultLayout.LayoutWithCompanion(
             pageVertPadding: '3rem',
         },
         sideNavHeader: () => new NavHeaderView(),
+        sideNavFooter: () =>
+            new DefaultLayout.FooterView({
+                sourceName: '@webpm-client/doc',
+                sourceUrl:
+                    'https://github.com/w3nest/webpm-client/tree/main/doc',
+            }),
         companionNodes$,
+        favoritesFooter: new AuthBadge(),
     },
     ctx,
 )
