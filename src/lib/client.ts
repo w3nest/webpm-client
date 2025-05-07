@@ -180,7 +180,7 @@ export class Client {
             }
             throw errorFactory(content as unknown as CdnError)
         }
-        if (key in StateImplementation.fetchedLoadingGraph) {
+        if (StateImplementation.fetchedLoadingGraph.has(key)) {
             return finalize()
         }
         const request = new Request(
@@ -298,7 +298,7 @@ export class Client {
      * @param inputs Refer to the documentation of {@link InstallInputs}.
      * @returns The global scope.
      */
-    install(inputs: InstallInputs): Promise<WindowOrWorkerGlobalScope> {
+    install(inputs: InstallInputs): Promise<Record<string, unknown>> {
         const sanitizedInputs = inputs
 
         const css = inputs.css ?? []
@@ -322,7 +322,6 @@ export class Client {
                   onEvent,
               })
             : Promise.resolve()
-
         const backendPartition =
             backendInputs.partition ?? Client.backendsPartitionId
         const backendInlinedAliases = extractInlinedAliases(
@@ -369,7 +368,13 @@ export class Client {
                     aliases,
                     executingWindow,
                 )
-                return { ...executingWindow, ...mappedAliases }
+                if (inputs.pyodide) {
+                    return {
+                        ...mappedAliases,
+                        pyodide: executingWindow['pyodide'],
+                    }
+                }
+                return mappedAliases
             },
             (error: unknown) => {
                 onEvent(new InstallErrorEvent())
