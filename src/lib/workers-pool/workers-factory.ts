@@ -631,7 +631,11 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
     log(`Start install in worker ${input.workerId}`)
 
     return install
-        .then(() => {
+        .then((aliases) => {
+            log(`Expose ${Object.keys(aliases)} aliases.`)
+            Object.entries(aliases).forEach(([k, v]) => {
+                self[k] = v
+            })
             log(
                 `Expose ${String(input.args.functions.length)} functions & ${String(input.args.variables.length)} variables.`,
             )
