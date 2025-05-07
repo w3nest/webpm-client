@@ -188,7 +188,7 @@ export class StateImplementation {
                     console.warn(
                         `Can not create alias: target module '${name}' is not installed`,
                     )
-                    return
+                    return acc
                 }
                 const version = versions.find((v) =>
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -199,7 +199,7 @@ export class StateImplementation {
                         `Can not create alias: no versions of '${name}' match the target semver ${semver}`,
                         { versions },
                     )
-                    return
+                    return acc
                 }
 
                 const path = version.exportPath
@@ -212,7 +212,7 @@ export class StateImplementation {
             }
             if (!pointed) {
                 console.warn('can not create alias', { alias, original })
-                return
+                return acc
             }
             return { ...acc, [alias]: pointed }
         }, {})
