@@ -1,7 +1,6 @@
 import { child$, ChildrenLike, sync$, VirtualDOM } from 'rx-vdom'
 import { EventsManager } from './events-manager'
-import { filter, map, take } from 'rxjs'
-import { shareReplay } from 'rxjs/operators'
+import { filter, map, take, shareReplay } from 'rxjs'
 import { ItemView, Phase } from './common.view'
 /**
  * Represents the view gathering events w/ pyodide installation; each event being displayed using {@link PyModuleView}.

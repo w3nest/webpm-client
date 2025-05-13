@@ -1,7 +1,18 @@
 /** @format */
 
-import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs'
-import { filter, last, map, take, takeWhile, tap } from 'rxjs/operators'
+import {
+    BehaviorSubject,
+    forkJoin,
+    Observable,
+    of,
+    Subject,
+    filter,
+    last,
+    map,
+    take,
+    takeWhile,
+    tap,
+} from 'rxjs'
 import { CdnEvent, getAssetId, isCdnEvent } from '..'
 import {
     InWorkerAction,

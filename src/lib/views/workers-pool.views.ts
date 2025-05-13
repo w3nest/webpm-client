@@ -1,7 +1,6 @@
 import { VirtualDOM, ChildrenLike, sync$, RxHTMLElement } from 'rx-vdom'
-import { filter, map, shareReplay } from 'rxjs/operators'
+import { filter, map, shareReplay, combineLatest, Observable } from 'rxjs'
 import type { WorkersPool } from '../workers-pool'
-import { combineLatest, Observable } from 'rxjs'
 import { InstallView } from './install.view'
 import { CdnEvent } from '../events.models'
 import { EventsManager } from './events-manager'

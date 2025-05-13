@@ -1,7 +1,6 @@
 import { ChildrenLike, sync$, VirtualDOM } from 'rx-vdom'
 import { EventsManager } from './events-manager'
-import { filter, map } from 'rxjs'
-import { shareReplay } from 'rxjs/operators'
+import { filter, map, shareReplay } from 'rxjs'
 import { ItemView, Phase, PhaseStatus } from './common.view'
 
 /**
