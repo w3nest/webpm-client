@@ -88,6 +88,42 @@
             }
         },
         {
+            "name": "defaultEsmInput",
+            "semantic": {
+                "role": "global",
+                "labels": [],
+                "attributes": {},
+                "relations": {}
+            },
+            "documentation": {
+                "sections": [
+                    {
+                        "content": "",
+                        "contentType": "markdown",
+                        "semantic": {
+                            "role": "",
+                            "labels": [],
+                            "attributes": {},
+                            "relations": {}
+                        }
+                    }
+                ]
+            },
+            "path": "defaultEsmInput",
+            "navPath": "@nav/api/MainModule.defaultEsmInput",
+            "code": {
+                "filePath": "src/lib/inputs.models.ts",
+                "declaration": "defaultEsmInput: Omit<EsmInputs, 'modules'> = {\n    scripts: [],\n    aliases: {},\n    usingDependencies: [],\n    modulesSideEffects: {},\n    autoUnwrapDefault: true,\n}",
+                "implementation": "",
+                "startLine": 94,
+                "endLine": 95,
+                "references": {
+                    "defaultEsmInput": "@nav/api/MainModule.defaultEsmInput",
+                    "EsmInputs": "@nav/api/MainModule.EsmInputs"
+                }
+            }
+        },
+        {
             "name": "errorEventTypes",
             "semantic": {
                 "role": "global",
@@ -6787,9 +6823,9 @@
             "code": {
                 "filePath": "src/lib/state.ts",
                 "declaration": "export class StateImplementation",
-                "implementation": "export class StateImplementation {\n    /**\n     * ES modules installed.\n     */\n    static esModules = new Map<\n        LibraryName,\n        {\n            version: Version\n            versionNumber: number\n            exportPath: string[]\n            apiKey: string\n        }[]\n    >([\n        [\n            pkgJson.name,\n            [\n                {\n                    version: pkgJson.version,\n                    apiKey: pkgJson.webpack.apiVersion,\n                    exportPath: [pkgJson.name],\n                    versionNumber: 0,\n                },\n            ],\n        ],\n    ])\n    /**\n     * Pyodide modules installed.\n     */\n    static pyModules: string[] = []\n\n    /**\n     * Fetched loading graph: mapping between a loading graph's body uid and corresponding computed loading graph.\n     * @hidden\n     */\n    static fetchedLoadingGraph = new Map<\n        string,\n        Promise<LoadingGraph | CdnError>\n    >()\n\n    /**\n     * Installed loading graph: mapping between a loading graph's body uid and window state\n     */\n    static importedLoadingGraphs = new Map<string, Promise<Window>>()\n\n    /**\n     * Installed script: mapping between a script's uid and a {@link FetchedScript}.\n     * @hidden\n     */\n    static importedScripts = new Map<string, Promise<FetchedScript>>()\n\n    static webSocketsStore: Record<\n        string,\n        Promise<Observable<ContextMessage>>\n    > = {}\n\n    static getWebSocket(wsUrl: string): Promise<Observable<ContextMessage>> {\n        if (wsUrl in StateImplementation.webSocketsStore) {\n            return StateImplementation.webSocketsStore[wsUrl]\n        }\n        StateImplementation.webSocketsStore[wsUrl] =\n            installBackendClientDeps().then(\n                ({ http }: { http: typeof HttpClients }) => {\n                    return new http.WebSocketClient<ContextMessage>(\n                        wsUrl,\n                    ).connectWs()\n                },\n            )\n        return StateImplementation.webSocketsStore[wsUrl]\n    }\n\n    /**\n     * Return whether an ESM already installed match a given semver query.\n     *\n     * @param name Module's name.\n     * @param semver Semantic versioning query.\n     */\n\n    static isEsmSatisfied(name: string, semver: string) {\n        const versions = StateImplementation.esModules.get(name)\n        if (!versions) {\n            return false\n        }\n        return versions.find((v) =>\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n            satisfies(\n                v.version.replace('-wip', ''),\n                semver.replace('-wip', ''),\n            ),\n        )\n    }\n    /**\n     * Return whether a library at given version is already installed with a compatible version.\n     * Compatible version means a greater version with same API key.\n     *\n     * @param name library name\n     * @param version version\n     */\n    static isCompatibleEsmInstalled(\n        name: string,\n        version: string,\n        apiKey: string,\n    ): boolean {\n        if (name === pkgJson.name) {\n            const symbol = `${pkgJson.name}_APIv${pkgJson.webpack.apiVersion}`\n            const alreadyHere = (window as unknown as never)[symbol] as\n                | { version: string }\n                | undefined\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment\n            const compatibleInstalled: boolean | undefined =\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                alreadyHere && gte(alreadyHere.version, version)\n            return compatibleInstalled ?? false\n        }\n        const module = StateImplementation.esModules.get(name)\n        if (!module) {\n            return false\n        }\n        const versions = module.map((item) => item.version)\n        if (versions.includes(version)) {\n            return true\n        }\n\n        const compatibleVersion = module\n            .filter((v) => v.apiKey === apiKey)\n            .find((installedVersion) => {\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                return gt(installedVersion, version)\n            })\n\n        if (compatibleVersion) {\n            console.log(\n                `${name}: a greater compatible version is already installed (${compatibleVersion.version}), skip install`,\n                {\n                    libName: name,\n                    queriedVersion: version,\n                    compatibleVersion,\n                },\n            )\n        }\n        return compatibleVersion !== undefined\n    }\n\n    /**\n     * @param aliases\n     * @param executingWindow\n     * @hidden\n     */\n    static extractAliases(\n        aliases: Record<string, string | ((Window) => unknown)>,\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        return Object.entries(aliases).reduce((acc, [alias, original]) => {\n            let pointed: MaybeModule = undefined\n            if (typeof original == 'string') {\n                const name = original.split('#')[0]\n                const semver = original\n                    .split('#')[1]\n                    .replace('-wip', '')\n                    .replace('latest', 'x')\n                const versions = StateImplementation.esModules.get(name)\n                if (!versions) {\n                    console.warn(\n                        `Can not create alias: target module '${name}' is not installed`,\n                    )\n                    return\n                }\n                const version = versions.find((v) =>\n                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                    satisfies(v.version.replace('-wip', ''), semver),\n                )\n                if (!version) {\n                    console.warn(\n                        `Can not create alias: no versions of '${name}' match the target semver ${semver}`,\n                        { versions },\n                    )\n                    return\n                }\n\n                const path = version.exportPath\n                pointed = path.reduce(\n                    (acc: MaybeModule, e: string) => (acc ? acc[e] : undefined),\n                    executingWindow,\n                ) as MaybeModule\n            } else {\n                pointed = original(executingWindow) as MaybeModule\n            }\n            if (!pointed) {\n                console.warn('can not create alias', { alias, original })\n                return\n            }\n            return { ...acc, [alias]: pointed }\n        }, {})\n    }\n\n    /**\n     * Update the various properties after new modules have been imported.\n     *\n     * @param modules modules installed\n     * @param executingWindow the executing window (where to expose the latest version if change need be).\n     * @hidden\n     */\n    static registerEsmModules(\n        modules: {\n            name: string\n            version: string\n            exportPath: string[]\n            aliases?: string[]\n            apiKey: string\n            versionNumber: number\n        }[],\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        modules.forEach(\n            ({ name, version, exportPath, apiKey, versionNumber, aliases }) => {\n                const existingVersions =\n                    StateImplementation.esModules.get(name) ?? []\n                const item = {\n                    version,\n                    exportPath,\n                    aliases,\n                    apiKey,\n                    versionNumber,\n                }\n                const versions = [...existingVersions, item].sort(\n                    (a, b) => b.versionNumber - a.versionNumber,\n                )\n                StateImplementation.esModules.set(name, versions)\n                const exported = exportPath.reduce(\n                    (acc: MaybeModule, e: string) => (acc ? acc[e] : undefined),\n                    executingWindow,\n                ) as MaybeModule\n                if (!exported) {\n                    console.error(\n                        `Can not find exported symbol of '${name}#${version}' at export: ${String(exportPath)}`,\n                    )\n                    return\n                }\n                if (!aliases) {\n                    return\n                }\n                aliases.forEach((alias) => {\n                    if (alias.includes(':')) {\n                        const baseName = alias.split(':')[0]\n                        const property = alias.split(':')[1]\n                        executingWindow[baseName] = exported[property]\n                        return\n                    }\n                    executingWindow[alias] = exported\n                })\n            },\n        )\n    }\n    /**\n     * Register imported python modules.\n     *\n     * @param pyModules Name of the python modules.\n     * @hidden\n     */\n    static registerImportedPyModules(pyModules: string[]) {\n        StateImplementation.pyModules = [\n            ...StateImplementation.pyModules,\n            ...pyModules,\n        ]\n    }\n}",
+                "implementation": "export class StateImplementation {\n    /**\n     * ES modules installed.\n     */\n    static esModules = new Map<\n        LibraryName,\n        {\n            version: Version\n            versionNumber: number\n            exportPath: string[]\n            apiKey: string\n        }[]\n    >([\n        [\n            pkgJson.name,\n            [\n                {\n                    version: pkgJson.version,\n                    apiKey: pkgJson.webpack.apiVersion,\n                    exportPath: [pkgJson.name],\n                    versionNumber: 0,\n                },\n            ],\n        ],\n    ])\n    /**\n     * Pyodide modules installed.\n     */\n    static pyModules: string[] = []\n\n    /**\n     * Fetched loading graph: mapping between a loading graph's body uid and corresponding computed loading graph.\n     * @hidden\n     */\n    static fetchedLoadingGraph = new Map<\n        string,\n        Promise<LoadingGraph | CdnError>\n    >()\n\n    /**\n     * Installed loading graph: mapping between a loading graph's body uid and window state\n     */\n    static importedLoadingGraphs = new Map<string, Promise<Window>>()\n\n    /**\n     * Installed script: mapping between a script's uid and a {@link FetchedScript}.\n     * @hidden\n     */\n    static importedScripts = new Map<string, Promise<FetchedScript>>()\n\n    static webSocketsStore: Record<\n        string,\n        Promise<Observable<ContextMessage>>\n    > = {}\n\n    static getWebSocket(wsUrl: string): Promise<Observable<ContextMessage>> {\n        if (wsUrl in StateImplementation.webSocketsStore) {\n            return StateImplementation.webSocketsStore[wsUrl]\n        }\n        StateImplementation.webSocketsStore[wsUrl] =\n            installBackendClientDeps().then(\n                ({ http }: { http: typeof HttpClients }) => {\n                    return new http.WebSocketClient<ContextMessage>(\n                        wsUrl,\n                    ).connectWs()\n                },\n            )\n        return StateImplementation.webSocketsStore[wsUrl]\n    }\n\n    /**\n     * Return whether an ESM already installed match a given semver query.\n     *\n     * @param name Module's name.\n     * @param semver Semantic versioning query.\n     */\n\n    static isEsmSatisfied(name: string, semver: string) {\n        const versions = StateImplementation.esModules.get(name)\n        if (!versions) {\n            return false\n        }\n        return versions.find((v) =>\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n            satisfies(\n                v.version.replace('-wip', ''),\n                semver.replace('-wip', ''),\n            ),\n        )\n    }\n    /**\n     * Return whether a library at given version is already installed with a compatible version.\n     * Compatible version means a greater version with same API key.\n     *\n     * @param name library name\n     * @param version version\n     */\n    static isCompatibleEsmInstalled(\n        name: string,\n        version: string,\n        apiKey: string,\n    ): boolean {\n        if (name === pkgJson.name) {\n            const symbol = `${pkgJson.name}_APIv${pkgJson.webpack.apiVersion}`\n            const alreadyHere = (window as unknown as never)[symbol] as\n                | { version: string }\n                | undefined\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment\n            const compatibleInstalled: boolean | undefined =\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                alreadyHere && gte(alreadyHere.version, version)\n            return compatibleInstalled ?? false\n        }\n        const module = StateImplementation.esModules.get(name)\n        if (!module) {\n            return false\n        }\n        const versions = module.map((item) => item.version)\n        if (versions.includes(version)) {\n            return true\n        }\n\n        const compatibleVersion = module\n            .filter((v) => v.apiKey === apiKey)\n            .find((installedVersion) => {\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                return gt(installedVersion, version)\n            })\n\n        if (compatibleVersion) {\n            console.log(\n                `${name}: a greater compatible version is already installed (${compatibleVersion.version}), skip install`,\n                {\n                    libName: name,\n                    queriedVersion: version,\n                    compatibleVersion,\n                },\n            )\n        }\n        return compatibleVersion !== undefined\n    }\n\n    /**\n     * @param aliases\n     * @param executingWindow\n     * @hidden\n     */\n    static extractAliases(\n        aliases: Record<string, string | ((Window) => unknown)>,\n        unwrapDefault: boolean,\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        return Object.entries(aliases).reduce((acc, [alias, original]) => {\n            let pointed: MaybeModule = undefined\n            if (typeof original == 'string') {\n                const name = original.split('#')[0]\n                const semver = original\n                    .split('#')[1]\n                    .replace('-wip', '')\n                    .replace('latest', 'x')\n                const versions = StateImplementation.esModules.get(name)\n                if (!versions) {\n                    console.warn(\n                        `Can not create alias: target module '${name}' is not installed`,\n                    )\n                    return acc\n                }\n                const version = versions.find((v) =>\n                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                    satisfies(v.version.replace('-wip', ''), semver),\n                )\n                if (!version) {\n                    console.warn(\n                        `Can not create alias: no versions of '${name}' match the target semver ${semver}`,\n                        { versions },\n                    )\n                    return acc\n                }\n\n                const path = version.exportPath\n                pointed = path.reduce((acc: MaybeModule, e: string) => {\n                    if (!acc) {\n                        return undefined\n                    }\n                    if (unwrapDefault) {\n                        return unwrapPreserveDefault(acc[e])\n                    }\n                    return acc[e]\n                }, executingWindow) as MaybeModule\n            } else {\n                pointed = original(executingWindow) as MaybeModule\n            }\n            if (!pointed) {\n                console.warn('can not create alias', { alias, original })\n                return acc\n            }\n            return { ...acc, [alias]: pointed }\n        }, {})\n    }\n\n    /**\n     * Update the various properties after new modules have been imported.\n     *\n     * @param modules modules installed\n     * @param executingWindow the executing window (where to expose the latest version if change need be).\n     * @hidden\n     */\n    static registerEsmModules(\n        modules: {\n            name: string\n            version: string\n            exportPath: string[]\n            aliases?: string[]\n            apiKey: string\n            versionNumber: number\n        }[],\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        modules.forEach(\n            ({ name, version, exportPath, apiKey, versionNumber, aliases }) => {\n                const existingVersions =\n                    StateImplementation.esModules.get(name) ?? []\n                const item = {\n                    version,\n                    exportPath,\n                    aliases,\n                    apiKey,\n                    versionNumber,\n                }\n                const versions = [...existingVersions, item].sort(\n                    (a, b) => b.versionNumber - a.versionNumber,\n                )\n                StateImplementation.esModules.set(name, versions)\n                const exported = exportPath.reduce(\n                    (acc: MaybeModule, e: string) => (acc ? acc[e] : undefined),\n                    executingWindow,\n                ) as MaybeModule\n                if (!exported) {\n                    console.error(\n                        `Can not find exported symbol of '${name}#${version}' at export: ${String(exportPath)}`,\n                    )\n                    return\n                }\n                if (!aliases) {\n                    return\n                }\n                aliases.forEach((alias) => {\n                    if (alias.includes(':')) {\n                        const baseName = alias.split(':')[0]\n                        const property = alias.split(':')[1]\n                        executingWindow[baseName] = exported[property]\n                        return\n                    }\n                    executingWindow[alias] = exported\n                })\n            },\n        )\n    }\n    /**\n     * Register imported python modules.\n     *\n     * @param pyModules Name of the python modules.\n     * @hidden\n     */\n    static registerImportedPyModules(pyModules: string[]) {\n        StateImplementation.pyModules = [\n            ...StateImplementation.pyModules,\n            ...pyModules,\n        ]\n    }\n}",
                 "startLine": 25,
-                "endLine": 294,
+                "endLine": 300,
                 "references": {
                     "StateImplementation": "@nav/api/MainModule.StateImplementation",
                     "Observable": "https://rxjs.dev/guide/observable"
@@ -8068,8 +8104,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "buildArgs: Record<string, string>",
                         "implementation": "",
-                        "startLine": 191,
-                        "endLine": 192,
+                        "startLine": 256,
+                        "endLine": 257,
                         "references": {
                             "buildArgs": "@nav/api/MainModule.BackendConfig.buildArgs"
                         }
@@ -8081,8 +8117,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface BackendConfig",
                 "implementation": "export interface BackendConfig {\n    /**\n     * Arguments regarding the build stage provided as key-value pairs.\n     *\n     * The available keys and values are backend specifics and should be documented by them.\n     */\n    buildArgs: Record<string, string>\n}",
-                "startLine": 185,
-                "endLine": 193,
+                "startLine": 250,
+                "endLine": 258,
                 "references": {
                     "BackendConfig": "@nav/api/MainModule.BackendConfig"
                 }
@@ -8389,8 +8425,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "configurations?: Record<string, BackendConfig>",
                         "implementation": "",
-                        "startLine": 209,
-                        "endLine": 210,
+                        "startLine": 274,
+                        "endLine": 275,
                         "references": {
                             "configurations": "@nav/api/MainModule.BackendInputs.configurations",
                             "BackendConfig": "@nav/api/MainModule.BackendConfig"
@@ -8425,8 +8461,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "modules: LightLibraryWithAliasQueryString[]",
                         "implementation": "",
-                        "startLine": 201,
-                        "endLine": 202,
+                        "startLine": 266,
+                        "endLine": 267,
                         "references": {
                             "modules": "@nav/api/MainModule.BackendInputs.modules"
                         }
@@ -8460,8 +8496,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "partition?: string",
                         "implementation": "",
-                        "startLine": 213,
-                        "endLine": 214,
+                        "startLine": 278,
+                        "endLine": 279,
                         "references": {
                             "partition": "@nav/api/MainModule.BackendInputs.partition"
                         }
@@ -8473,8 +8509,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface BackendInputs",
                 "implementation": "export interface BackendInputs {\n    /**\n     * List of modules to install.\n     */\n    modules: LightLibraryWithAliasQueryString[]\n    /**\n     * Configuration of the backend.\n     *\n     * A mapping with:\n     * *  Keys: backends names.\n     * *  Values: associated configuration.\n     */\n    configurations?: Record<string, BackendConfig>\n    /**\n     * Partition ID in which the backends are installed.\n     */\n    partition?: string\n}",
-                "startLine": 197,
-                "endLine": 215,
+                "startLine": 262,
+                "endLine": 280,
                 "references": {
                     "BackendInputs": "@nav/api/MainModule.BackendInputs",
                     "BackendConfig": "@nav/api/MainModule.BackendConfig"
@@ -8970,8 +9006,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "htmlLinkElement: HTMLLinkElement",
                         "implementation": "",
-                        "startLine": 467,
-                        "endLine": 468,
+                        "startLine": 532,
+                        "endLine": 533,
                         "references": {
                             "htmlLinkElement": "@nav/api/MainModule.CssSideEffectCallbackArgument.htmlLinkElement"
                         }
@@ -9005,8 +9041,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "origin: {\n        moduleName: string\n        version: string\n        assetId: string\n        url: string\n    }",
                         "implementation": "",
-                        "startLine": 457,
-                        "endLine": 458,
+                        "startLine": 522,
+                        "endLine": 523,
                         "references": {
                             "origin": "@nav/api/MainModule.CssSideEffectCallbackArgument.origin"
                         }
@@ -9040,8 +9076,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "renderingWindow: Window",
                         "implementation": "",
-                        "startLine": 471,
-                        "endLine": 472,
+                        "startLine": 536,
+                        "endLine": 537,
                         "references": {
                             "renderingWindow": "@nav/api/MainModule.CssSideEffectCallbackArgument.renderingWindow"
                         }
@@ -9053,8 +9089,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface CssSideEffectCallbackArgument",
                 "implementation": "export interface CssSideEffectCallbackArgument {\n    /**\n     * Origin of the style-sheet\n     */\n    origin: {\n        moduleName: string\n        version: string\n        assetId: string\n        url: string\n    }\n\n    /**\n     * HTML script element added\n     */\n    htmlLinkElement: HTMLLinkElement\n    /**\n     * Window instance in which the HTML link element has been added\n     */\n    renderingWindow: Window\n}",
-                "startLine": 453,
-                "endLine": 473,
+                "startLine": 518,
+                "endLine": 538,
                 "references": {
                     "CssSideEffectCallbackArgument": "@nav/api/MainModule.CssSideEffectCallbackArgument"
                 }
@@ -9449,7 +9485,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "Provide aliases to exported symbols name of module.",
+                                "content": "Provide extra aliases definition, usually to target indirect\ndependencies.\n\nKeys are alias name, values are either a  <mkapi-api-link nav=\"@nav/api/MainModule.LightLibraryQueryString\" semantic=\"type-alias\">LightLibraryQueryString</mkapi-api-link> \nor a callback function provided with the global scope.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -9466,10 +9502,45 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "aliases?: Record<string, string | ((Window) => unknown)>",
                         "implementation": "",
-                        "startLine": 178,
-                        "endLine": 179,
+                        "startLine": 210,
+                        "endLine": 211,
                         "references": {
                             "aliases": "@nav/api/MainModule.EsmInputs.aliases"
+                        }
+                    }
+                },
+                {
+                    "name": "autoUnwrapDefault",
+                    "semantic": {
+                        "role": "attribute",
+                        "labels": [],
+                        "attributes": {},
+                        "relations": {}
+                    },
+                    "documentation": {
+                        "sections": [
+                            {
+                                "content": "Automatically unwraps  `default`  exports when a module has no named exports.\n\n<note level=\"hint\">\nThis is particularly useful for ESM modules that export only a default symbol (common in many packages).\nWhen enabled, the default export is exposed both as the module itself and under the  `default`  property.\n</note>\n\n### Example\n\n<code-snippet language=\"javascript\">\nconst { confetti } = await install({\n    esm: {\n       modules:[\"js-confetti#^0.12.0 as confetti\"],\n       autoUnwrapDefault: true\n    }\n})\n\n// With  `autoUnwrapDefault: true` , this works as expected:\nnew confetti()\n\n// The raw default export is still accessible if needed:\nconfetti.default\n</code-snippet>\n\n<note level=\"warning\">\nDisable this option ( `false` ) if you explicitly need to preserve the original export structure as-is,\nfor instance when dealing with modules that expose important properties under  `default` .\n</note>",
+                                "contentType": "markdown",
+                                "semantic": {
+                                    "role": "",
+                                    "labels": [],
+                                    "attributes": {},
+                                    "relations": {}
+                                }
+                            }
+                        ]
+                    },
+                    "path": "EsmInputs.autoUnwrapDefault",
+                    "navPath": "@nav/api/MainModule.EsmInputs.autoUnwrapDefault",
+                    "code": {
+                        "filePath": "src/lib/inputs.models.ts",
+                        "declaration": "autoUnwrapDefault?: boolean",
+                        "implementation": "",
+                        "startLine": 243,
+                        "endLine": 244,
+                        "references": {
+                            "autoUnwrapDefault": "@nav/api/MainModule.EsmInputs.autoUnwrapDefault"
                         }
                     }
                 },
@@ -9501,8 +9572,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "modules: LightLibraryWithAliasQueryString[]",
                         "implementation": "",
-                        "startLine": 129,
-                        "endLine": 130,
+                        "startLine": 156,
+                        "endLine": 157,
                         "references": {
                             "modules": "@nav/api/MainModule.EsmInputs.modules",
                             "LightLibraryWithAliasQueryString": "@nav/api/MainModule.LightLibraryWithAliasQueryString",
@@ -9539,8 +9610,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "modulesSideEffects?: Record<\n        LightLibraryQueryString,\n        ModuleSideEffectCallback\n    >",
                         "implementation": "",
-                        "startLine": 170,
-                        "endLine": 171,
+                        "startLine": 197,
+                        "endLine": 198,
                         "references": {
                             "modulesSideEffects": "@nav/api/MainModule.EsmInputs.modulesSideEffects",
                             "ModuleSideEffectCallback": "@nav/api/MainModule.ModuleSideEffectCallback",
@@ -9578,8 +9649,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "scripts?: ScriptInput[]",
                         "implementation": "",
-                        "startLine": 138,
-                        "endLine": 139,
+                        "startLine": 165,
+                        "endLine": 166,
                         "references": {
                             "scripts": "@nav/api/MainModule.EsmInputs.scripts",
                             "ScriptInput": "@nav/api/MainModule.ScriptInput"
@@ -9614,8 +9685,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "usingDependencies?: LightLibraryQueryString[]",
                         "implementation": "",
-                        "startLine": 161,
-                        "endLine": 162,
+                        "startLine": 188,
+                        "endLine": 189,
                         "references": {
                             "usingDependencies": "@nav/api/MainModule.EsmInputs.usingDependencies",
                             "LightLibraryWithAliasQueryString": "@nav/api/MainModule.LightLibraryWithAliasQueryString",
@@ -9629,9 +9700,9 @@
             "code": {
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface EsmInputs",
-                "implementation": "export interface EsmInputs {\n    /**\n     * List of modules to install.\n     */\n    modules: LightLibraryWithAliasQueryString[]\n\n    /**\n     * Specifies standalone scripts to install in the browser.\n     * By opposition to `modules`, a script is installed as a standalone element:\n     * there is no direct or indirect dependencies' installation triggered.\n     *\n     * They are installed after all modules have been installed.\n     */\n    scripts?: ScriptInput[]\n\n    /**\n     * Override the 'natural' version used for some libraries coming from the dependency graph when resolving\n     * the installation. Items are provided in the form {@link LightLibraryQueryString}.\n     *\n     * Whenever a library is required in the dependency graph, the version(s) will be replaced by the (only) one\n     * coming from the relevant element (if any).\n     * This in turn disables multiple versions installation for the provided library\n     *\n     * **Example**:\n     *\n     * ```\n     * import { install } from `@w3nest/webpm-client`\n     *\n     * await install({\n     *     esm:{\n     *         modules: [`fictive-package#0.x`, `fictive-package#1.x`],\n     *         usingDependencies: ['depA#0.1.2']\n     *     }\n     * })\n     * ```\n     */\n    usingDependencies?: LightLibraryQueryString[]\n    /**\n     * Specify side effects to execute when modules are installed.\n     *\n     * The key is in the form `{libraryName}#{semver}`:\n     * any module installed matching some keys will trigger execution\n     * of associated side effects.\n     *\n     */\n    modulesSideEffects?: Record<\n        LightLibraryQueryString,\n        ModuleSideEffectCallback\n    >\n\n    /**\n     * Provide aliases to exported symbols name of module.\n     */\n    aliases?: Record<string, string | ((Window) => unknown)>\n}",
-                "startLine": 125,
-                "endLine": 180,
+                "implementation": "export interface EsmInputs {\n    /**\n     * List of modules to install.\n     */\n    modules: LightLibraryWithAliasQueryString[]\n\n    /**\n     * Specifies standalone scripts to install in the browser.\n     * By opposition to `modules`, a script is installed as a standalone element:\n     * there is no direct or indirect dependencies' installation triggered.\n     *\n     * They are installed after all modules have been installed.\n     */\n    scripts?: ScriptInput[]\n\n    /**\n     * Override the 'natural' version used for some libraries coming from the dependency graph when resolving\n     * the installation. Items are provided in the form {@link LightLibraryQueryString}.\n     *\n     * Whenever a library is required in the dependency graph, the version(s) will be replaced by the (only) one\n     * coming from the relevant element (if any).\n     * This in turn disables multiple versions installation for the provided library\n     *\n     * **Example**:\n     *\n     * ```\n     * import { install } from `@w3nest/webpm-client`\n     *\n     * await install({\n     *     esm:{\n     *         modules: [`fictive-package#0.x`, `fictive-package#1.x`],\n     *         usingDependencies: ['depA#0.1.2']\n     *     }\n     * })\n     * ```\n     */\n    usingDependencies?: LightLibraryQueryString[]\n    /**\n     * Specify side effects to execute when modules are installed.\n     *\n     * The key is in the form `{libraryName}#{semver}`:\n     * any module installed matching some keys will trigger execution\n     * of associated side effects.\n     *\n     */\n    modulesSideEffects?: Record<\n        LightLibraryQueryString,\n        ModuleSideEffectCallback\n    >\n\n    /**\n     * Provide extra aliases definition, usually to target indirect\n     * dependencies.\n     *\n     * Keys are alias name, values are either a {@link LightLibraryQueryString}\n     * or a callback function provided with the global scope.\n     *\n     */\n    aliases?: Record<string, string | ((Window) => unknown)>\n\n    /**\n     * Automatically unwraps `default` exports when a module has no named exports.\n     *\n     * <note level=\"hint\">\n     * This is particularly useful for ESM modules that export only a default symbol (common in many packages).\n     * When enabled, the default export is exposed both as the module itself and under the `default` property.\n     * </note>\n     *\n     * ### Example\n     *\n     * <code-snippet language=\"javascript\">\n     * const { confetti } = await install({\n     *     esm: {\n     *        modules:[\"js-confetti#^0.12.0 as confetti\"],\n     *        autoUnwrapDefault: true\n     *     }\n     * })\n     *\n     * // With `autoUnwrapDefault: true`, this works as expected:\n     * new confetti()\n     *\n     * // The raw default export is still accessible if needed:\n     * confetti.default\n     * </code-snippet>\n     *\n     * <note level=\"warning\">\n     * Disable this option (`false`) if you explicitly need to preserve the original export structure as-is,\n     * for instance when dealing with modules that expose important properties under `default`.\n     * </note>\n     *\n     */\n    autoUnwrapDefault?: boolean\n}",
+                "startLine": 152,
+                "endLine": 245,
                 "references": {
                     "EsmInputs": "@nav/api/MainModule.EsmInputs",
                     "ModuleSideEffectCallback": "@nav/api/MainModule.ModuleSideEffectCallback",
@@ -9765,8 +9836,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "backends?: LightLibraryWithAliasQueryString[] | BackendInputs",
                         "implementation": "",
-                        "startLine": 94,
-                        "endLine": 95,
+                        "startLine": 121,
+                        "endLine": 122,
                         "references": {
                             "backends": "@nav/api/MainModule.InstallInputs.backends",
                             "BackendInputs": "@nav/api/MainModule.BackendInputs",
@@ -9804,8 +9875,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "css?: CssInput[]",
                         "implementation": "",
-                        "startLine": 106,
-                        "endLine": 107,
+                        "startLine": 133,
+                        "endLine": 134,
                         "references": {
                             "css": "@nav/api/MainModule.InstallInputs.css",
                             "CssInput": "@nav/api/MainModule.CssInput"
@@ -9823,7 +9894,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "Specifies the ESM modules to install, using one of the following:\n*   <mkapi-api-link nav=\"@nav/api/MainModule.LightLibraryWithAliasQueryString\" semantic=\"type-alias\">LightLibraryWithAliasQueryString</mkapi-api-link>  for a simpler specification with limited control.\n*   <mkapi-api-link nav=\"@nav/api/MainModule.EsmInputs\" semantic=\"interface\">EsmInputs</mkapi-api-link>  for a comprehensive specification.",
+                                "content": "Specifies the ESM modules to install, using one of the following:\n*   <mkapi-api-link nav=\"@nav/api/MainModule.LightLibraryWithAliasQueryString\" semantic=\"type-alias\">LightLibraryWithAliasQueryString</mkapi-api-link>  for a simpler specification with limited control.\n*   <mkapi-api-link nav=\"@nav/api/MainModule.EsmInputs\" semantic=\"interface\">EsmInputs</mkapi-api-link>  for a comprehensive specification.\n\nWhen  <mkapi-api-link nav=\"@nav/api/MainModule.LightLibraryWithAliasQueryString\" semantic=\"type-alias\">LightLibraryWithAliasQueryString</mkapi-api-link>  is used, see  <mkapi-api-link nav=\"@nav/api/MainModule.defaultEsmInput\" semantic=\"global\">defaultEsmInput</mkapi-api-link>  for remaining default values.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -9840,8 +9911,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "esm?: LightLibraryWithAliasQueryString[] | EsmInputs",
                         "implementation": "",
-                        "startLine": 87,
-                        "endLine": 88,
+                        "startLine": 114,
+                        "endLine": 115,
                         "references": {
                             "esm": "@nav/api/MainModule.InstallInputs.esm",
                             "EsmInputs": "@nav/api/MainModule.EsmInputs",
@@ -9879,8 +9950,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "executingWindow?: WindowOrWorkerGlobalScope",
                         "implementation": "",
-                        "startLine": 113,
-                        "endLine": 114,
+                        "startLine": 140,
+                        "endLine": 141,
                         "references": {
                             "executingWindow": "@nav/api/MainModule.InstallInputs.executingWindow"
                         }
@@ -9914,8 +9985,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "onEvent?: (event: CdnEvent) => void",
                         "implementation": "",
-                        "startLine": 120,
-                        "endLine": 121,
+                        "startLine": 147,
+                        "endLine": 148,
                         "references": {
                             "onEvent": "@nav/api/MainModule.InstallInputs.onEvent",
                             "CdnEvent": "@nav/api/MainModule.CdnEvent"
@@ -9950,8 +10021,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "pyodide?: PyModule[] | PyodideInputs",
                         "implementation": "",
-                        "startLine": 101,
-                        "endLine": 102,
+                        "startLine": 128,
+                        "endLine": 129,
                         "references": {
                             "pyodide": "@nav/api/MainModule.InstallInputs.pyodide",
                             "PyodideInputs": "@nav/api/MainModule.PyodideInputs",
@@ -9966,9 +10037,9 @@
             "code": {
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface InstallInputs",
-                "implementation": "export interface InstallInputs {\n    /**\n     * Specifies the ESM modules to install, using one of the following:\n     * *  {@link LightLibraryWithAliasQueryString} for a simpler specification with limited control.\n     * *  {@link EsmInputs} for a comprehensive specification.\n     */\n    esm?: LightLibraryWithAliasQueryString[] | EsmInputs\n\n    /**\n     * Specifies the backend modules to install, using one of the following:\n     * *  {@link LightLibraryWithAliasQueryString} for a simpler specification with limited control.\n     * *  {@link EsmInputs} for a comprehensive specification.\n     */\n    backends?: LightLibraryWithAliasQueryString[] | BackendInputs\n\n    /**\n     * Specifies the pyodide (python running in the browser) modules to install, using one of the following:\n     * *  {@link PyModule} for a simpler specification with limited control.\n     * *  {@link PyodideInputs} for a comprehensive specification.\n     */\n    pyodide?: PyModule[] | PyodideInputs\n\n    /**\n     * Specify a list of stylesheets to install.\n     */\n    css?: CssInput[]\n\n    /**\n     * Window global in which installation occurs. If not provided, `window` is used.\n     *\n     * If the client is running in a Web Worker, it is the worker's global scope.\n     */\n    executingWindow?: WindowOrWorkerGlobalScope\n\n    /**\n     * If provided, any {@link CdnEvent} emitted are forwarded to this callback.\n     *\n     * @param event event emitted\n     */\n    onEvent?: (event: CdnEvent) => void\n}",
-                "startLine": 81,
-                "endLine": 122,
+                "implementation": "export interface InstallInputs {\n    /**\n     * Specifies the ESM modules to install, using one of the following:\n     * *  {@link LightLibraryWithAliasQueryString} for a simpler specification with limited control.\n     * *  {@link EsmInputs} for a comprehensive specification.\n     *\n     * When {@link LightLibraryWithAliasQueryString} is used, see {@link defaultEsmInput} for remaining default values.\n     */\n    esm?: LightLibraryWithAliasQueryString[] | EsmInputs\n\n    /**\n     * Specifies the backend modules to install, using one of the following:\n     * *  {@link LightLibraryWithAliasQueryString} for a simpler specification with limited control.\n     * *  {@link EsmInputs} for a comprehensive specification.\n     */\n    backends?: LightLibraryWithAliasQueryString[] | BackendInputs\n\n    /**\n     * Specifies the pyodide (python running in the browser) modules to install, using one of the following:\n     * *  {@link PyModule} for a simpler specification with limited control.\n     * *  {@link PyodideInputs} for a comprehensive specification.\n     */\n    pyodide?: PyModule[] | PyodideInputs\n\n    /**\n     * Specify a list of stylesheets to install.\n     */\n    css?: CssInput[]\n\n    /**\n     * Window global in which installation occurs. If not provided, `window` is used.\n     *\n     * If the client is running in a Web Worker, it is the worker's global scope.\n     */\n    executingWindow?: WindowOrWorkerGlobalScope\n\n    /**\n     * If provided, any {@link CdnEvent} emitted are forwarded to this callback.\n     *\n     * @param event event emitted\n     */\n    onEvent?: (event: CdnEvent) => void\n}",
+                "startLine": 106,
+                "endLine": 149,
                 "references": {
                     "InstallInputs": "@nav/api/MainModule.InstallInputs",
                     "BackendInputs": "@nav/api/MainModule.BackendInputs",
@@ -10032,8 +10103,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "definition: [string, string][][]",
                         "implementation": "",
-                        "startLine": 589,
-                        "endLine": 590,
+                        "startLine": 654,
+                        "endLine": 655,
                         "references": {
                             "definition": "@nav/api/MainModule.LoadingGraph.definition"
                         }
@@ -10067,8 +10138,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "graphType: string",
                         "implementation": "",
-                        "startLine": 600,
-                        "endLine": 601,
+                        "startLine": 665,
+                        "endLine": 666,
                         "references": {
                             "graphType": "@nav/api/MainModule.LoadingGraph.graphType"
                         }
@@ -10102,8 +10173,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "lock: Library[]",
                         "implementation": "",
-                        "startLine": 595,
-                        "endLine": 596,
+                        "startLine": 660,
+                        "endLine": 661,
                         "references": {
                             "lock": "@nav/api/MainModule.LoadingGraph.lock",
                             "Library": "@nav/api/MainModule.Library"
@@ -10116,8 +10187,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface LoadingGraph",
                 "implementation": "export interface LoadingGraph {\n    /**\n     *\n     * List of javascript libraries to fetch by batch:\n     *\n     * *  `definition[i]` defines a batch of libraries that can be fetched in any order (or at the same time), provided\n     * that all the libraries for the batches `j<i` have already been fetched\n     * *  `definition[i][j]` defines the j'th library for the batch i:\n     * a tuple of [`id`, `cdn-url`] where `id` is the asset id and `cdn-url` the associated URL\n     */\n    definition: [string, string][][]\n\n    /**\n     *\n     * Describes the libraries included in the loading graph\n     */\n    lock: Library[]\n\n    /**\n     * Type of the graph (versioning to be able to change the fetching mechanism)\n     */\n    graphType: string\n}",
-                "startLine": 579,
-                "endLine": 602,
+                "startLine": 644,
+                "endLine": 667,
                 "references": {
                     "LoadingGraph": "@nav/api/MainModule.LoadingGraph",
                     "Library": "@nav/api/MainModule.Library"
@@ -10177,8 +10248,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "executingWindow: WindowOrWorkerGlobalScope",
                         "implementation": "",
-                        "startLine": 440,
-                        "endLine": 441,
+                        "startLine": 505,
+                        "endLine": 506,
                         "references": {
                             "executingWindow": "@nav/api/MainModule.ModuleSideEffectCallbackArgument.executingWindow"
                         }
@@ -10212,8 +10283,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "htmlScriptElement?: HTMLScriptElement",
                         "implementation": "",
-                        "startLine": 436,
-                        "endLine": 437,
+                        "startLine": 501,
+                        "endLine": 502,
                         "references": {
                             "htmlScriptElement": "@nav/api/MainModule.ModuleSideEffectCallbackArgument.htmlScriptElement"
                         }
@@ -10247,8 +10318,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "module: unknown",
                         "implementation": "",
-                        "startLine": 428,
-                        "endLine": 429,
+                        "startLine": 493,
+                        "endLine": 494,
                         "references": {
                             "module": "@nav/api/MainModule.ModuleSideEffectCallbackArgument.module"
                         }
@@ -10282,8 +10353,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "origin: FetchedScript",
                         "implementation": "",
-                        "startLine": 432,
-                        "endLine": 433,
+                        "startLine": 497,
+                        "endLine": 498,
                         "references": {
                             "origin": "@nav/api/MainModule.ModuleSideEffectCallbackArgument.origin"
                         }
@@ -10295,8 +10366,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface ModuleSideEffectCallbackArgument",
                 "implementation": "export interface ModuleSideEffectCallbackArgument {\n    /**\n     * The installed module\n     */\n    module: unknown\n    /**\n     * Origin of the module\n     */\n    origin: FetchedScript\n    /**\n     * HTML script element added\n     */\n    htmlScriptElement?: HTMLScriptElement\n    /**\n     * Window instance in which the HTML script element has been added\n     */\n    executingWindow: WindowOrWorkerGlobalScope\n}",
-                "startLine": 424,
-                "endLine": 442,
+                "startLine": 489,
+                "endLine": 507,
                 "references": {
                     "ModuleSideEffectCallbackArgument": "@nav/api/MainModule.ModuleSideEffectCallbackArgument"
                 }
@@ -10355,8 +10426,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "indexUrl?: string",
                         "implementation": "",
-                        "startLine": 251,
-                        "endLine": 252,
+                        "startLine": 316,
+                        "endLine": 317,
                         "references": {
                             "indexUrl": "@nav/api/MainModule.PyodideInputs.indexUrl"
                         }
@@ -10390,8 +10461,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "modules: PyModule[]",
                         "implementation": "",
-                        "startLine": 234,
-                        "endLine": 235,
+                        "startLine": 299,
+                        "endLine": 300,
                         "references": {
                             "modules": "@nav/api/MainModule.PyodideInputs.modules",
                             "LightLibraryWithAliasQueryString": "@nav/api/MainModule.LightLibraryWithAliasQueryString",
@@ -10428,8 +10499,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "version?: string",
                         "implementation": "",
-                        "startLine": 230,
-                        "endLine": 231,
+                        "startLine": 295,
+                        "endLine": 296,
                         "references": {
                             "version": "@nav/api/MainModule.PyodideInputs.version"
                         }
@@ -10441,8 +10512,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface PyodideInputs",
                 "implementation": "export interface PyodideInputs {\n    /**\n     * The target version of Pyodide (specified as a plain string, not semver).\n     *\n     * If omitted, the latest release tag is automatically fetched from:\n     * `https://api.github.com/repos/pyodide/pyodide/releases/latest`.\n     *\n     * <note level=\"warning\">\n     * Only one Pyodide version can be installed at a time.\n     * </note>\n     */\n    version?: string\n    /**\n     * An array of Python modules to install.\n     */\n    modules: PyModule[]\n\n    pyodideAlias?: string\n\n    /**\n     * The index URL used to fetch Pyodide and its ported packages.\n     *\n     * If omitted, the `jsDelivr` CDN is used.\n     * If a custom URL is provided, any occurrence of the placeholder `$VERSION` will be replaced\n     * with the value specified in {@link PyodideInputs.version}.\n     *\n     * <note level=\"hint\">\n     * If omitted and serving your application via the W3Nest local server, the indexUrl targets\n     * the proxy `/python/pyodide/$VERSION`. This configuration allows resources to be cached locally on the\n     * user's hard drive, while missing resources are fetched from the `jsDelivr` CDN.\n     * </note>\n     */\n    indexUrl?: string\n}",
-                "startLine": 219,
-                "endLine": 253,
+                "startLine": 284,
+                "endLine": 318,
                 "references": {
                     "PyodideInputs": "@nav/api/MainModule.PyodideInputs"
                 }
@@ -10501,8 +10572,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "extraIndex?: string",
                         "implementation": "",
-                        "startLine": 529,
-                        "endLine": 530,
+                        "startLine": 594,
+                        "endLine": 595,
                         "references": {
                             "extraIndex": "@nav/api/MainModule.QueryLoadingGraphInputs.extraIndex"
                         }
@@ -10536,8 +10607,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "modules: LightLibraryQueryString[]",
                         "implementation": "",
-                        "startLine": 518,
-                        "endLine": 519,
+                        "startLine": 583,
+                        "endLine": 584,
                         "references": {
                             "modules": "@nav/api/MainModule.QueryLoadingGraphInputs.modules",
                             "LightLibraryWithAliasQueryString": "@nav/api/MainModule.LightLibraryWithAliasQueryString",
@@ -10574,8 +10645,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "usingDependencies?: LightLibraryQueryString[]",
                         "implementation": "",
-                        "startLine": 523,
-                        "endLine": 524,
+                        "startLine": 588,
+                        "endLine": 589,
                         "references": {
                             "usingDependencies": "@nav/api/MainModule.QueryLoadingGraphInputs.usingDependencies",
                             "LightLibraryWithAliasQueryString": "@nav/api/MainModule.LightLibraryWithAliasQueryString",
@@ -10590,8 +10661,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface QueryLoadingGraphInputs",
                 "implementation": "export interface QueryLoadingGraphInputs {\n    /**\n     * See `modules` of {@link InstallInputs}\n     */\n    modules: LightLibraryQueryString[]\n\n    /**\n     * See `usingDependencies` of {@link InstallInputs}\n     */\n    usingDependencies?: LightLibraryQueryString[]\n\n    /**\n     * This property allows to resolve loading graph, including some libraries that may not exist\n     * in target database.\n     */\n    extraIndex?: string\n}",
-                "startLine": 514,
-                "endLine": 531,
+                "startLine": 579,
+                "endLine": 596,
                 "references": {
                     "QueryLoadingGraphInputs": "@nav/api/MainModule.QueryLoadingGraphInputs"
                 }
@@ -10650,8 +10721,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "executingWindow: WindowOrWorkerGlobalScope",
                         "implementation": "",
-                        "startLine": 499,
-                        "endLine": 500,
+                        "startLine": 564,
+                        "endLine": 565,
                         "references": {
                             "executingWindow": "@nav/api/MainModule.ScriptSideEffectCallbackArgument.executingWindow"
                         }
@@ -10685,8 +10756,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "htmlScriptElement?: HTMLScriptElement",
                         "implementation": "",
-                        "startLine": 494,
-                        "endLine": 495,
+                        "startLine": 559,
+                        "endLine": 560,
                         "references": {
                             "htmlScriptElement": "@nav/api/MainModule.ScriptSideEffectCallbackArgument.htmlScriptElement"
                         }
@@ -10720,8 +10791,8 @@
                         "filePath": "src/lib/inputs.models.ts",
                         "declaration": "origin: FetchedScript",
                         "implementation": "",
-                        "startLine": 489,
-                        "endLine": 490,
+                        "startLine": 554,
+                        "endLine": 555,
                         "references": {
                             "origin": "@nav/api/MainModule.ScriptSideEffectCallbackArgument.origin"
                         }
@@ -10733,8 +10804,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export interface ScriptSideEffectCallbackArgument",
                 "implementation": "export interface ScriptSideEffectCallbackArgument {\n    /**\n     * Origin of the style-sheet\n     */\n    origin: FetchedScript\n\n    /**\n     * HTML script element added\n     */\n    htmlScriptElement?: HTMLScriptElement\n\n    /**\n     * Window instance in which the HTML script element has been added\n     */\n    executingWindow: WindowOrWorkerGlobalScope\n}",
-                "startLine": 485,
-                "endLine": 501,
+                "startLine": 550,
+                "endLine": 566,
                 "references": {
                     "ScriptSideEffectCallbackArgument": "@nav/api/MainModule.ScriptSideEffectCallbackArgument"
                 }
@@ -10942,8 +11013,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export type CssInput =\n    | FileLocationString\n    | { location: FileLocationString; sideEffects?: CssSideEffectCallback }",
                 "implementation": "",
-                "startLine": 275,
-                "endLine": 276,
+                "startLine": 340,
+                "endLine": 341,
                 "references": {
                     "CssInput": "@nav/api/MainModule.CssInput",
                     "FileLocationString": "@nav/api/MainModule.FileLocationString",
@@ -10981,8 +11052,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export type CssSideEffectCallback = (\n    argument: CssSideEffectCallbackArgument,\n) => void | Promise<void>",
                 "implementation": "",
-                "startLine": 478,
-                "endLine": 479,
+                "startLine": 543,
+                "endLine": 544,
                 "references": {
                     "CssSideEffectCallback": "@nav/api/MainModule.CssSideEffectCallback",
                     "CssSideEffectCallbackArgument": "@nav/api/MainModule.CssSideEffectCallbackArgument"
@@ -11356,8 +11427,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export type ModuleInput =\n    | {\n          name: string\n          version: string\n          sideEffects?: (Window) => void\n          alias: string\n      }\n    | string",
                 "implementation": "",
-                "startLine": 257,
-                "endLine": 258,
+                "startLine": 322,
+                "endLine": 323,
                 "references": {
                     "ModuleInput": "@nav/api/MainModule.ModuleInput"
                 }
@@ -11393,8 +11464,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export type ModuleSideEffectCallback = (\n    argument: ModuleSideEffectCallbackArgument,\n) => void | Promise<void>",
                 "implementation": "",
-                "startLine": 446,
-                "endLine": 447,
+                "startLine": 511,
+                "endLine": 512,
                 "references": {
                     "ModuleSideEffectCallback": "@nav/api/MainModule.ModuleSideEffectCallback",
                     "ModuleSideEffectCallbackArgument": "@nav/api/MainModule.ModuleSideEffectCallbackArgument"
@@ -11506,8 +11577,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export type ScriptInput =\n    | FileLocationString\n    | { location: FileLocationString; sideEffects: ScriptSideEffectCallback }",
                 "implementation": "",
-                "startLine": 288,
-                "endLine": 289,
+                "startLine": 353,
+                "endLine": 354,
                 "references": {
                     "ScriptInput": "@nav/api/MainModule.ScriptInput",
                     "FileLocationString": "@nav/api/MainModule.FileLocationString",
@@ -11545,8 +11616,8 @@
                 "filePath": "src/lib/inputs.models.ts",
                 "declaration": "export type ScriptSideEffectCallback = (\n    argument: ScriptSideEffectCallbackArgument,\n) => void | Promise<void>",
                 "implementation": "",
-                "startLine": 506,
-                "endLine": 507,
+                "startLine": 571,
+                "endLine": 572,
                 "references": {
                     "ScriptSideEffectCallback": "@nav/api/MainModule.ScriptSideEffectCallback",
                     "ScriptSideEffectCallbackArgument": "@nav/api/MainModule.ScriptSideEffectCallbackArgument"
@@ -11743,7 +11814,7 @@
             "code": {
                 "filePath": "src/lib/backend-configuration.ts",
                 "declaration": "export function backendConfiguration({\n    pathLoadingGraph,\n    pathResource,\n    origin,\n    id,\n    pathPypi,\n    pathPyodide,\n}: {\n    id?: string\n    pathLoadingGraph: string\n    pathResource: string\n    origin?: { secure?: boolean; hostname?: string; port?: number } | string\n    pathPypi?: string\n    pathPyodide?: string\n}): BackendConfiguration",
-                "implementation": "export function backendConfiguration({\n    pathLoadingGraph,\n    pathResource,\n    origin,\n    id,\n    pathPypi,\n    pathPyodide,\n}: {\n    id?: string\n    pathLoadingGraph: string\n    pathResource: string\n    origin?: { secure?: boolean; hostname?: string; port?: number } | string\n    pathPypi?: string\n    pathPyodide?: string\n}): BackendConfiguration {\n    if (typeof origin !== 'string') {\n        origin = computeOrigin(origin)\n    }\n    return {\n        id,\n        origin,\n        urlLoadingGraph: `${origin}${pathLoadingGraph}`,\n        urlResource: `${origin}${pathResource}`,\n        urlPypi: pathPypi ? `${origin}${pathPypi}` : 'https://pypi.org/',\n        urlPyodide: pathPyodide\n            ? `${origin}${pathPyodide}/$VERSION`\n            : `https://cdn.jsdelivr.net/pyodide/v$VERSION/full`,\n    }\n}",
+                "implementation": "export function backendConfiguration({\n    pathLoadingGraph,\n    pathResource,\n    origin,\n    id,\n    pathPypi,\n    pathPyodide,\n}: {\n    id?: string\n    pathLoadingGraph: string\n    pathResource: string\n    origin?: { secure?: boolean; hostname?: string; port?: number } | string\n    pathPypi?: string\n    pathPyodide?: string\n}): BackendConfiguration {\n    if (typeof origin !== 'string') {\n        origin = computeOrigin(origin)\n    }\n    return {\n        id,\n        origin,\n        urlLoadingGraph: `${origin}${pathLoadingGraph}`,\n        urlResource: `${origin}${pathResource}`,\n        urlPypi: pathPypi ? `${origin}${pathPypi}` : 'https://pypi.org/simple',\n        urlPyodide: pathPyodide\n            ? `${origin}${pathPyodide}/$VERSION`\n            : `https://cdn.jsdelivr.net/pyodide/v$VERSION/full`,\n    }\n}",
                 "startLine": 122,
                 "endLine": 151,
                 "references": {
@@ -12369,8 +12440,8 @@
                 "filePath": "src/lib/utils.ts",
                 "declaration": "export function parseResourceId(resourceId: string): {\n    name: string\n    version: string\n    path: string\n    assetId: string\n    url: string\n}",
                 "implementation": "export function parseResourceId(resourceId: string): {\n    name: string\n    version: string\n    path: string\n    assetId: string\n    url: string\n} {\n    const name = resourceId.split('#')[0]\n    const version = resourceId.split('#')[1].split('~')[0]\n    const path = resourceId.split('#')[1].split('~')[1]\n    const assetId = getAssetId(name)\n    const url = `${getUrlBase(name, version)}/${path}`\n    return { name, version, path, assetId, url }\n}",
-                "startLine": 110,
-                "endLine": 124,
+                "startLine": 111,
+                "endLine": 125,
                 "references": {
                     "parseResourceId": "@nav/api/MainModule.parseResourceId"
                 }
