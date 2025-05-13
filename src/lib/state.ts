@@ -171,6 +171,7 @@ export class StateImplementation {
      */
     static extractAliases(
         aliases: Record<string, string | ((Window) => unknown)>,
+        unwrapDefault: boolean,
         executingWindow: WindowOrWorkerGlobalScope,
     ) {
         type Module = Record<string, unknown>
@@ -203,10 +204,15 @@ export class StateImplementation {
                 }
 
                 const path = version.exportPath
-                pointed = path.reduce(
-                    (acc: MaybeModule, e: string) => (acc ? acc[e] : undefined),
-                    executingWindow,
-                ) as MaybeModule
+                pointed = path.reduce((acc: MaybeModule, e: string) => {
+                    if (!acc) {
+                        return undefined
+                    }
+                    if (unwrapDefault) {
+                        return unwrapPreserveDefault(acc[e])
+                    }
+                    return acc[e]
+                }, executingWindow) as MaybeModule
             } else {
                 pointed = original(executingWindow) as MaybeModule
             }
@@ -290,4 +296,24 @@ export class StateImplementation {
             ...pyModules,
         ]
     }
+}
+
+function unwrapPreserveDefault(mod: unknown) {
+    if (
+        mod &&
+        typeof mod === 'object' &&
+        'default' in mod &&
+        mod.default !== null &&
+        mod.default !== undefined &&
+        Object.keys(mod).length === 1
+    ) {
+        const unwrapped = mod.default
+        return new Proxy(unwrapped, {
+            get(target, prop, receiver) {
+                if (prop === 'default') return unwrapped
+                return Reflect.get(target, prop, receiver) as unknown
+            },
+        })
+    }
+    return mod
 }

@@ -11,6 +11,7 @@ import {
     PyodideInputs,
     CssSideEffectCallback,
     Library,
+    defaultEsmInput,
 } from './inputs.models'
 import {
     CdnEvent,
@@ -411,7 +412,7 @@ export function normalizeBackendInputs(inputs: InstallInputs): BackendInputs {
 export function normalizeEsmInputs(inputs: InstallInputs): EsmInputs {
     const emptyInstaller = {
         modules: [],
-        scripts: [],
+        ...defaultEsmInput,
     }
     if (!inputs.esm) {
         return emptyInstaller

@@ -74,6 +74,31 @@ export type LightLibraryWithAliasQueryString =
 export type PyModule = string
 
 /**
+ * Default configuration values for ESM modules installation, excluding the `modules` list.
+ *
+ * This constant provides a base `EsmInputs` object with sensible defaults for all optional fields when
+ * an installation using {@link LightLibraryWithAliasQueryString} is triggered.
+ *
+ * ### Default Values (see {@link EsmInputs}):
+ *
+ * - `scripts`: `[]` — No additional standalone scripts are loaded.
+ * - `aliases`: `{}` — No custom aliasing of modules.
+ * - `usingDependencies`: `[]` — All dependencies are resolved from the natural loading graph unless specified.
+ * - `modulesSideEffects`: `{}` — No side effects are triggered during module loading.
+ * - `autoUnwrapDefault`: `true` — Modules with only a default export are unwrapped automatically.
+ *
+ * This configuration is useful when you want to ensure consistent behavior across multiple installations
+ * while maintaining flexibility to override module-specific settings.
+ *
+ */
+export const defaultEsmInput: Omit<EsmInputs, 'modules'> = {
+    scripts: [],
+    aliases: {},
+    usingDependencies: [],
+    modulesSideEffects: {},
+    autoUnwrapDefault: true,
+}
+/**
  * Specifies the installation of various components in the environment.
  *
  * This is the input for the method {@link install}.
@@ -83,6 +108,8 @@ export interface InstallInputs {
      * Specifies the ESM modules to install, using one of the following:
      * *  {@link LightLibraryWithAliasQueryString} for a simpler specification with limited control.
      * *  {@link EsmInputs} for a comprehensive specification.
+     *
+     * When {@link LightLibraryWithAliasQueryString} is used, see {@link defaultEsmInput} for remaining default values.
      */
     esm?: LightLibraryWithAliasQueryString[] | EsmInputs
 
@@ -181,6 +208,39 @@ export interface EsmInputs {
      *
      */
     aliases?: Record<string, string | ((Window) => unknown)>
+
+    /**
+     * Automatically unwraps `default` exports when a module has no named exports.
+     *
+     * <note level="hint">
+     * This is particularly useful for ESM modules that export only a default symbol (common in many packages).
+     * When enabled, the default export is exposed both as the module itself and under the `default` property.
+     * </note>
+     *
+     * ### Example
+     *
+     * <code-snippet language="javascript">
+     * const { confetti } = await install({
+     *     esm: {
+     *        modules:["js-confetti#^0.12.0 as confetti"],
+     *        autoUnwrapDefault: true
+     *     }
+     * })
+     *
+     * // With `autoUnwrapDefault: true`, this works as expected:
+     * new confetti()
+     *
+     * // The raw default export is still accessible if needed:
+     * confetti.default
+     * </code-snippet>
+     *
+     * <note level="warning">
+     * Disable this option (`false`) if you explicitly need to preserve the original export structure as-is,
+     * for instance when dealing with modules that expose important properties under `default`.
+     * </note>
+     *
+     */
+    autoUnwrapDefault?: boolean
 }
 
 /**

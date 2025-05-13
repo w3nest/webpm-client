@@ -366,6 +366,7 @@ export class Client {
                 onEvent(new InstallDoneEvent())
                 const mappedAliases = StateImplementation.extractAliases(
                     aliases,
+                    esmInputs.autoUnwrapDefault ?? true,
                     executingWindow,
                 )
                 if (inputs.pyodide && 'pyodide' in executingWindow) {
