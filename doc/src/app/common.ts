@@ -13,11 +13,12 @@ import {
 } from 'mkdocs-ts'
 import { AnyVirtualDOM } from 'rx-vdom'
 import { DebugMode } from './config.debug'
-import { ApiLink, CrossLink, ExtLink, GitHubLink } from './md-widgets'
 import { companionNodes$ } from './on-load'
 import { SearchView } from './how-to/search.view'
 import { firstValueFrom } from 'rxjs'
 import pkgJson from '../../package.json'
+// Register links
+import './md-widgets'
 
 export const project = {
     name: 'webpm-client',
@@ -91,10 +92,6 @@ export function createRootContext({
 
 GlobalMarkdownViews.factory = {
     ...GlobalMarkdownViews.factory,
-    'api-link': (elem: HTMLElement) => new ApiLink(elem),
-    'ext-link': (elem: HTMLElement) => new ExtLink(elem),
-    'cross-link': (elem: HTMLElement) => new CrossLink(elem),
-    'github-link': (elem: HTMLElement) => new GitHubLink(elem),
     'split-api': () => ({
         tag: 'i',
         class: 'mkdocs-inv',

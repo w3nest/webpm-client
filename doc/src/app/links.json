@@ -1,0 +1,249 @@
+{
+    "apiLinks": {
+        "install": {
+            "href": "@nav/api/MainModule.install",
+            "withClass": "mkapi-role-function"
+        },
+        "LightLibraryWithAliasQueryString": {
+            "href": "@nav/api/MainModule.LightLibraryWithAliasQueryString",
+            "withClass": "mkapi-role-type-alias"
+        },
+        "EsmInputs": {
+            "href": "@nav/api/MainModule.EsmInputs",
+            "withClass": "mkapi-role-interface"
+        },
+        "ModuleSideEffectCallback": {
+            "href": "@nav/api/MainModule.ModuleSideEffectCallback",
+            "withClass": "mkapi-role-type-alias"
+        },
+        "PyodideInputs": {
+            "href": "@nav/api/MainModule.PyodideInputs",
+            "withClass": "mkapi-role-interface"
+        },
+        "PyodideInputs.version": {
+            "href": "@nav/api/MainModule.PyodideInputs.version",
+            "withClass": "mkapi-role-attribute"
+        },
+        "PyodideInputs.indexUrl": {
+            "href": "@nav/api/MainModule.PyodideInputs.indexUrl",
+            "withClass": "mkapi-role-attribute"
+        },
+        "PyodideInputs.micropipConstraints": {
+            "href": "@nav/api/MainModule.PyodideInputs.micropipConstraints",
+            "withClass": "mkapi-role-attribute"
+        },
+        "BackendInputs": {
+            "href": "@nav/api/MainModule.BackendInputs",
+            "withClass": "mkapi-role-interface"
+        },
+        "PyModule": {
+            "href": "@nav/api/MainModule.PyModule",
+            "withClass": "mkapi-role-type-alias"
+        },
+        "InstallInputs": {
+            "href": "@nav/api/MainModule.InstallInputs",
+            "withClass": "mkapi-role-interface"
+        },
+        "InstallInputs.esm": {
+            "href": "@nav/api/MainModule.InstallInputs.esm",
+            "withClass": "mkapi-role-attribute"
+        },
+        "InstallInputs.pyodide": {
+            "href": "@nav/api/MainModule.InstallInputs.pyodide",
+            "withClass": "mkapi-role-attribute"
+        },
+        "InstallInputs.backends": {
+            "href": "@nav/api/MainModule.InstallInputs.backends",
+            "withClass": "mkapi-role-attribute"
+        },
+        "queryLoadingGraph": {
+            "href": "@nav/api/MainModule.queryLoadingGraph",
+            "withClass": "mkapi-role-function"
+        },
+        "ViewsModule": {
+            "href": "@nav/api/ViewsModule",
+            "withClass": "mkapi-role-module"
+        },
+        "installWithUI": {
+            "href": "@nav/api/ViewsModule.installWithUI",
+            "withClass": "mkapi-role-function"
+        },
+        "BackendClient": {
+            "href": "@nav/api/MainModule.BackendClient",
+            "withClass": "mkapi-role-interface"
+        },
+        "BackendClient.urlW3Lab": {
+            "href": "@nav/api/MainModule.BackendClient.urlW3Lab",
+            "withClass": "mkapi-role-attribute"
+        },
+        "WorkersPoolModule": {
+            "href": "@nav/api/WorkersPoolModule",
+            "withClass": "mkapi-role-module"
+        },
+        "WWorkerTrait": {
+            "href": "@nav/api/WorkersPoolModule.WWorkerTrait",
+            "withClass": "mkapi-role-interface"
+        },
+        "WorkersPool": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPool",
+            "withClass": "mkapi-role-class"
+        },
+        "WorkersPool.workers$": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPool.workers$",
+            "withClass": "mkapi-role-attribute"
+        },
+        "WorkersPool.startedWorkers$": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPool.startedWorkers$",
+            "withClass": "mkapi-role-attribute"
+        },
+        "WorkersPool.busyWorkers$": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPool.busyWorkers$",
+            "withClass": "mkapi-role-attribute"
+        },
+        "WorkersPool.runningTasks$": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPool.runningTasks$",
+            "withClass": "mkapi-role-attribute"
+        },
+        "WorkersPoolInput": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPoolInput",
+            "withClass": "mkapi-role-interface"
+        },
+        "WorkersPoolInput.globals": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPoolInput.globals",
+            "withClass": "mkapi-role-attribute"
+        },
+        "WorkersPool.schedule": {
+            "href": "@nav/api/WorkersPoolModule.WorkersPool.schedule",
+            "withClass": "mkapi-role-method"
+        },
+        "Message": {
+            "href": "@nav/api/WorkersPoolModule.Message",
+            "withClass": "mkapi-role-type-alias"
+        },
+        "MessageStart": {
+            "href": "@nav/api/WorkersPoolModule.MessageStart",
+            "withClass": "mkapi-role-interface"
+        },
+        "MessageExit": {
+            "href": "@nav/api/WorkersPoolModule.MessageExit",
+            "withClass": "mkapi-role-interface"
+        },
+        "MessageLog": {
+            "href": "@nav/api/WorkersPoolModule.MessageLog",
+            "withClass": "mkapi-role-interface"
+        },
+        "MessageData": {
+            "href": "@nav/api/WorkersPoolModule.MessageData",
+            "withClass": "mkapi-role-interface"
+        },
+        "WorkerContext": {
+            "href": "@nav/api/WorkersPoolModule.WorkerContext",
+            "withClass": "mkapi-role-interface"
+        },
+        "EntryPointArguments": {
+            "href": "@nav/api/WorkersPoolModule.EntryPointArguments",
+            "withClass": "mkapi-role-interface"
+        },
+        "EntryPointArguments.context": {
+            "href": "@nav/api/WorkersPoolModule.EntryPointArguments.context",
+            "withClass": "mkapi-role-attribute"
+        },
+        "installWorkersPoolModule": {
+            "href": "@nav/api/MainModule.installWorkersPoolModule",
+            "withClass": "mkapi-role-function"
+        }
+    },
+    "extLinks": {
+        "w3nest": { "href": "/apps/@w3nest/doc/latest" },
+        "w3nest/how-to/publish": {
+            "href": "/apps/@w3nest/doc/latest?nav=/how-to/publish"
+        },
+        "pyodide": { "href": "https://pyodide.org/en/stable/" },
+        "pyodide-packages": {
+            "href": "https://pyodide.org/en/stable/usage/packages-in-pyodide.html"
+        },
+        "pyodide-publish": {
+            "href": "https://pyodide.org/en/stable/development/new-packages.html"
+        },
+        "micropip": {
+            "href": "https://micropip.pyodide.org/en/stable/project/usage.html"
+        },
+        "pypi": { "href": "https://pypi.org/" },
+        "semver": {
+            "href": "https://docs.npmjs.com/cli/v6/using-npm/semver"
+        },
+        "pyrun_backend": {
+            "href": "/apps/@mkdocs-ts/doc/0.3.0-wip?nav=/api/Interpreters/pyrun_backend"
+        },
+        "mkdocs-ts": {
+            "href": "/apps/@mkdocs-ts/doc/0.3.0-wip?nav=/"
+        },
+        "mkdocs-ts.notebook-tuto": {
+            "href": "/apps/@mkdocs-ts/doc/0.3.0-wip?nav=/tutorials/notebook"
+        },
+        "structured-clone": {
+            "href": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm"
+        },
+        "pi-approx": {
+            "href": "https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Monte-Carlo"
+        },
+        "Observable": {
+            "href": "https://rxjs.dev/guide/observable"
+        },
+        "Subject": {
+            "href": "https://rxjs.dev/guide/subject"
+        },
+        "torus-knot": {
+            "href": "https://threejs.org/docs/#api/en/geometries/TorusKnotGeometry"
+        },
+        "pmp": {
+            "href": "https://www.pmp-library.org/"
+        },
+        "wasm": {
+            "href": "https://webassembly.org/"
+        },
+        "three": {
+            "href": "https://threejs.org/"
+        },
+        "rxjs": {
+            "href": "https://rxjs.dev/"
+        },
+        "bootstrap": {
+            "href": "https://getbootstrap.com/"
+        },
+        "bootstrap-select": {
+            "href":"https://developer.snapappointments.com/bootstrap-select/"
+        }
+    },
+    "githubLinks": {
+        "webpm-doc": {
+            "href": "https://github.com/w3nest/webpm/blob/main/doc"
+        },
+        "webpm-externals": {
+            "href": "https://github.com/w3nest/webpm-externals"
+        },
+        "publish-package": {
+            "href": "https://github.com/youwol/cdn-externals/issues/new?template=request_package_integration.yml"
+        }
+    },
+    "crossLinks": {
+        "tutorials": {
+            "href": "@nav/tutorials"
+        },
+        "how-to": {
+            "href": "@nav/how-to"
+        },
+        "how-to/install": {
+            "href": "@nav/how-to/install"
+        },
+        "how-to/publish": {
+            "href": "@nav/how-to/publish"
+        },
+        "api": {
+            "href": "@nav/api"
+        },
+        "workers": {
+            "href": "@nav/tutorials/workers"
+        }
+    }
+}
