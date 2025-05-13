@@ -1,5 +1,4 @@
 from shutil import copyfile
-import subprocess
 from pathlib import Path
 
 from w3nest.ci.ts_frontend import (
