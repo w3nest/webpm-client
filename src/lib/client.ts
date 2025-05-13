@@ -368,10 +368,10 @@ export class Client {
                     aliases,
                     executingWindow,
                 )
-                if (inputs.pyodide) {
+                if (inputs.pyodide && 'pyodide' in executingWindow) {
                     return {
                         ...mappedAliases,
-                        pyodide: executingWindow['pyodide'],
+                        pyodide: executingWindow.pyodide,
                     }
                 }
                 return mappedAliases

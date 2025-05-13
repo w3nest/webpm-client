@@ -632,10 +632,12 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
 
     return install
         .then((aliases) => {
-            log(`Expose ${Object.keys(aliases)} aliases.`)
-            Object.entries(aliases).forEach(([k, v]) => {
-                self[k] = v
-            })
+            log(`Expose ${String(Object.keys(aliases))} aliases.`)
+            Object.entries(aliases).forEach(
+                ([k, v]: [k: string, v: unknown]) => {
+                    self[k] = v
+                },
+            )
             log(
                 `Expose ${String(input.args.functions.length)} functions & ${String(input.args.variables.length)} variables.`,
             )
