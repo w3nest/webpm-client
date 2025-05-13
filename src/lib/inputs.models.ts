@@ -173,7 +173,12 @@ export interface EsmInputs {
     >
 
     /**
-     * Provide aliases to exported symbols name of module.
+     * Provide extra aliases definition, usually to target indirect
+     * dependencies.
+     *
+     * Keys are alias name, values are either a {@link LightLibraryQueryString}
+     * or a callback function provided with the global scope.
+     *
      */
     aliases?: Record<string, string | ((Window) => unknown)>
 }
