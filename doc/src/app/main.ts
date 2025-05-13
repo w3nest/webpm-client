@@ -25,7 +25,9 @@ await install({
         `mkdocs-ts#${mkdocsVersion}~assets/notebook.css`,
         `mkdocs-ts#${mkdocsVersion}~assets/ts-typedoc.css`,
     ],
-    onEvent: (ev) => loadingScreen.next(ev),
+    onEvent: (ev) => {
+        loadingScreen.next(ev)
+    },
 })
-loadingScreen.done()
 await import('./on-load')
+loadingScreen.done()
