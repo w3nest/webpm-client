@@ -152,7 +152,6 @@ export async function applyModuleSideEffects({
         return
     }
 
-    module.__yw_set_from_version__ = origin.version
     StateImplementation.registerEsmModules(
         [
             {
