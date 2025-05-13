@@ -212,7 +212,10 @@
             "href": "https://getbootstrap.com/"
         },
         "bootstrap-select": {
-            "href":"https://developer.snapappointments.com/bootstrap-select/"
+            "href": "https://developer.snapappointments.com/bootstrap-select/"
+        },
+        "bs-dropdown": {
+            "href": "https://getbootstrap.com/docs/5.0/components/dropdowns/"
         }
     },
     "githubLinks": {

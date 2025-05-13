@@ -2,16 +2,13 @@
 # ESM Modules
 
 To install **ECMAScript Modules (ESM)**, use the <api-link target='install'></api-link> function and specify 
-the **<api-link target='InstallInputs.esm'></api-link>** attribute using one of the following:  
-
-- A list of **<api-link target='LightLibraryWithAliasQueryString'></api-link>** – A simple way to specify the modules.  
-- **<api-link target='EsmInputs'></api-link>** – Provides additional configuration options.  
+the **<api-link target='InstallInputs.esm'></api-link>** attribute.
 
 ---
 
-## **Example: Installing Bootstrap**  
+## Simple Install 
 
-The following example demonstrates how to install the **Bootstrap** module using
+The following example demonstrates how to install the <ext-link target="bootstrap">Bootstrap</ext-link> module using
 <api-link target='LightLibraryWithAliasQueryString'></api-link>:  
 
 <js-cell>  
@@ -34,7 +31,7 @@ When specifying a semantic versioning range (e.g., `^5.3.3`) in the attribute `e
 
 This ensures that only **one version** of a library is installed per API version, where the API version is defined by
 the **left-most non-zero digit**.
-Having multiple versions of the same API is **not allowed**.  
+Having multiple library versions corresponding to the same API version is **not allowed**.  
 
 For example:  
 ✅ A runtime **can** have `bootstrap` installed in versions `5.x.y` and `4.x'.y'`.  
@@ -61,19 +58,20 @@ it is automatically used. This ensures seamless updates with minimal maintenance
 
 </note>  
 
-Once installed, Bootstrap can be used in your code as usual:  
+Once installed, Bootstrap can be used in your code as usual, *e.g.* to create a 
+<ext-link target="bs-dropdown">drop down menu</ext-link>:  
 
 <js-cell>  
-let innerHTML = `  
-<div class="dropdown">  
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
-        Dropdown button  
-    </button>  
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">  
-        <a class="dropdown-item">Foo</a>  
-        <a class="dropdown-item">Bar</a>  
-        <a class="dropdown-item">Baz</a>  
-    </div>  
+let innerHTML = `
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown button
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item">Action</a></li>
+    <li><a class="dropdown-item">Another action</a></li>
+    <li><a class="dropdown-item">Something else here</a></li>
+  </ul>
 </div>`  
 
 display({tag:'div', innerHTML})  
@@ -81,9 +79,11 @@ display({tag:'div', innerHTML})
 
 ---
 
-## **Example: Installing `bootstrap-select`**  
+## Multiple Versions Support
 
-The following example installs **bootstrap-select**, which extends Bootstrap's functionality:  
+The runtime managed by {{webpm-client}} can feature multiple versions of a given library.
+This is illustrated with the following example installing <ext-link target="bootstrap-select"></ext-link> 
+(it extends Bootstrap's functionality):  
 
 <js-cell>  
 const { BSelect } = await webpm.install({  
@@ -104,7 +104,7 @@ $('.selectpicker').selectpicker();
 
 
 Since `bootstrap-select` depends on `bootstrap#^4.0.0`, two versions of Bootstrap are now available. 
-**webpm-client** ensures that consuming modules are correctly linked to the appropriate version.  
+The library ensures that consuming modules are correctly linked to the appropriate version.  
 
 
 <note level='info'>  
@@ -112,6 +112,31 @@ Modules can define **aliases** that become available upon installation.
 For example, the **`$`** symbol in the code above is an alias provided when the **`jquery`** module is installed.  
 </note>  
 
+## Sub-package imports
+
+It is possible to imports selected sub-packages exported by a module, for instance 
+<ext-link target="rxjs">RxjS</ext-link> exports additional modules such as `fetch`:
+
+<js-cell>  
+const { fetch, rxjs } = await webpm.install({  
+    esm: [
+        'rxjs#^7.8.2 as rxjs',
+        'rxjs/fetch#^7.8.2 as fetch',
+    ],  
+})  
+
+fetch.fromFetch('../assets/favicon.svg').pipe(
+    rxjs.switchMap((resp) => rxjs.from(resp.text()))
+).subscribe((svg) => {
+    display({
+        tag:'div', 
+        class:'w-50 mx-auto',
+        innerHTML: svg
+    })
+})
+</js-cell> 
+
+## Views
 
 The library provide an add on module <api-link target="ViewsModule"></api-link> (that needs to be explicitly installed)
 providing a couple of useful views to display the current environment and installation events.
@@ -120,17 +145,33 @@ For instance, to monitor the actual runtime environment:
 
 <js-cell cell-id="monitoring">  
 const ViewsMdle = await webpm.installViewsModule()  
-display(new ViewsMdle.RuntimeView())  
+display(new ViewsMdle.RuntimeView())
 </js-cell>  
 
 <note level='info'>  
-Note that the ESM module `bootstrap` is installed at two versions. 
+Note that the module `bootstrap` is installed at two versions. 
 </note>  
 
 ---
 
-## Advanced Usage
+## Additional Options
 
-When specifying the `esm` attributes, you can leverage <api-link target='EsmInputs'></api-link> to configure additional 
-options. In this example, we demonstrate a more complex scenario involving dynamic plugins—often a challenge due 
-to dependency resolution issues (e.g., handling `peerDependencies`).
+When specifying the `esm` attribute, you can provide advanced configuration through the
+<api-link target='EsmInputs'></api-link> interface. This enables fine-grained control over how modules are loaded and 
+resolved. Key options include:
+
+* **`aliases`**:
+  Define custom aliases for modules—especially useful for referencing indirect dependencies or renaming imports 
+  in a more meaningful way.
+
+* **`modulesSideEffects`**:
+  Attach callbacks that are triggered when specific modules are loaded. This is useful for performing initialization 
+  logic or registering global effects.
+
+* **`scripts`**:
+  Specify standalone JavaScript scripts to load after ESM installation. These scripts are not considered part of the
+  dependency resolution graph and are loaded directly.
+
+* **`usingDependencies`**:
+  Override default dependency resolution by explicitly providing version constraints for specific packages.
+  This is useful when you need to ensure compatibility with a particular version of a shared library.
