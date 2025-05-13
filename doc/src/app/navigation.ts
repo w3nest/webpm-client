@@ -1,4 +1,4 @@
-import { AppNav, NotebookModule, notebookOptions, url } from './common'
+import { AppNav, fromMd } from './common'
 
 import { navigation as navHowTo } from './how-to'
 import { navigation as navTutorial } from './tutorials'
@@ -22,12 +22,7 @@ export const navigation: AppNav = {
         icon: logo,
         wrapperClass: `${DefaultLayout.NavHeaderView.DefaultWrapperClass} border-bottom p-1`,
     },
-    layout: ({ router }) =>
-        new NotebookModule.NotebookPage({
-            url: url('index.md'),
-            router,
-            options: notebookOptions,
-        }),
+    layout: fromMd('index.md'),
     routes: {
         '/how-to': navHowTo,
         '/tutorials': navTutorial,

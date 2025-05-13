@@ -1,12 +1,28 @@
-import {
-    AppNav,
-    fromMd,
-    icon,
-    url,
-    NotebookModule,
-    notebookOptions,
-} from '../common'
+import { installNotebookModule, Router } from 'mkdocs-ts'
+import { AppNav, fromMd, icon, url, placeholders } from '../common'
+import { firstValueFrom } from 'rxjs'
 
+async function notebookPage(path: string, router: Router) {
+    const NotebookModule = await installNotebookModule()
+    const notebookOptions = {
+        runAtStart: true,
+        defaultCellAttributes: {
+            lineNumbers: false,
+        },
+        markdown: {
+            latex: true,
+            placeholders,
+        },
+    }
+    await firstValueFrom(
+        NotebookModule.SnippetEditorView.fetchCmDependencies$('javascript'),
+    )
+    return new NotebookModule.NotebookPage({
+        url: url(path),
+        router,
+        options: notebookOptions,
+    })
+}
 export const navigation: AppNav = {
     name: 'Tutorials',
     header: {
@@ -19,12 +35,7 @@ export const navigation: AppNav = {
             header: {
                 icon: { tag: 'i', class: 'fab fa-js' },
             },
-            layout: ({ router }) =>
-                new NotebookModule.NotebookPage({
-                    url: url('tutorials.esm.md'),
-                    router,
-                    options: notebookOptions,
-                }),
+            layout: ({ router }) => notebookPage('tutorials.esm.md', router),
         },
         '/pyodide': {
             name: 'Pyodide',
@@ -32,11 +43,7 @@ export const navigation: AppNav = {
                 icon: { tag: 'i', class: 'fab fa-python' },
             },
             layout: ({ router }) =>
-                new NotebookModule.NotebookPage({
-                    url: url('tutorials.pyodide.md'),
-                    router,
-                    options: notebookOptions,
-                }),
+                notebookPage('tutorials.pyodide.md', router),
         },
         '/backends': {
             name: 'Backends',
@@ -44,11 +51,7 @@ export const navigation: AppNav = {
                 icon: { tag: 'i', class: 'fas fa-network-wired' },
             },
             layout: ({ router }) =>
-                new NotebookModule.NotebookPage({
-                    url: url('tutorials.backends.md'),
-                    router,
-                    options: notebookOptions,
-                }),
+                notebookPage('tutorials.backends.md', router),
         },
         '/workers': {
             name: 'Workers Pool',
@@ -56,11 +59,7 @@ export const navigation: AppNav = {
                 icon: { tag: 'i', class: 'fas fa-cogs' },
             },
             layout: ({ router }) =>
-                new NotebookModule.NotebookPage({
-                    url: url('tutorials.workers.md'),
-                    router,
-                    options: notebookOptions,
-                }),
+                notebookPage('tutorials.workers.md', router),
         },
         /* '/events': {
             name: 'Events & Loading Screen',

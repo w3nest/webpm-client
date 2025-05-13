@@ -12,7 +12,11 @@
 It streamlines dynamic installation and management of various resource types, 
 offering you enhanced modularity and flexibility for your projects.
 
-It supports the following resource types:
+To see it in action, try running the following snippet (<kbd>Ctrl</kbd>+<kbd>Enter</kbd> is a shortcut for execution):
+
+<confettiExample></confettiExample>
+
+The installer supports the following resource types:
 
 *  **ESM modules:** JavaScript or WASM-based modules executed in the front end.
 
@@ -33,13 +37,11 @@ For details on how to publish packages, refer to the <cross-link target="how-to/
 
 
 This documentation is itself using {{webpm-client}} to install and link its 
-dependencies. Below is displayed the runtime environment:
+dependencies. You can run the following snippet to display the runtime environment:
 
 
-<js-cell cell-id="monitoring">
-const { RuntimeView } = await webpm.installViewsModule()
-display(new RuntimeView())
-</js-cell>
+<runTimeView></runTimeView>
+
 
 ---
 
@@ -58,7 +60,7 @@ To begin using {{webpm-client}}, consider the following resources:
 
 ## W3Nest ? 
 
-{{webpm-client}} reaches its full potential when used with applications served by the  
+{{webpm-client}} reaches its full potential when used with applications served by the 
 **W3Nest local server**. 
 This solution emulates a cloud environment directly on your desktop, enabling seamless web application development and 
 distribution. It eliminates concerns about cost, 

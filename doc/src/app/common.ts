@@ -11,11 +11,11 @@ import {
     InMemoryReporter,
     GlobalMarkdownViews,
 } from 'mkdocs-ts'
-import { AnyVirtualDOM } from 'rx-vdom'
+import { AnyVirtualDOM, child$ } from 'rx-vdom'
 import { DebugMode } from './config.debug'
-import { companionNodes$ } from './on-load'
+import { companionNodes$, router } from './on-load'
 import { SearchView } from './how-to/search.view'
-import { firstValueFrom } from 'rxjs'
+import { from } from 'rxjs'
 import pkgJson from '../../package.json'
 // Register links
 import './md-widgets'
@@ -50,21 +50,6 @@ export type AppNav = Navigation<
     DefaultLayout.NavLayout,
     DefaultLayout.NavHeader
 >
-
-export const NotebookModule = await installNotebookModule()
-export const notebookOptions = {
-    runAtStart: true,
-    defaultCellAttributes: {
-        lineNumbers: false,
-    },
-    markdown: {
-        latex: true,
-        placeholders,
-    },
-}
-await firstValueFrom(
-    NotebookModule.SnippetEditorView.fetchCmDependencies$('javascript'),
-)
 
 Context.Enabled = DebugMode
 export const inMemReporter = new InMemoryReporter()
@@ -103,4 +88,48 @@ GlobalMarkdownViews.factory = {
         ],
     }),
     'search-resource': () => new SearchView(),
+    runTimeView: () => {
+        return {
+            tag: 'div' as const,
+            children: [
+                child$({
+                    source$: from(installNotebookModule()),
+                    vdomMap: (mdle) => {
+                        return new mdle.NotebookSection({
+                            src: `<js-cell cell-id="monitoring">
+const { RuntimeView } = await webpm.installViewsModule()
+display(new RuntimeView())
+</js-cell>
+`,
+                            router,
+                        })
+                    },
+                }),
+            ],
+        }
+    },
+    confettiExample: () => {
+        return {
+            tag: 'div' as const,
+            children: [
+                child$({
+                    source$: from(installNotebookModule()),
+                    vdomMap: (mdle) => {
+                        return new mdle.NotebookSection({
+                            src: `<js-cell cell-id="monitoring">
+const { JSConfetti } = await webpm.install({
+    esm:["js-confetti#^0.12.0 as JSConfetti"]
+})
+new JSConfetti().addConfetti({
+    emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸']
+})
+</js-cell>
+`,
+                            router,
+                        })
+                    },
+                }),
+            ],
+        }
+    },
 }
