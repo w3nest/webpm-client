@@ -4,6 +4,7 @@ import { Router, DefaultLayout, MdWidgets } from 'mkdocs-ts'
 import { createRootContext, inMemReporter } from './common'
 import { BehaviorSubject } from 'rxjs'
 import { AuthBadge } from '@w3nest/ui-tk/Badges'
+import { Footer } from '@w3nest/ui-tk/Mkdocs'
 
 const ctx = createRootContext({
     threadName: 'App',
@@ -16,7 +17,7 @@ export const router = new Router({
     navigation,
 })
 
-const bookmarks$ = new BehaviorSubject(['/', '/how-to', '/tutorials', '/api'])
+const bookmarks$ = new BehaviorSubject(['/how-to', '/tutorials', '/api'])
 
 export const companionNodes$ = new BehaviorSubject([])
 
@@ -68,15 +69,28 @@ const app = new DefaultLayout.LayoutWithCompanion(
         displayOptions: {
             pageVertPadding: '3rem',
         },
-        sideNavHeader: () => new NavHeaderView(),
-        sideNavFooter: () =>
-            new DefaultLayout.FooterView({
-                sourceName: '@webpm-client/doc',
-                sourceUrl:
-                    'https://github.com/w3nest/webpm-client/tree/main/doc',
+        topBanner: {
+            logo: {
+                icon: '../assets/favicon.svg',
+                title: 'WebPM',
+            },
+            expandedContent: new DefaultLayout.BookmarksView({
+                bookmarks$,
+                router,
             }),
+            badge: new AuthBadge(),
+        },
+        footer: new Footer({
+            license: 'MIT',
+            copyrights: [
+                { year: '2021', holder: 'YouWol' },
+                { year: '2025', holder: 'Guillaume Reinisch' },
+            ],
+            github: 'https://github.com/w3nest/mkdocs-ts',
+            npm: 'https://www.npmjs.com/package/mkdocs-ts',
+            docGithub: 'https://github.com/w3nest/mkdocs-ts/tree/main/doc',
+        }),
         companionNodes$,
-        favoritesFooter: new AuthBadge(),
     },
     ctx,
 )
