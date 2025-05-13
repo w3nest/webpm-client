@@ -142,7 +142,7 @@ export function backendConfiguration({
         origin,
         urlLoadingGraph: `${origin}${pathLoadingGraph}`,
         urlResource: `${origin}${pathResource}`,
-        urlPypi: pathPypi ? `${origin}${pathPypi}` : 'https://pypi.org/',
+        urlPypi: pathPypi ? `${origin}${pathPypi}` : 'https://pypi.org/simple',
         urlPyodide: pathPyodide
             ? `${origin}${pathPyodide}/$VERSION`
             : `https://cdn.jsdelivr.net/pyodide/v$VERSION/full`,
