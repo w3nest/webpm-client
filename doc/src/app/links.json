@@ -173,13 +173,13 @@
             "href": "https://docs.npmjs.com/cli/v6/using-npm/semver"
         },
         "pyrun_backend": {
-            "href": "/apps/@mkdocs-ts/doc/0.3.0-wip?nav=/api/Interpreters/pyrun_backend"
+            "href": "/apps/@mkdocs-ts/doc/latest?nav=/api/Interpreters/pyrun_backend"
         },
         "mkdocs-ts": {
-            "href": "/apps/@mkdocs-ts/doc/0.3.0-wip?nav=/"
+            "href": "/apps/@mkdocs-ts/doc/latest?nav=/"
         },
         "mkdocs-ts.notebook-tuto": {
-            "href": "/apps/@mkdocs-ts/doc/0.3.0-wip?nav=/tutorials/notebook"
+            "href": "/apps/@mkdocs-ts/doc/latest?nav=/tutorials/notebook"
         },
         "structured-clone": {
             "href": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm"
