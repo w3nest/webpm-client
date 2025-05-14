@@ -90,6 +90,7 @@ const app = new DefaultLayout.LayoutWithCompanion(
             npm: 'https://www.npmjs.com/package/mkdocs-ts',
             docGithub: 'https://github.com/w3nest/mkdocs-ts/tree/main/doc',
         }),
+        navFooter: true,
         companionNodes$,
     },
     ctx,

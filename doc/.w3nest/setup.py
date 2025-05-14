@@ -19,7 +19,7 @@ pkg_json = parse_json(project_folder / "package.json")
 pkg_json_webpm = parse_json(project_folder / ".." / "package.json")
 # (cd ./node_modules/@youwol/mkdocs-ts/bin/ && node index.js --project ../../../../.. --nav /api --out ../../../../assets/api)
 externals_deps = {
-    "mkdocs-ts": "^0.4.1",
+    "mkdocs-ts": "^0.4.2",
     "@w3nest/webpm-client": f"^{pkg_json_webpm['version'].replace('-wip', '')}",
     "rxjs": "^7.5.6",
     "@w3nest/http-clients": "^0.1.5",
