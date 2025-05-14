@@ -12,7 +12,7 @@
 It streamlines dynamic installation and management of various resource types, 
 offering you enhanced modularity and flexibility for your projects.
 
-To see it in action, try running the following snippet (<kbd>Ctrl</kbd>+<kbd>Enter</kbd> is a shortcut for execution):
+To see it in action, execute the following snippet (<kbd>Ctrl</kbd>+<kbd>Enter</kbd> is a shortcut for execution):
 
 <confettiExample></confettiExample>
 
