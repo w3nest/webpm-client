@@ -48,10 +48,7 @@ export function onHttpRequestLoad(
     onEvent?: (ev: CdnEvent) => void,
 ) {
     if (req.status === Status200) {
-        const content =
-            req.responseText +
-            `\n//# sourceURL=${url.split('/').slice(0, -1).join('/')}/`
-
+        const content = req.responseText + `\n//# sourceMappingURL=${url}.map`
         onEvent?.(new SourceLoadedEvent(name, assetId, url, version, event))
         resolve({
             name,
@@ -223,7 +220,6 @@ export function importScriptMainWindow({
         return executingWindow.document.getElementById(url) as HTMLScriptElement
     }
     const script = document.createElement('script')
-    script.id = url
     if (Client.FrontendConfiguration.crossOrigin !== undefined) {
         script.crossOrigin = Client.FrontendConfiguration.crossOrigin
     }
@@ -238,6 +234,7 @@ export function importScriptMainWindow({
     executingWindow.addEventListener('error', onErrorParsing)
     head.appendChild(script)
     executingWindow.removeEventListener('error', onErrorParsing)
+    //script.src = url
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return error ?? script
 }
