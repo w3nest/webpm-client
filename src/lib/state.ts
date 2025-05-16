@@ -298,15 +298,23 @@ export class StateImplementation {
     }
 }
 
-function unwrapPreserveDefault(mod: unknown) {
-    if (
-        mod &&
+interface DefaultOnly<T = unknown> {
+    default: T
+}
+
+function isDefaultOnly<T>(mod: unknown): mod is DefaultOnly<T> {
+    return (
         typeof mod === 'object' &&
+        mod !== null &&
         'default' in mod &&
         mod.default !== null &&
         mod.default !== undefined &&
-        Object.keys(mod).length === 1
-    ) {
+        Object.keys(mod as object).length === 1
+    )
+}
+
+function unwrapPreserveDefault(mod: unknown) {
+    if (isDefaultOnly<object>(mod)) {
         const unwrapped = mod.default
         return new Proxy(unwrapped, {
             get(target, prop, receiver) {
