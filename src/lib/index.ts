@@ -5,7 +5,7 @@ export * from './inputs.models'
 export {
     backendConfiguration,
     BackendConfiguration,
-    getLocalCookie,
+    getW3NestCookie,
     Cookie,
 } from './backend-configuration'
 export { FrontendConfiguration } from './frontend-configuration'

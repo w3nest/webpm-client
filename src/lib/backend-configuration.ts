@@ -94,7 +94,7 @@ export interface Cookie {
     }
 }
 
-export function getLocalCookie(): Cookie | undefined {
+export function getW3NestCookie(): Cookie | undefined {
     const name = 'w3nest'
     const regex = new RegExp(`(^| )${name}=([^;]+)`)
     const match = regex.exec(document.cookie)

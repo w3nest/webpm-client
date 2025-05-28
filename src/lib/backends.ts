@@ -12,7 +12,7 @@ import {
     StartBackendEvent,
 } from './events.models'
 import type * as rxjsModuleType from 'rxjs'
-import { getLocalCookie } from './backend-configuration'
+import { getW3NestCookie } from './backend-configuration'
 import pkgJson from '../../package.json'
 import type * as HttpClients from '@w3nest/http-clients'
 
@@ -68,7 +68,7 @@ export async function installBackends({
         log('No backend to install')
         return
     }
-    const ywLocalCookie = getLocalCookie()
+    const ywLocalCookie = getW3NestCookie()
     if (!ywLocalCookie || ywLocalCookie.type !== 'local') {
         log(
             'No cookie for local backend installation found, abort installation',
