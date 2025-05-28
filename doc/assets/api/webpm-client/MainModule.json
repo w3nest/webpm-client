@@ -11909,8 +11909,8 @@
                 "filePath": "src/lib/utils.ts",
                 "declaration": "export function getAssetId(name: string)",
                 "implementation": "export function getAssetId(name: string) {\n    return window.btoa(name)\n}",
-                "startLine": 346,
-                "endLine": 349,
+                "startLine": 343,
+                "endLine": 346,
                 "references": {
                     "getAssetId": "@nav/api/MainModule.getAssetId"
                 }
@@ -11966,8 +11966,8 @@
                 "filePath": "src/lib/utils.ts",
                 "declaration": "export function getUrlBase(name: string, version: string)",
                 "implementation": "export function getUrlBase(name: string, version: string) {\n    const assetId = getAssetId(name)\n    return `${Client.BackendConfiguration.urlResource}/${assetId}/${version}`\n}",
-                "startLine": 359,
-                "endLine": 363,
+                "startLine": 356,
+                "endLine": 360,
                 "references": {
                     "getUrlBase": "@nav/api/MainModule.getUrlBase"
                 }
@@ -12440,8 +12440,8 @@
                 "filePath": "src/lib/utils.ts",
                 "declaration": "export function parseResourceId(resourceId: string): {\n    name: string\n    version: string\n    path: string\n    assetId: string\n    url: string\n}",
                 "implementation": "export function parseResourceId(resourceId: string): {\n    name: string\n    version: string\n    path: string\n    assetId: string\n    url: string\n} {\n    const name = resourceId.split('#')[0]\n    const version = resourceId.split('#')[1].split('~')[0]\n    const path = resourceId.split('#')[1].split('~')[1]\n    const assetId = getAssetId(name)\n    const url = `${getUrlBase(name, version)}/${path}`\n    return { name, version, path, assetId, url }\n}",
-                "startLine": 111,
-                "endLine": 125,
+                "startLine": 108,
+                "endLine": 122,
                 "references": {
                     "parseResourceId": "@nav/api/MainModule.parseResourceId"
                 }
