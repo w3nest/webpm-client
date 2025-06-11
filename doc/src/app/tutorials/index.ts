@@ -1,6 +1,12 @@
-import { installNotebookModule, Router } from 'mkdocs-ts'
-import { AppNav, fromMd, icon, url, placeholders } from '../common'
-import { firstValueFrom } from 'rxjs'
+import { Router } from 'mkdocs-ts'
+import {
+    AppNav,
+    fromMd,
+    icon,
+    url,
+    placeholders,
+    installNotebookModule,
+} from '../common'
 
 async function notebookPage(path: string, router: Router) {
     const NotebookModule = await installNotebookModule()
@@ -14,9 +20,6 @@ async function notebookPage(path: string, router: Router) {
             placeholders,
         },
     }
-    await firstValueFrom(
-        NotebookModule.SnippetEditorView.fetchCmDependencies$('javascript'),
-    )
     return new NotebookModule.NotebookPage({
         url: url(path),
         router,

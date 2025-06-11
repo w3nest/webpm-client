@@ -1,7 +1,20 @@
-import { DefaultLayout, installCodeApiModule, MdWidgets } from 'mkdocs-ts'
+import { DefaultLayout } from 'mkdocs-ts'
 import { AppNav, createRootContext, placeholders } from '../common'
-import { firstValueFrom } from 'rxjs'
 import { companionNodes$ } from '../on-load'
+import type * as CodeApiModule from '@mkdocs-ts/code-api'
+import * as webpm from '@w3nest/webpm-client'
+import * as pkgJson from '../../../package.json'
+
+export async function installCodeApiModule() {
+    const codeApiVersion = pkgJson.webpm.dependencies['@mkdocs-ts/code-api']
+    const { CodeApi } = await webpm.install<{
+        CodeApi: typeof CodeApiModule
+    }>({
+        esm: [`@mkdocs-ts/code-api#${codeApiVersion} as CodeApi`],
+        css: [`@mkdocs-ts/code-api#${codeApiVersion}~assets/ts-typedoc.css`],
+    })
+    return CodeApi
+}
 
 export async function apiNav(): Promise<AppNav> {
     const context = createRootContext({
@@ -10,11 +23,8 @@ export async function apiNav(): Promise<AppNav> {
     })
 
     const CodeApiModule = await installCodeApiModule()
-    // This is to preload for javascript snippets included in the API documentation, such that the `scrollTo` is
-    // working well.
-    await firstValueFrom(
-        MdWidgets.CodeSnippetView.fetchCmDependencies$('javascript'),
-    )
+
+    const baseUrl = webpm.getUrlBase(pkgJson.name, pkgJson.version)
     return CodeApiModule.codeApiEntryNode(
         {
             name: 'API',
@@ -31,17 +41,12 @@ export async function apiNav(): Promise<AppNav> {
                 ],
             },
             entryModule: 'webpm-client',
-            docBasePath: '../assets/api',
+            dataFolder: `${baseUrl}/assets/api`,
+            rootModulesNav: {
+                'webpm-client': '@nav/api',
+            },
             configuration: {
                 ...CodeApiModule.configurationTsTypedoc,
-                notebook: {
-                    options: {
-                        runAtStart: true,
-                        markdown: {
-                            placeholders,
-                        },
-                    },
-                },
                 mdParsingOptions: {
                     placeholders,
                 },

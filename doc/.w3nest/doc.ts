@@ -1,4 +1,4 @@
-import { generateApiFiles } from './../node_modules/mkdocs-ts/src/mkapi-backends/mkapi-typescript'
+import { generateApiFiles } from './../node_modules/@mkdocs-ts/code-api/src/mkapi-backends/mkapi-typescript'
 
 const missingRefs = {
     LightLibraryWithAliasQueryString:

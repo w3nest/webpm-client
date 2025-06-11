@@ -19,12 +19,14 @@ pkg_json = parse_json(project_folder / "package.json")
 pkg_json_webpm = parse_json(project_folder / ".." / "package.json")
 # (cd ./node_modules/@youwol/mkdocs-ts/bin/ && node index.js --project ../../../../.. --nav /api --out ../../../../assets/api)
 externals_deps = {
-    "mkdocs-ts": "^0.4.2",
+    "mkdocs-ts": "^0.5.1",
+    "@mkdocs-ts/code-api": "^0.2.0",
+    "@mkdocs-ts/notebook": "^0.1.1",
     "@w3nest/webpm-client": f"^{pkg_json_webpm['version'].replace('-wip', '')}",
-    "rxjs": "^7.5.6",
-    "@w3nest/http-clients": "^0.1.5",
-    "rx-vdom": "^0.1.3",
-    "@w3nest/ui-tk": "^0.1.1",
+    "rxjs": "^7.8.2",
+    "@w3nest/http-clients": "^0.1.7",
+    "rx-vdom": "^0.1.6",
+    "@w3nest/ui-tk": "^0.1.5",
 }
 in_bundle_deps = {}
 dev_deps = {}
@@ -45,6 +47,8 @@ config = ProjectConfig(
             entryFile="app/main.ts",
             loadDependencies=[
                 "mkdocs-ts",
+                "@mkdocs-ts/code-api",
+                "@mkdocs-ts/notebook",
                 "@w3nest/webpm-client",
                 "rxjs",
                 "@w3nest/http-clients",

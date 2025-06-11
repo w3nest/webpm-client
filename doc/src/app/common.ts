@@ -2,7 +2,6 @@ import {
     Navigation,
     DefaultLayout,
     fromMarkdown,
-    installNotebookModule,
     Context,
     Label,
     NoContext,
@@ -19,6 +18,9 @@ import { from } from 'rxjs'
 import pkgJson from '../../package.json'
 // Register links
 import './md-widgets'
+
+import * as webpm from '@w3nest/webpm-client'
+import type * as NotebookModule from '@mkdocs-ts/notebook'
 
 export const project = {
     name: 'webpm-client',
@@ -73,6 +75,16 @@ export function createRootContext({
         labels,
         callstack: [],
     })
+}
+export async function installNotebookModule() {
+    const notebookVersion = pkgJson.webpm.dependencies['@mkdocs-ts/notebook']
+    const { Notebook } = await webpm.install<{
+        Notebook: typeof NotebookModule
+    }>({
+        esm: [`@mkdocs-ts/notebook#${notebookVersion} as Notebook`],
+        css: [`@mkdocs-ts/notebook#${notebookVersion}~assets/notebook.css`],
+    })
+    return Notebook
 }
 
 GlobalMarkdownViews.factory = {
