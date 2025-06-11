@@ -79,6 +79,7 @@ const app = new DefaultLayout.LayoutWithCompanion(
                 router,
             }),
             badge: new AuthBadge(),
+            zIndex: 1001,
         },
         footer: new Footer({
             license: 'MIT',
