@@ -27,7 +27,12 @@ export const project = {
     docBasePath: `../assets/api`,
 }
 
-export const url = (restOfPath: string) => `../assets/${restOfPath}`
+export const url = (restOfPath: string) =>
+    webpm.resolveUrlWithFP({
+        package: pkgJson.name,
+        version: pkgJson.version,
+        path: `assets/${restOfPath}`,
+    })
 
 export const placeholders = {
     '{{project}}': project.name,
