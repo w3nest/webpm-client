@@ -84,7 +84,7 @@ const app = new DefaultLayout.LayoutWithCompanion(
         footer: new Footer({
             license: 'MIT',
             copyrights: [
-                { year: '2021', holder: 'YouWol' },
+                { year: '2021-2024', holder: 'YouWol' },
                 { year: '2025', holder: 'Guillaume Reinisch' },
             ],
             github: 'https://github.com/w3nest/mkdocs-ts',
