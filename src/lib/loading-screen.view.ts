@@ -126,7 +126,7 @@ export class LoadingScreen {
                 height: '100vh',
                 padding: 'inherit',
                 'font-weight': 'bolder',
-                'z-index': '10',
+                'z-index': '1000',
             },
             autoRender: true,
         }
