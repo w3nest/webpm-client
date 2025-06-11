@@ -401,6 +401,10 @@ export class Client {
         const log = (text: string, level: 'Info' | 'Error' = 'Info') => {
             onEvent(new ConsoleEvent(level, 'LoadingGraph', text))
         }
+        StateImplementation.locks = [
+            ...StateImplementation.locks,
+            ...inputs.loadingGraph.lock,
+        ]
         const locks = inputs.loadingGraph.lock
             .map((pack) => [pack.id, pack])
             .reduce<

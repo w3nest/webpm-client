@@ -1,4 +1,4 @@
-import { LoadingGraph, FetchedScript } from './inputs.models'
+import { LoadingGraph, FetchedScript, Library } from './inputs.models'
 import { gt, gte, satisfies } from 'semver'
 import pkgJson from '../../package.json'
 import { installBackendClientDeps } from './backends'
@@ -7,6 +7,7 @@ import type { Observable } from 'rxjs'
 import type { ContextMessage } from '@w3nest/http-clients'
 import type * as HttpClients from '@w3nest/http-clients'
 import { CdnError } from './errors.models'
+import { getUrlBase } from './utils'
 
 /**
  * Type alias for string used as library name.
@@ -18,11 +19,46 @@ export type LibraryName = string
 export type Version = string
 
 /**
+ * Resolves the full URL for a package asset, optionally appending a fingerprint
+ * query parameter if a lock entry exists for the specified package and version.
+ *
+ * This function is typically used to construct browser-safe URLs for
+ * fingerprinted (cache-busted) JavaScript bundles, ensuring that republished
+ * versions can bypass browser caching when necessary.
+ *
+ * @param params An object containing:
+ * @param params.package The name of the library or package.
+ * @param params.version The specific version of the package.
+ * @param params.path The relative path to the asset within the package.
+ *
+ * @returns A URL string combining the base URL, asset path, and optionally
+ * a `?fp=<fingerprint>` query parameter if a matching fingerprint is found.
+ */
+export function resolveUrlWithFP(params: {
+    package: LibraryName
+    version: string
+    path: string
+}) {
+    const urlBase = `${getUrlBase(params.package, params.version)}/${params.path}`
+    const lock = StateImplementation.locks.find(
+        ({ name, version }) =>
+            name === params.package && version === params.version,
+    )
+    if (!lock) {
+        return urlBase
+    }
+    return `${urlBase}?fp=${lock.fingerprint}`
+}
+/**
  * Singleton object that gathers history of fetched modules, scripts & CSS.
  * It also acts as a cache store.
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class StateImplementation {
+    /**
+     * Union of all elements retrieved from `locks` attribute of installed loading graph.
+     */
+    static locks: Library[] = []
     /**
      * ES modules installed.
      */

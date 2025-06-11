@@ -1,5 +1,10 @@
 export { Client, install, queryLoadingGraph } from './client'
-export { StateImplementation, LibraryName, Version } from './state'
+export {
+    StateImplementation,
+    LibraryName,
+    Version,
+    resolveUrlWithFP,
+} from './state'
 export * from './loading-screen.view'
 export * from './inputs.models'
 export {

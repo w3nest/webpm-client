@@ -616,6 +616,11 @@ export interface Library {
     versionNumber: number
 
     /**
+     * Fingerprint of the library (from its source files).
+     */
+    fingerprint: string
+
+    /**
      * API key.
      */
     apiKey: string
