@@ -4,7 +4,7 @@
         "sections": []
     },
     "path": "webpm-client/MainModule/TestUtilsTypes",
-    "navPath": "@nav/api/",
+    "navPath": "@nav[webpm-client]",
     "attributes": [],
     "types": [
         {
@@ -12,7 +12,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Implementation of  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link>  for testing purpose using Jest.",
+                        "content": "Implementation of  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link>  for testing purpose using Jest.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -24,7 +24,7 @@
                 ]
             },
             "path": "WebWorkerJest",
-            "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest",
+            "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest",
             "attributes": [
                 {
                     "name": "uid",
@@ -49,7 +49,7 @@
                         ]
                     },
                     "path": "WebWorkerJest.uid",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.uid",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.uid",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "public readonly uid: string",
@@ -57,8 +57,8 @@
                         "startLine": 20,
                         "endLine": 21,
                         "references": {
-                            "uid": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.uid",
-                            "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid"
+                            "uid": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.uid",
+                            "WWorkerTrait.uid": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid"
                         }
                     }
                 }
@@ -81,7 +81,7 @@
                         ]
                     },
                     "path": "WebWorkerJest.execute",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.execute",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.execute",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "execute<T>({\n    taskId,\n    entryPoint,\n    args,\n}: {\n    taskId: string\n    entryPoint: (args: EntryPointArguments<T>) => unknown\n    args: T\n})",
@@ -89,8 +89,8 @@
                         "startLine": 35,
                         "endLine": 59,
                         "references": {
-                            "execute": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.execute",
-                            "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments"
+                            "execute": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.execute",
+                            "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments"
                         }
                     },
                     "semantic": {
@@ -117,7 +117,7 @@
                         ]
                     },
                     "path": "WebWorkerJest.send",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.send",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.send",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "send({ taskId, data }: { taskId: string; data: unknown })",
@@ -125,7 +125,7 @@
                         "startLine": 59,
                         "endLine": 72,
                         "references": {
-                            "send": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.send"
+                            "send": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.send"
                         }
                     },
                     "semantic": {
@@ -152,7 +152,7 @@
                         ]
                     },
                     "path": "WebWorkerJest.terminate",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.terminate",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.terminate",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "terminate()",
@@ -160,7 +160,7 @@
                         "startLine": 76,
                         "endLine": 79,
                         "references": {
-                            "terminate": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest.terminate"
+                            "terminate": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.terminate"
                         }
                     },
                     "semantic": {
@@ -178,14 +178,14 @@
                 "startLine": 19,
                 "endLine": 80,
                 "references": {
-                    "WebWorkerJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest",
-                    "Message": "@nav/api/WorkersPoolModule.Message",
-                    "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid",
-                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
-                    "WWorkerTrait.execute": "@nav/api/WorkersPoolModule.WWorkerTrait.execute",
-                    "WWorkerTrait.send": "@nav/api/WorkersPoolModule.WWorkerTrait.send",
-                    "WWorkerTrait.terminate": "@nav/api/WorkersPoolModule.WWorkerTrait.terminate",
-                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait"
+                    "WebWorkerJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest",
+                    "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
+                    "WWorkerTrait.uid": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid",
+                    "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments",
+                    "WWorkerTrait.execute": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.execute",
+                    "WWorkerTrait.send": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.send",
+                    "WWorkerTrait.terminate": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.terminate",
+                    "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait"
                 }
             },
             "semantic": {
@@ -200,7 +200,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Implementation of  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.IWWorkerProxy\" semantic=\"interface\">IWWorkerProxy</mkapi-api-link>  for testing purpose using Jest.",
+                        "content": "Implementation of  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy\" semantic=\"interface\">IWWorkerProxy</mkapi-api-link>  for testing purpose using Jest.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -212,7 +212,7 @@
                 ]
             },
             "path": "WebWorkersJest",
-            "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest",
+            "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest",
             "attributes": [
                 {
                     "name": "onAfterWorkerInstall",
@@ -237,7 +237,7 @@
                         ]
                     },
                     "path": "WebWorkersJest.onAfterWorkerInstall",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.onAfterWorkerInstall",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.onAfterWorkerInstall",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "public readonly onAfterWorkerInstall?: InWorkerAction",
@@ -245,9 +245,9 @@
                         "startLine": 90,
                         "endLine": 91,
                         "references": {
-                            "onAfterWorkerInstall": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.onAfterWorkerInstall",
-                            "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
-                            "IWWorkerProxy.onAfterWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall"
+                            "onAfterWorkerInstall": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.onAfterWorkerInstall",
+                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
+                            "IWWorkerProxy.onAfterWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall"
                         }
                     }
                 },
@@ -274,7 +274,7 @@
                         ]
                     },
                     "path": "WebWorkersJest.onBeforeWorkerInstall",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.onBeforeWorkerInstall",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.onBeforeWorkerInstall",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "public readonly onBeforeWorkerInstall?: InWorkerAction",
@@ -282,9 +282,9 @@
                         "startLine": 89,
                         "endLine": 90,
                         "references": {
-                            "onBeforeWorkerInstall": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.onBeforeWorkerInstall",
-                            "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
-                            "IWWorkerProxy.onBeforeWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall"
+                            "onBeforeWorkerInstall": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.onBeforeWorkerInstall",
+                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
+                            "IWWorkerProxy.onBeforeWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall"
                         }
                     }
                 }
@@ -307,7 +307,7 @@
                         ]
                     },
                     "path": "WebWorkersJest.createWorker",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.createWorker",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.createWorker",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "createWorker({\n    onMessageWorker,\n    onMessageMain,\n}: {\n    onMessageWorker: (message: Message) => unknown\n    onMessageMain: (message: Message) => unknown\n})",
@@ -315,9 +315,9 @@
                         "startLine": 124,
                         "endLine": 140,
                         "references": {
-                            "createWorker": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.createWorker",
-                            "Message": "@nav/api/WorkersPoolModule.Message",
-                            "WebWorkerJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest"
+                            "createWorker": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.createWorker",
+                            "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
+                            "WebWorkerJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest"
                         }
                     },
                     "semantic": {
@@ -344,7 +344,7 @@
                         ]
                     },
                     "path": "WebWorkersJest.serializeFunction",
-                    "navPath": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.serializeFunction",
+                    "navPath": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.serializeFunction",
                     "code": {
                         "filePath": "src/lib/test-utils/index.ts",
                         "declaration": "serializeFunction(fct: (...unknown: unknown[]) => unknown)",
@@ -352,7 +352,7 @@
                         "startLine": 141,
                         "endLine": 145,
                         "references": {
-                            "serializeFunction": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest.serializeFunction"
+                            "serializeFunction": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.serializeFunction"
                         }
                     },
                     "semantic": {
@@ -370,16 +370,16 @@
                 "startLine": 84,
                 "endLine": 146,
                 "references": {
-                    "WebWorkersJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest",
-                    "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
-                    "IWWorkerProxy.onAfterWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
-                    "IWWorkerProxy.onBeforeWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
-                    "IWWorkerProxy.type": "@nav/api/WorkersPoolModule.IWWorkerProxy.type",
-                    "WebWorkerJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest",
-                    "Message": "@nav/api/WorkersPoolModule.Message",
-                    "IWWorkerProxy.createWorker": "@nav/api/WorkersPoolModule.IWWorkerProxy.createWorker",
-                    "IWWorkerProxy.serializeFunction": "@nav/api/WorkersPoolModule.IWWorkerProxy.serializeFunction",
-                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy"
+                    "WebWorkersJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest",
+                    "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
+                    "IWWorkerProxy.onAfterWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
+                    "IWWorkerProxy.onBeforeWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
+                    "IWWorkerProxy.type": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.type",
+                    "WebWorkerJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest",
+                    "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
+                    "IWWorkerProxy.createWorker": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.createWorker",
+                    "IWWorkerProxy.serializeFunction": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.serializeFunction",
+                    "IWWorkerProxy": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy"
                 }
             },
             "semantic": {

@@ -3,7 +3,7 @@
     "documentation": {
         "sections": [
             {
-                "content": "Add-on module enhancing [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)\nmanagement by automating environment setup, handling task scheduling, and managing resources efficiently.\n\n<note level=\"warning\">\nThis module is **not included by default** in the main library.\nConsumers must install it explicitly using  <mkapi-api-link nav=\"@nav/api/MainModule.installWorkersPoolModule\" semantic=\"function\">MainModule.installWorkersPoolModule</mkapi-api-link> .\n</note>\n\nThe main entry point of the module is  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool\" semantic=\"class\">WorkersPool</mkapi-api-link> .",
+                "content": "Add-on module enhancing [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)\nmanagement by automating environment setup, handling task scheduling, and managing resources efficiently.\n\n<note level=\"warning\">\nThis module is **not included by default** in the main library.\nConsumers must install it explicitly using  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.installWorkersPoolModule\" semantic=\"function\">MainModule.installWorkersPoolModule</mkapi-api-link> .\n</note>\n\nThe main entry point of the module is  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool\" semantic=\"class\">WorkersPool</mkapi-api-link> .",
                 "contentType": "markdown",
                 "semantic": {
                     "role": "",
@@ -15,7 +15,7 @@
         ]
     },
     "path": "webpm-client/WorkersPoolModule",
-    "navPath": "@nav/api/",
+    "navPath": "@nav[webpm-client]",
     "attributes": [],
     "types": [
         {
@@ -23,7 +23,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Empty implementation of  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.ContextTrait\" semantic=\"interface\">ContextTrait</mkapi-api-link> .",
+                        "content": "Empty implementation of  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.ContextTrait\" semantic=\"interface\">ContextTrait</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -35,7 +35,7 @@
                 ]
             },
             "path": "NoContext",
-            "navPath": "@nav/api/WorkersPoolModule.NoContext",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.NoContext",
             "attributes": [],
             "callables": [
                 {
@@ -77,7 +77,7 @@
                         ]
                     },
                     "path": "NoContext.withChild",
-                    "navPath": "@nav/api/WorkersPoolModule.NoContext.withChild",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.NoContext.withChild",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "withChild<T>(_name: string, cb: (ctx: ContextTrait) => T): T",
@@ -85,8 +85,8 @@
                         "startLine": 50,
                         "endLine": 53,
                         "references": {
-                            "withChild": "@nav/api/WorkersPoolModule.NoContext.withChild",
-                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                            "withChild": "@nav[webpm-client]/WorkersPoolModule.NoContext.withChild",
+                            "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait"
                         }
                     },
                     "semantic": {
@@ -104,10 +104,10 @@
                 "startLine": 49,
                 "endLine": 58,
                 "references": {
-                    "NoContext": "@nav/api/WorkersPoolModule.NoContext",
-                    "ContextTrait.info": "@nav/api/WorkersPoolModule.ContextTrait.info",
-                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait",
-                    "ContextTrait.withChild": "@nav/api/WorkersPoolModule.ContextTrait.withChild"
+                    "NoContext": "@nav[webpm-client]/WorkersPoolModule.NoContext",
+                    "ContextTrait.info": "@nav[webpm-client]/WorkersPoolModule.ContextTrait.info",
+                    "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait",
+                    "ContextTrait.withChild": "@nav[webpm-client]/WorkersPoolModule.ContextTrait.withChild"
                 }
             },
             "semantic": {
@@ -134,7 +134,7 @@
                 ]
             },
             "path": "Process",
-            "navPath": "@nav/api/WorkersPoolModule.Process",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.Process",
             "attributes": [
                 {
                     "name": "context",
@@ -159,7 +159,7 @@
                         ]
                     },
                     "path": "Process.context",
-                    "navPath": "@nav/api/WorkersPoolModule.Process.context",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.Process.context",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly context: ContextTrait",
@@ -167,8 +167,8 @@
                         "startLine": 719,
                         "endLine": 720,
                         "references": {
-                            "context": "@nav/api/WorkersPoolModule.Process.context",
-                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                            "context": "@nav[webpm-client]/WorkersPoolModule.Process.context",
+                            "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait"
                         }
                     }
                 },
@@ -195,7 +195,7 @@
                         ]
                     },
                     "path": "Process.taskId",
-                    "navPath": "@nav/api/WorkersPoolModule.Process.taskId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.Process.taskId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly taskId: string",
@@ -203,7 +203,7 @@
                         "startLine": 711,
                         "endLine": 712,
                         "references": {
-                            "taskId": "@nav/api/WorkersPoolModule.Process.taskId"
+                            "taskId": "@nav[webpm-client]/WorkersPoolModule.Process.taskId"
                         }
                     }
                 },
@@ -230,7 +230,7 @@
                         ]
                     },
                     "path": "Process.title",
-                    "navPath": "@nav/api/WorkersPoolModule.Process.title",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.Process.title",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly title: string",
@@ -238,7 +238,7 @@
                         "startLine": 715,
                         "endLine": 716,
                         "references": {
-                            "title": "@nav/api/WorkersPoolModule.Process.title"
+                            "title": "@nav[webpm-client]/WorkersPoolModule.Process.title"
                         }
                     }
                 }
@@ -251,8 +251,8 @@
                 "startLine": 707,
                 "endLine": 752,
                 "references": {
-                    "Process": "@nav/api/WorkersPoolModule.Process",
-                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                    "Process": "@nav[webpm-client]/WorkersPoolModule.Process",
+                    "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait"
                 }
             },
             "semantic": {
@@ -267,7 +267,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Implementation of  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link>  for Web Workers provided by browsers.",
+                        "content": "Implementation of  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link>  for Web Workers provided by browsers.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -279,7 +279,7 @@
                 ]
             },
             "path": "WebWorkerBrowser",
-            "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser",
             "attributes": [
                 {
                     "name": "uid",
@@ -304,7 +304,7 @@
                         ]
                     },
                     "path": "WebWorkerBrowser.uid",
-                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.uid",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.uid",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "public readonly uid: string",
@@ -312,8 +312,8 @@
                         "startLine": 82,
                         "endLine": 83,
                         "references": {
-                            "uid": "@nav/api/WorkersPoolModule.WebWorkerBrowser.uid",
-                            "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid"
+                            "uid": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.uid",
+                            "WWorkerTrait.uid": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid"
                         }
                     }
                 },
@@ -340,7 +340,7 @@
                         ]
                     },
                     "path": "WebWorkerBrowser.worker",
-                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.worker",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.worker",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "public readonly worker: Worker",
@@ -348,7 +348,7 @@
                         "startLine": 86,
                         "endLine": 87,
                         "references": {
-                            "worker": "@nav/api/WorkersPoolModule.WebWorkerBrowser.worker"
+                            "worker": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.worker"
                         }
                     }
                 }
@@ -371,7 +371,7 @@
                         ]
                     },
                     "path": "WebWorkerBrowser.execute",
-                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.execute",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.execute",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "execute<T>({\n    taskId,\n    entryPoint,\n    args,\n}: {\n    taskId: string\n    entryPoint: (args: EntryPointArguments<T>) => unknown\n    args: T\n})",
@@ -379,8 +379,8 @@
                         "startLine": 92,
                         "endLine": 112,
                         "references": {
-                            "execute": "@nav/api/WorkersPoolModule.WebWorkerBrowser.execute",
-                            "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments"
+                            "execute": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.execute",
+                            "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments"
                         }
                     },
                     "semantic": {
@@ -407,7 +407,7 @@
                         ]
                     },
                     "path": "WebWorkerBrowser.send",
-                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.send",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.send",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "send({ taskId, data }: { taskId: string; data: unknown })",
@@ -415,7 +415,7 @@
                         "startLine": 113,
                         "endLine": 124,
                         "references": {
-                            "send": "@nav/api/WorkersPoolModule.WebWorkerBrowser.send"
+                            "send": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.send"
                         }
                     },
                     "semantic": {
@@ -442,7 +442,7 @@
                         ]
                     },
                     "path": "WebWorkerBrowser.terminate",
-                    "navPath": "@nav/api/WorkersPoolModule.WebWorkerBrowser.terminate",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.terminate",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "terminate()",
@@ -450,7 +450,7 @@
                         "startLine": 125,
                         "endLine": 128,
                         "references": {
-                            "terminate": "@nav/api/WorkersPoolModule.WebWorkerBrowser.terminate"
+                            "terminate": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser.terminate"
                         }
                     },
                     "semantic": {
@@ -468,13 +468,13 @@
                 "startLine": 78,
                 "endLine": 129,
                 "references": {
-                    "WebWorkerBrowser": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
-                    "WWorkerTrait.uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid",
-                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
-                    "WWorkerTrait.execute": "@nav/api/WorkersPoolModule.WWorkerTrait.execute",
-                    "WWorkerTrait.send": "@nav/api/WorkersPoolModule.WWorkerTrait.send",
-                    "WWorkerTrait.terminate": "@nav/api/WorkersPoolModule.WWorkerTrait.terminate",
-                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait"
+                    "WebWorkerBrowser": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser",
+                    "WWorkerTrait.uid": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid",
+                    "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments",
+                    "WWorkerTrait.execute": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.execute",
+                    "WWorkerTrait.send": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.send",
+                    "WWorkerTrait.terminate": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.terminate",
+                    "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait"
                 }
             },
             "semantic": {
@@ -489,7 +489,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Implementation of  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.IWWorkerProxy\" semantic=\"interface\">IWWorkerProxy</mkapi-api-link>  for browser environment.",
+                        "content": "Implementation of  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy\" semantic=\"interface\">IWWorkerProxy</mkapi-api-link>  for browser environment.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -501,7 +501,7 @@
                 ]
             },
             "path": "WebWorkersBrowser",
-            "navPath": "@nav/api/WorkersPoolModule.WebWorkersBrowser",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser",
             "attributes": [],
             "callables": [
                 {
@@ -521,7 +521,7 @@
                         ]
                     },
                     "path": "WebWorkersBrowser.createWorker",
-                    "navPath": "@nav/api/WorkersPoolModule.WebWorkersBrowser.createWorker",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser.createWorker",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "createWorker({\n    onMessageWorker,\n    onMessageMain,\n}: {\n    onMessageWorker: (message) => unknown\n    onMessageMain: (message) => unknown\n})",
@@ -529,8 +529,8 @@
                         "startLine": 135,
                         "endLine": 157,
                         "references": {
-                            "createWorker": "@nav/api/WorkersPoolModule.WebWorkersBrowser.createWorker",
-                            "WebWorkerBrowser": "@nav/api/WorkersPoolModule.WebWorkerBrowser"
+                            "createWorker": "@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser.createWorker",
+                            "WebWorkerBrowser": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser"
                         }
                     },
                     "semantic": {
@@ -579,7 +579,7 @@
                         ]
                     },
                     "path": "WebWorkersBrowser.serializeFunction",
-                    "navPath": "@nav/api/WorkersPoolModule.WebWorkersBrowser.serializeFunction",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser.serializeFunction",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "serializeFunction(fct?: (...unknown) => unknown): string",
@@ -587,7 +587,7 @@
                         "startLine": 164,
                         "endLine": 167,
                         "references": {
-                            "serializeFunction": "@nav/api/WorkersPoolModule.WebWorkersBrowser.serializeFunction"
+                            "serializeFunction": "@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser.serializeFunction"
                         }
                     },
                     "semantic": {
@@ -605,12 +605,12 @@
                 "startLine": 133,
                 "endLine": 168,
                 "references": {
-                    "WebWorkersBrowser": "@nav/api/WorkersPoolModule.WebWorkersBrowser",
-                    "IWWorkerProxy.type": "@nav/api/WorkersPoolModule.IWWorkerProxy.type",
-                    "WebWorkerBrowser": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
-                    "IWWorkerProxy.createWorker": "@nav/api/WorkersPoolModule.IWWorkerProxy.createWorker",
-                    "IWWorkerProxy.serializeFunction": "@nav/api/WorkersPoolModule.IWWorkerProxy.serializeFunction",
-                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy"
+                    "WebWorkersBrowser": "@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser",
+                    "IWWorkerProxy.type": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.type",
+                    "WebWorkerBrowser": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser",
+                    "IWWorkerProxy.createWorker": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.createWorker",
+                    "IWWorkerProxy.serializeFunction": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.serializeFunction",
+                    "IWWorkerProxy": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy"
                 }
             },
             "semantic": {
@@ -625,7 +625,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Entry point to create workers pool.\n\nIt is constructed using  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.constructor\" semantic=\"constructor\">WorkersPool.constructor</mkapi-api-link> , then task scheduling is achieved using\n <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.schedule\" semantic=\"method\">WorkersPool.schedule</mkapi-api-link> .\n\nThe Workers Pool Module efficiently manages Web Workers by dynamically allocating and scheduling tasks based\non availability and resource constraints.\n\n**Task Scheduling:**\n\n*  When a task is submitted, the pool checks for **available workers**.\n*  If a worker is **idle**, it immediately picks up the task.\n\n**Worker Allocation:**\n\n*  If no workers are available but the pool has **not reached its maximum limit**, a new worker is created\n   to handle the task.\n*  If the pool has already **stretched to its maximum capacity**, the task is queued until a worker becomes\n   available.\n\n**Execution & Cleanup:**\n\n*  Once a worker completes a task, it is **either reused** for the next pending task or **remains idle**\n   until needed.",
+                        "content": "Entry point to create workers pool.\n\nIt is constructed using  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.constructor\" semantic=\"constructor\">WorkersPool.constructor</mkapi-api-link> , then task scheduling is achieved using\n <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.schedule\" semantic=\"method\">WorkersPool.schedule</mkapi-api-link> .\n\nThe Workers Pool Module efficiently manages Web Workers by dynamically allocating and scheduling tasks based\non availability and resource constraints.\n\n**Task Scheduling:**\n\n*  When a task is submitted, the pool checks for **available workers**.\n*  If a worker is **idle**, it immediately picks up the task.\n\n**Worker Allocation:**\n\n*  If no workers are available but the pool has **not reached its maximum limit**, a new worker is created\n   to handle the task.\n*  If the pool has already **stretched to its maximum capacity**, the task is queued until a worker becomes\n   available.\n\n**Execution & Cleanup:**\n\n*  Once a worker completes a task, it is **either reused** for the next pending task or **remains idle**\n   until needed.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -637,7 +637,7 @@
                 ]
             },
             "path": "WorkersPool",
-            "navPath": "@nav/api/WorkersPoolModule.WorkersPool",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
             "attributes": [
                 {
                     "name": "backgroundContext",
@@ -650,7 +650,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "If  `CtxFactory`  is provided in constructor's argument ( <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPoolInput\" semantic=\"interface\">WorkersPoolInput</mkapi-api-link> ),\nmain thread logging information is available here.",
+                                "content": "If  `CtxFactory`  is provided in constructor's argument ( <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput\" semantic=\"interface\">WorkersPoolInput</mkapi-api-link> ),\nmain thread logging information is available here.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -662,7 +662,7 @@
                         ]
                     },
                     "path": "WorkersPool.backgroundContext",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.backgroundContext",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.backgroundContext",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly backgroundContext: ContextTrait | undefined",
@@ -670,8 +670,8 @@
                         "startLine": 927,
                         "endLine": 928,
                         "references": {
-                            "backgroundContext": "@nav/api/WorkersPoolModule.WorkersPool.backgroundContext",
-                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                            "backgroundContext": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.backgroundContext",
+                            "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait"
                         }
                     }
                 },
@@ -698,7 +698,7 @@
                         ]
                     },
                     "path": "WorkersPool.busyWorkers$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.busyWorkers$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.busyWorkers$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly busyWorkers$ = new BehaviorSubject<string[]>([])",
@@ -706,7 +706,7 @@
                         "startLine": 912,
                         "endLine": 913,
                         "references": {
-                            "busyWorkers$": "@nav/api/WorkersPoolModule.WorkersPool.busyWorkers$",
+                            "busyWorkers$": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.busyWorkers$",
                             "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                         }
                     }
@@ -722,7 +722,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "Observable that gathers all the  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.CdnEventWorker\" semantic=\"type-alias\">CdnEventWorker</mkapi-api-link>  emitted by the workers.",
+                                "content": "Observable that gathers all the  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.CdnEventWorker\" semantic=\"type-alias\">CdnEventWorker</mkapi-api-link>  emitted by the workers.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -734,7 +734,7 @@
                         ]
                     },
                     "path": "WorkersPool.cdnEvent$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.cdnEvent$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.cdnEvent$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly cdnEvent$: Subject<CdnEventWorker>",
@@ -742,8 +742,8 @@
                         "startLine": 934,
                         "endLine": 935,
                         "references": {
-                            "cdnEvent$": "@nav/api/WorkersPoolModule.WorkersPool.cdnEvent$",
-                            "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
+                            "cdnEvent$": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.cdnEvent$",
+                            "CdnEventWorker": "@nav[webpm-client]/WorkersPoolModule.CdnEventWorker",
                             "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                         }
                     }
@@ -771,7 +771,7 @@
                         ]
                     },
                     "path": "WorkersPool.environment",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.environment",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.environment",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly environment: WorkerEnvironment",
@@ -779,8 +779,8 @@
                         "startLine": 941,
                         "endLine": 942,
                         "references": {
-                            "environment": "@nav/api/WorkersPoolModule.WorkersPool.environment",
-                            "WorkerEnvironment": "@nav/api/WorkersPoolModule.WorkerEnvironment"
+                            "environment": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.environment",
+                            "WorkerEnvironment": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment"
                         }
                     }
                 },
@@ -795,7 +795,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "All the  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.Message\" semantic=\"type-alias\">messages </mkapi-api-link>  from all workers.",
+                                "content": "All the  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.Message\" semantic=\"type-alias\">messages </mkapi-api-link>  from all workers.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -807,7 +807,7 @@
                         ]
                     },
                     "path": "WorkersPool.mergedChannel$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.mergedChannel$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.mergedChannel$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly mergedChannel$ = new Subject<Message>()",
@@ -815,8 +815,8 @@
                         "startLine": 874,
                         "endLine": 875,
                         "references": {
-                            "mergedChannel$": "@nav/api/WorkersPoolModule.WorkersPool.mergedChannel$",
-                            "Message": "@nav/api/WorkersPoolModule.Message",
+                            "mergedChannel$": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.mergedChannel$",
+                            "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
                             "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                         }
                     }
@@ -844,7 +844,7 @@
                         ]
                     },
                     "path": "WorkersPool.pool",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.pool",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.pool",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly pool: PoolSize",
@@ -852,8 +852,8 @@
                         "startLine": 865,
                         "endLine": 866,
                         "references": {
-                            "pool": "@nav/api/WorkersPoolModule.WorkersPool.pool",
-                            "PoolSize": "@nav/api/WorkersPoolModule.PoolSize"
+                            "pool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.pool",
+                            "PoolSize": "@nav[webpm-client]/WorkersPoolModule.PoolSize"
                         }
                     }
                 },
@@ -880,7 +880,7 @@
                         ]
                     },
                     "path": "WorkersPool.runningTasks$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.runningTasks$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.runningTasks$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly runningTasks$ = new BehaviorSubject<\n        { workerId: string; taskId: string; title: string }[]\n    >([])",
@@ -888,7 +888,7 @@
                         "startLine": 903,
                         "endLine": 904,
                         "references": {
-                            "runningTasks$": "@nav/api/WorkersPoolModule.WorkersPool.runningTasks$",
+                            "runningTasks$": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.runningTasks$",
                             "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                         }
                     }
@@ -916,7 +916,7 @@
                         ]
                     },
                     "path": "WorkersPool.startedWorkers$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.startedWorkers$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.startedWorkers$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly startedWorkers$ = new BehaviorSubject<string[]>([])",
@@ -924,7 +924,7 @@
                         "startLine": 880,
                         "endLine": 881,
                         "references": {
-                            "startedWorkers$": "@nav/api/WorkersPoolModule.WorkersPool.startedWorkers$",
+                            "startedWorkers$": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.startedWorkers$",
                             "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                         }
                     }
@@ -952,7 +952,7 @@
                         ]
                     },
                     "path": "WorkersPool.workerReleased$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.workerReleased$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.workerReleased$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly workerReleased$ = new Subject<{\n        workerId: WorkerId\n        taskId: string\n    }>()",
@@ -960,7 +960,7 @@
                         "startLine": 918,
                         "endLine": 919,
                         "references": {
-                            "workerReleased$": "@nav/api/WorkersPoolModule.WorkersPool.workerReleased$",
+                            "workerReleased$": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.workerReleased$",
                             "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                         }
                     }
@@ -976,7 +976,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "Observable that emit a dictionary  `workerId -> {worker, channel$}`  each time new workers\nare ready to be used (installation & post-install tasks achieved).\n\nThe  `channel$`  object is streaming all associated worker's  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.Message\" semantic=\"type-alias\">Message</mkapi-api-link> .",
+                                "content": "Observable that emit a dictionary  `workerId -> {worker, channel$}`  each time new workers\nare ready to be used (installation & post-install tasks achieved).\n\nThe  `channel$`  object is streaming all associated worker's  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.Message\" semantic=\"type-alias\">Message</mkapi-api-link> .",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -988,7 +988,7 @@
                         ]
                     },
                     "path": "WorkersPool.workers$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.workers$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.workers$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "public readonly workers$ = new BehaviorSubject<\n        Record<\n            string,\n            {\n                worker: WWorkerTrait\n                channel$: Observable<Message>\n            }\n        >\n    >({})",
@@ -996,9 +996,9 @@
                         "startLine": 889,
                         "endLine": 890,
                         "references": {
-                            "workers$": "@nav/api/WorkersPoolModule.WorkersPool.workers$",
-                            "Message": "@nav/api/WorkersPoolModule.Message",
-                            "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
+                            "workers$": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.workers$",
+                            "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
+                            "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait",
                             "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                             "Observable": "https://rxjs.dev/guide/observable"
                         }
@@ -1034,7 +1034,7 @@
                         ]
                     },
                     "path": "WorkersPool.constructor",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.constructor",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.constructor",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "constructor(params: WorkersPoolInput)",
@@ -1042,8 +1042,8 @@
                         "startLine": 957,
                         "endLine": 998,
                         "references": {
-                            "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool",
-                            "WorkersPoolInput": "@nav/api/WorkersPoolModule.WorkersPoolInput"
+                            "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
+                            "WorkersPoolInput": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput"
                         }
                     },
                     "semantic": {
@@ -1069,7 +1069,7 @@
                             },
                             {
                                 "title": "Returns",
-                                "content": "The Web Workers proxy ( <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WebWorkersBrowser\" semantic=\"class\">WebWorkersBrowser</mkapi-api-link>  in real usage).",
+                                "content": "The Web Workers proxy ( <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser\" semantic=\"class\">WebWorkersBrowser</mkapi-api-link>  in real usage).",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "returns",
@@ -1081,7 +1081,7 @@
                         ]
                     },
                     "path": "WorkersPool.getWebWorkersProxy",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.getWebWorkersProxy",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.getWebWorkersProxy",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "getWebWorkersProxy(): IWWorkerProxy",
@@ -1089,8 +1089,8 @@
                         "startLine": 1157,
                         "endLine": 1160,
                         "references": {
-                            "getWebWorkersProxy": "@nav/api/WorkersPoolModule.WorkersPool.getWebWorkersProxy",
-                            "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy"
+                            "getWebWorkersProxy": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.getWebWorkersProxy",
+                            "IWWorkerProxy": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy"
                         }
                     },
                     "semantic": {
@@ -1117,7 +1117,7 @@
                         ]
                     },
                     "path": "WorkersPool.ready",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.ready",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.ready",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "async ready(): Promise<void>",
@@ -1125,7 +1125,7 @@
                         "startLine": 1020,
                         "endLine": 1038,
                         "references": {
-                            "ready": "@nav/api/WorkersPoolModule.WorkersPool.ready"
+                            "ready": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.ready"
                         }
                     },
                     "semantic": {
@@ -1152,7 +1152,7 @@
                         ]
                     },
                     "path": "WorkersPool.reserve",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.reserve",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.reserve",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "reserve({ workersCount }: { workersCount: number })",
@@ -1160,8 +1160,8 @@
                         "startLine": 1004,
                         "endLine": 1015,
                         "references": {
-                            "reserve": "@nav/api/WorkersPoolModule.WorkersPool.reserve",
-                            "Message": "@nav/api/WorkersPoolModule.Message",
+                            "reserve": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.reserve",
+                            "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
                             "Observable": "https://rxjs.dev/guide/observable"
                         }
                     },
@@ -1210,7 +1210,7 @@
                             },
                             {
                                 "title": "Returns",
-                                "content": "Observable on the  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.Message\" semantic=\"type-alias\">Message</mkapi-api-link>  emitted during task execution. In any case, the last message sent is\n <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageExit\" semantic=\"type-alias\">MessageExit</mkapi-api-link> .",
+                                "content": "Observable on the  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.Message\" semantic=\"type-alias\">Message</mkapi-api-link>  emitted during task execution. In any case, the last message sent is\n <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageExit\" semantic=\"type-alias\">MessageExit</mkapi-api-link> .",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "returns",
@@ -1222,7 +1222,7 @@
                         ]
                     },
                     "path": "WorkersPool.schedule",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.schedule",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.schedule",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "schedule<TArgs = unknown>(\n    input: ScheduleInput<TArgs>,\n    context = new NoContext(),\n): Observable<Message>",
@@ -1230,10 +1230,10 @@
                         "startLine": 1048,
                         "endLine": 1118,
                         "references": {
-                            "schedule": "@nav/api/WorkersPoolModule.WorkersPool.schedule",
-                            "ScheduleInput": "@nav/api/WorkersPoolModule.ScheduleInput",
-                            "NoContext": "@nav/api/WorkersPoolModule.NoContext",
-                            "Message": "@nav/api/WorkersPoolModule.Message",
+                            "schedule": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.schedule",
+                            "ScheduleInput": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput",
+                            "NoContext": "@nav[webpm-client]/WorkersPoolModule.NoContext",
+                            "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
                             "Observable": "https://rxjs.dev/guide/observable"
                         }
                     },
@@ -1272,7 +1272,7 @@
                         ]
                     },
                     "path": "WorkersPool.sendData",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.sendData",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.sendData",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "sendData({ taskId, data }: { taskId: string; data: unknown })",
@@ -1280,7 +1280,7 @@
                         "startLine": 1142,
                         "endLine": 1153,
                         "references": {
-                            "sendData": "@nav/api/WorkersPoolModule.WorkersPool.sendData"
+                            "sendData": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.sendData"
                         }
                     },
                     "semantic": {
@@ -1307,7 +1307,7 @@
                         ]
                     },
                     "path": "WorkersPool.terminate",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPool.terminate",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.terminate",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "terminate()",
@@ -1315,7 +1315,7 @@
                         "startLine": 1424,
                         "endLine": 1431,
                         "references": {
-                            "terminate": "@nav/api/WorkersPoolModule.WorkersPool.terminate"
+                            "terminate": "@nav[webpm-client]/WorkersPoolModule.WorkersPool.terminate"
                         }
                     },
                     "semantic": {
@@ -1333,19 +1333,19 @@
                 "startLine": 855,
                 "endLine": 1432,
                 "references": {
-                    "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool",
-                    "WorkersPoolInput": "@nav/api/WorkersPoolModule.WorkersPoolInput",
-                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait",
-                    "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
-                    "WorkerEnvironment": "@nav/api/WorkersPoolModule.WorkerEnvironment",
-                    "Message": "@nav/api/WorkersPoolModule.Message",
-                    "PoolSize": "@nav/api/WorkersPoolModule.PoolSize",
-                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
-                    "BackendConfiguration": "@nav/api/MainModule.BackendConfiguration",
-                    "FrontendConfiguration": "@nav/api/MainModule.FrontendConfiguration",
-                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy",
-                    "ScheduleInput": "@nav/api/WorkersPoolModule.ScheduleInput",
-                    "NoContext": "@nav/api/WorkersPoolModule.NoContext",
+                    "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
+                    "WorkersPoolInput": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput",
+                    "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait",
+                    "CdnEventWorker": "@nav[webpm-client]/WorkersPoolModule.CdnEventWorker",
+                    "WorkerEnvironment": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment",
+                    "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
+                    "PoolSize": "@nav[webpm-client]/WorkersPoolModule.PoolSize",
+                    "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait",
+                    "BackendConfiguration": "@nav[webpm-client]/MainModule.BackendConfiguration",
+                    "FrontendConfiguration": "@nav[webpm-client]/MainModule.FrontendConfiguration",
+                    "IWWorkerProxy": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy",
+                    "ScheduleInput": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput",
+                    "NoContext": "@nav[webpm-client]/WorkersPoolModule.NoContext",
                     "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                     "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                     "Observable": "https://rxjs.dev/guide/observable"
@@ -1375,7 +1375,7 @@
                 ]
             },
             "path": "ContextTrait",
-            "navPath": "@nav/api/WorkersPoolModule.ContextTrait",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.ContextTrait",
             "attributes": [
                 {
                     "name": "withChild",
@@ -1400,7 +1400,7 @@
                         ]
                     },
                     "path": "ContextTrait.withChild",
-                    "navPath": "@nav/api/WorkersPoolModule.ContextTrait.withChild",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.ContextTrait.withChild",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "withChild: <T>(name: string, cb: (ctx: ContextTrait) => T) => T",
@@ -1408,8 +1408,8 @@
                         "startLine": 42,
                         "endLine": 43,
                         "references": {
-                            "withChild": "@nav/api/WorkersPoolModule.ContextTrait.withChild",
-                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                            "withChild": "@nav[webpm-client]/WorkersPoolModule.ContextTrait.withChild",
+                            "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait"
                         }
                     }
                 }
@@ -1422,8 +1422,8 @@
                 "startLine": 34,
                 "endLine": 45,
                 "references": {
-                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait",
-                    "NoContext": "@nav/api/WorkersPoolModule.NoContext"
+                    "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait",
+                    "NoContext": "@nav[webpm-client]/WorkersPoolModule.NoContext"
                 }
             },
             "semantic": {
@@ -1450,7 +1450,7 @@
                 ]
             },
             "path": "EntryPointArguments",
-            "navPath": "@nav/api/WorkersPoolModule.EntryPointArguments",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments",
             "attributes": [
                 {
                     "name": "args",
@@ -1475,7 +1475,7 @@
                         ]
                     },
                     "path": "EntryPointArguments.args",
-                    "navPath": "@nav/api/WorkersPoolModule.EntryPointArguments.args",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.args",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "args: TArgs",
@@ -1483,7 +1483,7 @@
                         "startLine": 363,
                         "endLine": 364,
                         "references": {
-                            "args": "@nav/api/WorkersPoolModule.EntryPointArguments.args"
+                            "args": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.args"
                         }
                     }
                 },
@@ -1510,7 +1510,7 @@
                         ]
                     },
                     "path": "EntryPointArguments.context",
-                    "navPath": "@nav/api/WorkersPoolModule.EntryPointArguments.context",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.context",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "context: WorkerContext",
@@ -1518,8 +1518,8 @@
                         "startLine": 375,
                         "endLine": 376,
                         "references": {
-                            "context": "@nav/api/WorkersPoolModule.EntryPointArguments.context",
-                            "WorkerContext": "@nav/api/WorkersPoolModule.WorkerContext"
+                            "context": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.context",
+                            "WorkerContext": "@nav[webpm-client]/WorkersPoolModule.WorkerContext"
                         }
                     }
                 },
@@ -1546,7 +1546,7 @@
                         ]
                     },
                     "path": "EntryPointArguments.taskId",
-                    "navPath": "@nav/api/WorkersPoolModule.EntryPointArguments.taskId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.taskId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "taskId: string",
@@ -1554,7 +1554,7 @@
                         "startLine": 367,
                         "endLine": 368,
                         "references": {
-                            "taskId": "@nav/api/WorkersPoolModule.EntryPointArguments.taskId"
+                            "taskId": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.taskId"
                         }
                     }
                 },
@@ -1581,7 +1581,7 @@
                         ]
                     },
                     "path": "EntryPointArguments.workerId",
-                    "navPath": "@nav/api/WorkersPoolModule.EntryPointArguments.workerId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.workerId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "workerId: string",
@@ -1589,7 +1589,7 @@
                         "startLine": 371,
                         "endLine": 372,
                         "references": {
-                            "workerId": "@nav/api/WorkersPoolModule.EntryPointArguments.workerId"
+                            "workerId": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.workerId"
                         }
                     }
                 },
@@ -1616,7 +1616,7 @@
                         ]
                     },
                     "path": "EntryPointArguments.workerScope",
-                    "navPath": "@nav/api/WorkersPoolModule.EntryPointArguments.workerScope",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.workerScope",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "workerScope: Record<string, unknown>",
@@ -1624,7 +1624,7 @@
                         "startLine": 379,
                         "endLine": 380,
                         "references": {
-                            "workerScope": "@nav/api/WorkersPoolModule.EntryPointArguments.workerScope"
+                            "workerScope": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments.workerScope"
                         }
                     }
                 }
@@ -1637,8 +1637,8 @@
                 "startLine": 356,
                 "endLine": 381,
                 "references": {
-                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
-                    "WorkerContext": "@nav/api/WorkersPoolModule.WorkerContext"
+                    "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments",
+                    "WorkerContext": "@nav[webpm-client]/WorkersPoolModule.WorkerContext"
                 }
             },
             "semantic": {
@@ -1653,7 +1653,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Proxy interface for Web Workers creation.\n\nThe default implementation used is the one provided by the browser ( <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WebWorkersBrowser\" semantic=\"class\">WebWorkersBrowser</mkapi-api-link> ).",
+                        "content": "Proxy interface for Web Workers creation.\n\nThe default implementation used is the one provided by the browser ( <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser\" semantic=\"class\">WebWorkersBrowser</mkapi-api-link> ).",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -1665,7 +1665,7 @@
                 ]
             },
             "path": "IWWorkerProxy",
-            "navPath": "@nav/api/WorkersPoolModule.IWWorkerProxy",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy",
             "attributes": [
                 {
                     "name": "onAfterWorkerInstall",
@@ -1690,7 +1690,7 @@
                         ]
                     },
                     "path": "IWWorkerProxy.onAfterWorkerInstall",
-                    "navPath": "@nav/api/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "onAfterWorkerInstall?: InWorkerAction",
@@ -1698,8 +1698,8 @@
                         "startLine": 72,
                         "endLine": 73,
                         "references": {
-                            "onAfterWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
-                            "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction"
+                            "onAfterWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
+                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction"
                         }
                     }
                 },
@@ -1726,7 +1726,7 @@
                         ]
                     },
                     "path": "IWWorkerProxy.onBeforeWorkerInstall",
-                    "navPath": "@nav/api/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "onBeforeWorkerInstall?: InWorkerAction",
@@ -1734,8 +1734,8 @@
                         "startLine": 68,
                         "endLine": 69,
                         "references": {
-                            "onBeforeWorkerInstall": "@nav/api/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
-                            "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction"
+                            "onBeforeWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
+                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction"
                         }
                     }
                 }
@@ -1758,7 +1758,7 @@
                         ]
                     },
                     "path": "IWWorkerProxy.createWorker",
-                    "navPath": "@nav/api/WorkersPoolModule.IWWorkerProxy.createWorker",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.createWorker",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "createWorker({\n        onMessageWorker,\n        onMessageMain,\n    }: {\n        onMessageWorker: (message) => unknown\n        onMessageMain: (message) => unknown\n    }): WWorkerTrait",
@@ -1766,8 +1766,8 @@
                         "startLine": 52,
                         "endLine": 53,
                         "references": {
-                            "createWorker": "@nav/api/WorkersPoolModule.IWWorkerProxy.createWorker",
-                            "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait"
+                            "createWorker": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.createWorker",
+                            "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait"
                         }
                     },
                     "semantic": {
@@ -1794,7 +1794,7 @@
                         ]
                     },
                     "path": "IWWorkerProxy.serializeFunction",
-                    "navPath": "@nav/api/WorkersPoolModule.IWWorkerProxy.serializeFunction",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.serializeFunction",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "serializeFunction(fct?: (...unknown: unknown[]) => unknown): string",
@@ -1802,7 +1802,7 @@
                         "startLine": 63,
                         "endLine": 64,
                         "references": {
-                            "serializeFunction": "@nav/api/WorkersPoolModule.IWWorkerProxy.serializeFunction"
+                            "serializeFunction": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.serializeFunction"
                         }
                     },
                     "semantic": {
@@ -1820,11 +1820,11 @@
                 "startLine": 46,
                 "endLine": 74,
                 "references": {
-                    "IWWorkerProxy": "@nav/api/WorkersPoolModule.IWWorkerProxy",
-                    "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
-                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
-                    "WebWorkersBrowser": "@nav/api/WorkersPoolModule.WebWorkersBrowser",
-                    "WebWorkersJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkersJest"
+                    "IWWorkerProxy": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy",
+                    "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
+                    "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait",
+                    "WebWorkersBrowser": "@nav[webpm-client]/WorkersPoolModule.WebWorkersBrowser",
+                    "WebWorkersJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest"
                 }
             },
             "semantic": {
@@ -1839,7 +1839,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Message send from the main thread to a worker for a particular task.\nSee  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.sendData\" semantic=\"method\">WorkersPool.sendData</mkapi-api-link> .",
+                        "content": "Message send from the main thread to a worker for a particular task.\nSee  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.sendData\" semantic=\"method\">WorkersPool.sendData</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -1851,7 +1851,7 @@
                 ]
             },
             "path": "MainToWorkerMessage",
-            "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage",
             "attributes": [
                 {
                     "name": "data",
@@ -1876,7 +1876,7 @@
                         ]
                     },
                     "path": "MainToWorkerMessage.data",
-                    "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage.data",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage.data",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "data: unknown",
@@ -1884,7 +1884,7 @@
                         "startLine": 299,
                         "endLine": 300,
                         "references": {
-                            "data": "@nav/api/WorkersPoolModule.MainToWorkerMessage.data"
+                            "data": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage.data"
                         }
                     }
                 },
@@ -1911,7 +1911,7 @@
                         ]
                     },
                     "path": "MainToWorkerMessage.taskId",
-                    "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage.taskId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage.taskId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "taskId: string",
@@ -1919,7 +1919,7 @@
                         "startLine": 289,
                         "endLine": 290,
                         "references": {
-                            "taskId": "@nav/api/WorkersPoolModule.MainToWorkerMessage.taskId"
+                            "taskId": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage.taskId"
                         }
                     }
                 },
@@ -1946,7 +1946,7 @@
                         ]
                     },
                     "path": "MainToWorkerMessage.workerId",
-                    "navPath": "@nav/api/WorkersPoolModule.MainToWorkerMessage.workerId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage.workerId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "workerId: string",
@@ -1954,7 +1954,7 @@
                         "startLine": 294,
                         "endLine": 295,
                         "references": {
-                            "workerId": "@nav/api/WorkersPoolModule.MainToWorkerMessage.workerId"
+                            "workerId": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage.workerId"
                         }
                     }
                 }
@@ -1967,7 +1967,7 @@
                 "startLine": 285,
                 "endLine": 301,
                 "references": {
-                    "MainToWorkerMessage": "@nav/api/WorkersPoolModule.MainToWorkerMessage"
+                    "MainToWorkerMessage": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage"
                 }
             },
             "semantic": {
@@ -1982,7 +1982,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "A special type of  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageData\" semantic=\"interface\">MessageData</mkapi-api-link>  for  <mkapi-api-link nav=\"@nav/api/MainModule.CdnEvent\" semantic=\"interface\">MainModule.CdnEvent</mkapi-api-link> .",
+                        "content": "A special type of  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageData\" semantic=\"interface\">MessageData</mkapi-api-link>  for  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.CdnEvent\" semantic=\"interface\">MainModule.CdnEvent</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -1994,7 +1994,7 @@
                 ]
             },
             "path": "MessageCdnEvent",
-            "navPath": "@nav/api/WorkersPoolModule.MessageCdnEvent",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageCdnEvent",
             "attributes": [],
             "callables": [],
             "code": {
@@ -2004,8 +2004,8 @@
                 "startLine": 76,
                 "endLine": 82,
                 "references": {
-                    "MessageCdnEvent": "@nav/api/WorkersPoolModule.MessageCdnEvent",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent"
+                    "MessageCdnEvent": "@nav[webpm-client]/WorkersPoolModule.MessageCdnEvent",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent"
                 }
             },
             "semantic": {
@@ -2020,7 +2020,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Type mapping between  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageType\" semantic=\"type-alias\">MessageType</mkapi-api-link>  and associated data structure.",
+                        "content": "Type mapping between  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageType\" semantic=\"type-alias\">MessageType</mkapi-api-link>  and associated data structure.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2032,7 +2032,7 @@
                 ]
             },
             "path": "MessageContent",
-            "navPath": "@nav/api/WorkersPoolModule.MessageContent",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageContent",
             "attributes": [],
             "callables": [],
             "code": {
@@ -2042,15 +2042,15 @@
                 "startLine": 318,
                 "endLine": 328,
                 "references": {
-                    "MessageContent": "@nav/api/WorkersPoolModule.MessageContent",
-                    "MessageCdnEvent": "@nav/api/WorkersPoolModule.MessageCdnEvent",
-                    "MessageData": "@nav/api/WorkersPoolModule.MessageData",
-                    "MessageExecute": "@nav/api/WorkersPoolModule.MessageExecute",
-                    "MessageExit": "@nav/api/WorkersPoolModule.MessageExit",
-                    "MessageLog": "@nav/api/WorkersPoolModule.MessageLog",
-                    "MainToWorkerMessage": "@nav/api/WorkersPoolModule.MainToWorkerMessage",
-                    "MessagePostError": "@nav/api/WorkersPoolModule.MessagePostError",
-                    "MessageStart": "@nav/api/WorkersPoolModule.MessageStart"
+                    "MessageContent": "@nav[webpm-client]/WorkersPoolModule.MessageContent",
+                    "MessageCdnEvent": "@nav[webpm-client]/WorkersPoolModule.MessageCdnEvent",
+                    "MessageData": "@nav[webpm-client]/WorkersPoolModule.MessageData",
+                    "MessageExecute": "@nav[webpm-client]/WorkersPoolModule.MessageExecute",
+                    "MessageExit": "@nav[webpm-client]/WorkersPoolModule.MessageExit",
+                    "MessageLog": "@nav[webpm-client]/WorkersPoolModule.MessageLog",
+                    "MainToWorkerMessage": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage",
+                    "MessagePostError": "@nav[webpm-client]/WorkersPoolModule.MessagePostError",
+                    "MessageStart": "@nav[webpm-client]/WorkersPoolModule.MessageStart"
                 }
             },
             "semantic": {
@@ -2065,7 +2065,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Message emitted from workers when a data is sent (see  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkerContext\" semantic=\"interface\">WorkerContext</mkapi-api-link> ).",
+                        "content": "Message emitted from workers when a data is sent (see  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkerContext\" semantic=\"interface\">WorkerContext</mkapi-api-link> ).",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2077,7 +2077,7 @@
                 ]
             },
             "path": "MessageData",
-            "navPath": "@nav/api/WorkersPoolModule.MessageData",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageData",
             "attributes": [],
             "callables": [],
             "code": {
@@ -2087,7 +2087,7 @@
                 "startLine": 266,
                 "endLine": 271,
                 "references": {
-                    "MessageData": "@nav/api/WorkersPoolModule.MessageData"
+                    "MessageData": "@nav[webpm-client]/WorkersPoolModule.MessageData"
                 }
             },
             "semantic": {
@@ -2114,7 +2114,7 @@
                 ]
             },
             "path": "MessageExecute",
-            "navPath": "@nav/api/WorkersPoolModule.MessageExecute",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageExecute",
             "attributes": [
                 {
                     "name": "args",
@@ -2139,7 +2139,7 @@
                         ]
                     },
                     "path": "MessageExecute.args",
-                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.args",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.args",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "args: unknown",
@@ -2147,7 +2147,7 @@
                         "startLine": 213,
                         "endLine": 214,
                         "references": {
-                            "args": "@nav/api/WorkersPoolModule.MessageExecute.args"
+                            "args": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.args"
                         }
                     }
                 },
@@ -2174,7 +2174,7 @@
                         ]
                     },
                     "path": "MessageExecute.entryPoint",
-                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.entryPoint",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.entryPoint",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "entryPoint: string",
@@ -2182,7 +2182,7 @@
                         "startLine": 209,
                         "endLine": 210,
                         "references": {
-                            "entryPoint": "@nav/api/WorkersPoolModule.MessageExecute.entryPoint"
+                            "entryPoint": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.entryPoint"
                         }
                     }
                 },
@@ -2209,7 +2209,7 @@
                         ]
                     },
                     "path": "MessageExecute.taskId",
-                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.taskId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.taskId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "taskId: string",
@@ -2217,7 +2217,7 @@
                         "startLine": 201,
                         "endLine": 202,
                         "references": {
-                            "taskId": "@nav/api/WorkersPoolModule.MessageExecute.taskId"
+                            "taskId": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.taskId"
                         }
                     }
                 },
@@ -2244,7 +2244,7 @@
                         ]
                     },
                     "path": "MessageExecute.workerId",
-                    "navPath": "@nav/api/WorkersPoolModule.MessageExecute.workerId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.workerId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "workerId: string",
@@ -2252,7 +2252,7 @@
                         "startLine": 205,
                         "endLine": 206,
                         "references": {
-                            "workerId": "@nav/api/WorkersPoolModule.MessageExecute.workerId"
+                            "workerId": "@nav[webpm-client]/WorkersPoolModule.MessageExecute.workerId"
                         }
                     }
                 }
@@ -2265,7 +2265,7 @@
                 "startLine": 197,
                 "endLine": 215,
                 "references": {
-                    "MessageExecute": "@nav/api/WorkersPoolModule.MessageExecute"
+                    "MessageExecute": "@nav[webpm-client]/WorkersPoolModule.MessageExecute"
                 }
             },
             "semantic": {
@@ -2280,7 +2280,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Message sent from the main thread to the workers to request installation of the  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkerEnvironment\" semantic=\"interface\">WorkerEnvironment</mkapi-api-link> .",
+                        "content": "Message sent from the main thread to the workers to request installation of the  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment\" semantic=\"interface\">WorkerEnvironment</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2292,7 +2292,7 @@
                 ]
             },
             "path": "MessageInstall",
-            "navPath": "@nav/api/WorkersPoolModule.MessageInstall",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageInstall",
             "attributes": [],
             "callables": [],
             "code": {
@@ -2302,12 +2302,12 @@
                 "startLine": 560,
                 "endLine": 576,
                 "references": {
-                    "MessageInstall": "@nav/api/WorkersPoolModule.MessageInstall",
-                    "BackendConfiguration": "@nav/api/MainModule.BackendConfiguration",
-                    "InstallInputs": "@nav/api/MainModule.InstallInputs",
-                    "FrontendConfiguration": "@nav/api/MainModule.FrontendConfiguration",
-                    "InWorkerAction": "@nav/api/WorkersPoolModule.InWorkerAction",
-                    "WorkerVariable": "@nav/api/WorkersPoolModule.WorkerVariable"
+                    "MessageInstall": "@nav[webpm-client]/WorkersPoolModule.MessageInstall",
+                    "BackendConfiguration": "@nav[webpm-client]/MainModule.BackendConfiguration",
+                    "InstallInputs": "@nav[webpm-client]/MainModule.InstallInputs",
+                    "FrontendConfiguration": "@nav[webpm-client]/MainModule.FrontendConfiguration",
+                    "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
+                    "WorkerVariable": "@nav[webpm-client]/WorkersPoolModule.WorkerVariable"
                 }
             },
             "semantic": {
@@ -2322,7 +2322,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Message emitted from workers when a log is sent (see  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkerContext\" semantic=\"interface\">WorkerContext</mkapi-api-link> ).",
+                        "content": "Message emitted from workers when a log is sent (see  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkerContext\" semantic=\"interface\">WorkerContext</mkapi-api-link> ).",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2334,7 +2334,7 @@
                 ]
             },
             "path": "MessageLog",
-            "navPath": "@nav/api/WorkersPoolModule.MessageLog",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageLog",
             "attributes": [],
             "callables": [],
             "code": {
@@ -2344,7 +2344,7 @@
                 "startLine": 256,
                 "endLine": 262,
                 "references": {
-                    "MessageLog": "@nav/api/WorkersPoolModule.MessageLog"
+                    "MessageLog": "@nav[webpm-client]/WorkersPoolModule.MessageLog"
                 }
             },
             "semantic": {
@@ -2371,7 +2371,7 @@
                 ]
             },
             "path": "MessagePostError",
-            "navPath": "@nav/api/WorkersPoolModule.MessagePostError",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessagePostError",
             "attributes": [],
             "callables": [],
             "code": {
@@ -2381,7 +2381,7 @@
                 "startLine": 275,
                 "endLine": 280,
                 "references": {
-                    "MessagePostError": "@nav/api/WorkersPoolModule.MessagePostError"
+                    "MessagePostError": "@nav[webpm-client]/WorkersPoolModule.MessagePostError"
                 }
             },
             "semantic": {
@@ -2408,7 +2408,7 @@
                 ]
             },
             "path": "MessageStart",
-            "navPath": "@nav/api/WorkersPoolModule.MessageStart",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageStart",
             "attributes": [],
             "callables": [],
             "code": {
@@ -2418,7 +2418,7 @@
                 "startLine": 219,
                 "endLine": 223,
                 "references": {
-                    "MessageStart": "@nav/api/WorkersPoolModule.MessageStart"
+                    "MessageStart": "@nav[webpm-client]/WorkersPoolModule.MessageStart"
                 }
             },
             "semantic": {
@@ -2445,7 +2445,7 @@
                 ]
             },
             "path": "PoolSize",
-            "navPath": "@nav/api/WorkersPoolModule.PoolSize",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.PoolSize",
             "attributes": [
                 {
                     "name": "startAt",
@@ -2458,7 +2458,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "Initial number of workers to get ready before  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.ready\" semantic=\"method\">WorkersPool.ready</mkapi-api-link>  is fulfilled.\nSet to  `1`  by default.",
+                                "content": "Initial number of workers to get ready before  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.ready\" semantic=\"method\">WorkersPool.ready</mkapi-api-link>  is fulfilled.\nSet to  `1`  by default.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -2470,7 +2470,7 @@
                         ]
                     },
                     "path": "PoolSize.startAt",
-                    "navPath": "@nav/api/WorkersPoolModule.PoolSize.startAt",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.PoolSize.startAt",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "startAt: number",
@@ -2478,7 +2478,7 @@
                         "startLine": 761,
                         "endLine": 762,
                         "references": {
-                            "startAt": "@nav/api/WorkersPoolModule.PoolSize.startAt"
+                            "startAt": "@nav[webpm-client]/WorkersPoolModule.PoolSize.startAt"
                         }
                     }
                 },
@@ -2505,7 +2505,7 @@
                         ]
                     },
                     "path": "PoolSize.stretchTo",
-                    "navPath": "@nav/api/WorkersPoolModule.PoolSize.stretchTo",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.PoolSize.stretchTo",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "stretchTo: number",
@@ -2513,7 +2513,7 @@
                         "startLine": 766,
                         "endLine": 767,
                         "references": {
-                            "stretchTo": "@nav/api/WorkersPoolModule.PoolSize.stretchTo"
+                            "stretchTo": "@nav[webpm-client]/WorkersPoolModule.PoolSize.stretchTo"
                         }
                     }
                 }
@@ -2526,7 +2526,7 @@
                 "startLine": 756,
                 "endLine": 768,
                 "references": {
-                    "PoolSize": "@nav/api/WorkersPoolModule.PoolSize"
+                    "PoolSize": "@nav[webpm-client]/WorkersPoolModule.PoolSize"
                 }
             },
             "semantic": {
@@ -2541,7 +2541,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Input for  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.schedule\" semantic=\"method\">WorkersPool.schedule</mkapi-api-link> .",
+                        "content": "Input for  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.schedule\" semantic=\"method\">WorkersPool.schedule</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2564,7 +2564,7 @@
                 ]
             },
             "path": "ScheduleInput",
-            "navPath": "@nav/api/WorkersPoolModule.ScheduleInput",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput",
             "attributes": [
                 {
                     "name": "args",
@@ -2589,7 +2589,7 @@
                         ]
                     },
                     "path": "ScheduleInput.args",
-                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.args",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.args",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "args: TArgs",
@@ -2597,7 +2597,7 @@
                         "startLine": 823,
                         "endLine": 824,
                         "references": {
-                            "args": "@nav/api/WorkersPoolModule.ScheduleInput.args"
+                            "args": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.args"
                         }
                     }
                 },
@@ -2624,7 +2624,7 @@
                         ]
                     },
                     "path": "ScheduleInput.entryPoint",
-                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.entryPoint",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.entryPoint",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "entryPoint: (input: EntryPointArguments<TArgs>) => void",
@@ -2632,8 +2632,8 @@
                         "startLine": 819,
                         "endLine": 820,
                         "references": {
-                            "entryPoint": "@nav/api/WorkersPoolModule.ScheduleInput.entryPoint",
-                            "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments"
+                            "entryPoint": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.entryPoint",
+                            "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments"
                         }
                     }
                 },
@@ -2660,7 +2660,7 @@
                         ]
                     },
                     "path": "ScheduleInput.targetWorkerId",
-                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.targetWorkerId",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.targetWorkerId",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "targetWorkerId?: string",
@@ -2668,7 +2668,7 @@
                         "startLine": 827,
                         "endLine": 828,
                         "references": {
-                            "targetWorkerId": "@nav/api/WorkersPoolModule.ScheduleInput.targetWorkerId"
+                            "targetWorkerId": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.targetWorkerId"
                         }
                     }
                 },
@@ -2695,7 +2695,7 @@
                         ]
                     },
                     "path": "ScheduleInput.title",
-                    "navPath": "@nav/api/WorkersPoolModule.ScheduleInput.title",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.title",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "title: string",
@@ -2703,7 +2703,7 @@
                         "startLine": 815,
                         "endLine": 816,
                         "references": {
-                            "title": "@nav/api/WorkersPoolModule.ScheduleInput.title"
+                            "title": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput.title"
                         }
                     }
                 }
@@ -2716,8 +2716,8 @@
                 "startLine": 811,
                 "endLine": 829,
                 "references": {
-                    "ScheduleInput": "@nav/api/WorkersPoolModule.ScheduleInput",
-                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments"
+                    "ScheduleInput": "@nav[webpm-client]/WorkersPoolModule.ScheduleInput",
+                    "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments"
                 }
             },
             "semantic": {
@@ -2743,7 +2743,7 @@
                     },
                     {
                         "title": "Generics",
-                        "content": "\n*  **TArgs**: Type of the entry point's arguments\n*  **TReturn**: Type of the entry point's return\n(emitted afterward using  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageExit\" semantic=\"type-alias\">MessageExit</mkapi-api-link> ).",
+                        "content": "\n*  **TArgs**: Type of the entry point's arguments\n*  **TReturn**: Type of the entry point's return\n(emitted afterward using  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageExit\" semantic=\"type-alias\">MessageExit</mkapi-api-link> ).",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "arguments",
@@ -2755,7 +2755,7 @@
                 ]
             },
             "path": "Task",
-            "navPath": "@nav/api/WorkersPoolModule.Task",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.Task",
             "attributes": [
                 {
                     "name": "args",
@@ -2780,7 +2780,7 @@
                         ]
                     },
                     "path": "Task.args",
-                    "navPath": "@nav/api/WorkersPoolModule.Task.args",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.Task.args",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "args: TArgs",
@@ -2788,7 +2788,7 @@
                         "startLine": 137,
                         "endLine": 138,
                         "references": {
-                            "args": "@nav/api/WorkersPoolModule.Task.args"
+                            "args": "@nav[webpm-client]/WorkersPoolModule.Task.args"
                         }
                     }
                 },
@@ -2815,7 +2815,7 @@
                         ]
                     },
                     "path": "Task.entryPoint",
-                    "navPath": "@nav/api/WorkersPoolModule.Task.entryPoint",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.Task.entryPoint",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "entryPoint: (args: TArgs) => TReturn | Promise<TReturn>",
@@ -2823,7 +2823,7 @@
                         "startLine": 130,
                         "endLine": 131,
                         "references": {
-                            "entryPoint": "@nav/api/WorkersPoolModule.Task.entryPoint"
+                            "entryPoint": "@nav[webpm-client]/WorkersPoolModule.Task.entryPoint"
                         }
                     }
                 },
@@ -2850,7 +2850,7 @@
                         ]
                     },
                     "path": "Task.title",
-                    "navPath": "@nav/api/WorkersPoolModule.Task.title",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.Task.title",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "title: string",
@@ -2858,7 +2858,7 @@
                         "startLine": 118,
                         "endLine": 119,
                         "references": {
-                            "title": "@nav/api/WorkersPoolModule.Task.title"
+                            "title": "@nav[webpm-client]/WorkersPoolModule.Task.title"
                         }
                     }
                 }
@@ -2871,7 +2871,7 @@
                 "startLine": 114,
                 "endLine": 139,
                 "references": {
-                    "Task": "@nav/api/WorkersPoolModule.Task"
+                    "Task": "@nav[webpm-client]/WorkersPoolModule.Task"
                 }
             },
             "semantic": {
@@ -2886,7 +2886,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Context available in  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link>  to log info or send data.\nAll data must follow\n[structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).",
+                        "content": "Context available in  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link>  to log info or send data.\nAll data must follow\n[structured clone algo](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm).",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2898,7 +2898,7 @@
                 ]
             },
             "path": "WorkerContext",
-            "navPath": "@nav/api/WorkersPoolModule.WorkerContext",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerContext",
             "attributes": [
                 {
                     "name": "info",
@@ -2911,7 +2911,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "The info logged are send from the workers to the main thread as\n <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageLog\" semantic=\"interface\">MessageLog</mkapi-api-link> .",
+                                "content": "The info logged are send from the workers to the main thread as\n <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageLog\" semantic=\"interface\">MessageLog</mkapi-api-link> .",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -2923,7 +2923,7 @@
                         ]
                     },
                     "path": "WorkerContext.info",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkerContext.info",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerContext.info",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "info: (text: string, data?: unknown) => void",
@@ -2931,7 +2931,7 @@
                         "startLine": 176,
                         "endLine": 177,
                         "references": {
-                            "info": "@nav/api/WorkersPoolModule.WorkerContext.info"
+                            "info": "@nav[webpm-client]/WorkersPoolModule.WorkerContext.info"
                         }
                     }
                 },
@@ -2946,7 +2946,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "If defined by the developer in its worker's implementation,\nevery message send using  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.sendData\" semantic=\"method\">WorkersPool.sendData</mkapi-api-link>  (from the main thread) will\nbe intercepted by this callback.",
+                                "content": "If defined by the developer in its worker's implementation,\nevery message send using  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.sendData\" semantic=\"method\">WorkersPool.sendData</mkapi-api-link>  (from the main thread) will\nbe intercepted by this callback.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -2958,7 +2958,7 @@
                         ]
                     },
                     "path": "WorkerContext.onData",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkerContext.onData",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerContext.onData",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "onData?: (message: unknown) => void",
@@ -2966,7 +2966,7 @@
                         "startLine": 190,
                         "endLine": 191,
                         "references": {
-                            "onData": "@nav/api/WorkersPoolModule.WorkerContext.onData"
+                            "onData": "@nav[webpm-client]/WorkersPoolModule.WorkerContext.onData"
                         }
                     }
                 },
@@ -2981,7 +2981,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "The data logged are send from the workers to the main thread as\n <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageData\" semantic=\"interface\">MessageData</mkapi-api-link> .",
+                                "content": "The data logged are send from the workers to the main thread as\n <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageData\" semantic=\"interface\">MessageData</mkapi-api-link> .",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -2993,7 +2993,7 @@
                         ]
                     },
                     "path": "WorkerContext.sendData",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkerContext.sendData",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerContext.sendData",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "sendData: (data: Record<string, unknown>) => void",
@@ -3001,7 +3001,7 @@
                         "startLine": 183,
                         "endLine": 184,
                         "references": {
-                            "sendData": "@nav/api/WorkersPoolModule.WorkerContext.sendData"
+                            "sendData": "@nav[webpm-client]/WorkersPoolModule.WorkerContext.sendData"
                         }
                     }
                 }
@@ -3014,7 +3014,7 @@
                 "startLine": 168,
                 "endLine": 192,
                 "references": {
-                    "WorkerContext": "@nav/api/WorkersPoolModule.WorkerContext"
+                    "WorkerContext": "@nav[webpm-client]/WorkersPoolModule.WorkerContext"
                 }
             },
             "semantic": {
@@ -3041,7 +3041,7 @@
                 ]
             },
             "path": "WorkerEnvironment",
-            "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment",
             "attributes": [
                 {
                     "name": "cdnInstallation",
@@ -3066,7 +3066,7 @@
                         ]
                     },
                     "path": "WorkerEnvironment.cdnInstallation",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.cdnInstallation",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.cdnInstallation",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "cdnInstallation: InstallInputs",
@@ -3074,8 +3074,8 @@
                         "startLine": 155,
                         "endLine": 156,
                         "references": {
-                            "cdnInstallation": "@nav/api/WorkersPoolModule.WorkerEnvironment.cdnInstallation",
-                            "InstallInputs": "@nav/api/MainModule.InstallInputs"
+                            "cdnInstallation": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.cdnInstallation",
+                            "InstallInputs": "@nav[webpm-client]/MainModule.InstallInputs"
                         }
                     }
                 },
@@ -3102,7 +3102,7 @@
                         ]
                     },
                     "path": "WorkerEnvironment.functions",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.functions",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.functions",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "functions: WorkerFunction<unknown>[]",
@@ -3110,8 +3110,8 @@
                         "startLine": 151,
                         "endLine": 152,
                         "references": {
-                            "functions": "@nav/api/WorkersPoolModule.WorkerEnvironment.functions",
-                            "WorkerFunction": "@nav/api/WorkersPoolModule.WorkerFunction"
+                            "functions": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.functions",
+                            "WorkerFunction": "@nav[webpm-client]/WorkersPoolModule.WorkerFunction"
                         }
                     }
                 },
@@ -3138,7 +3138,7 @@
                         ]
                     },
                     "path": "WorkerEnvironment.postInstallTasks",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.postInstallTasks",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.postInstallTasks",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "postInstallTasks?: Task[]",
@@ -3146,8 +3146,8 @@
                         "startLine": 159,
                         "endLine": 160,
                         "references": {
-                            "postInstallTasks": "@nav/api/WorkersPoolModule.WorkerEnvironment.postInstallTasks",
-                            "Task": "@nav/api/WorkersPoolModule.Task"
+                            "postInstallTasks": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.postInstallTasks",
+                            "Task": "@nav[webpm-client]/WorkersPoolModule.Task"
                         }
                     }
                 },
@@ -3174,7 +3174,7 @@
                         ]
                     },
                     "path": "WorkerEnvironment.variables",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkerEnvironment.variables",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.variables",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "variables: WorkerVariable<unknown>[]",
@@ -3182,8 +3182,8 @@
                         "startLine": 147,
                         "endLine": 148,
                         "references": {
-                            "variables": "@nav/api/WorkersPoolModule.WorkerEnvironment.variables",
-                            "WorkerVariable": "@nav/api/WorkersPoolModule.WorkerVariable"
+                            "variables": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment.variables",
+                            "WorkerVariable": "@nav[webpm-client]/WorkersPoolModule.WorkerVariable"
                         }
                     }
                 }
@@ -3196,11 +3196,11 @@
                 "startLine": 143,
                 "endLine": 161,
                 "references": {
-                    "WorkerEnvironment": "@nav/api/WorkersPoolModule.WorkerEnvironment",
-                    "InstallInputs": "@nav/api/MainModule.InstallInputs",
-                    "WorkerFunction": "@nav/api/WorkersPoolModule.WorkerFunction",
-                    "Task": "@nav/api/WorkersPoolModule.Task",
-                    "WorkerVariable": "@nav/api/WorkersPoolModule.WorkerVariable"
+                    "WorkerEnvironment": "@nav[webpm-client]/WorkersPoolModule.WorkerEnvironment",
+                    "InstallInputs": "@nav[webpm-client]/MainModule.InstallInputs",
+                    "WorkerFunction": "@nav[webpm-client]/WorkersPoolModule.WorkerFunction",
+                    "Task": "@nav[webpm-client]/WorkersPoolModule.Task",
+                    "WorkerVariable": "@nav[webpm-client]/WorkersPoolModule.WorkerVariable"
                 }
             },
             "semantic": {
@@ -3215,7 +3215,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Input for  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.constructor\" semantic=\"constructor\">WorkersPool.constructor</mkapi-api-link> .",
+                        "content": "Input for  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.constructor\" semantic=\"constructor\">WorkersPool.constructor</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3227,7 +3227,7 @@
                 ]
             },
             "path": "WorkersPoolInput",
-            "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput",
             "attributes": [
                 {
                     "name": "cdnEvent$",
@@ -3240,7 +3240,7 @@
                     "documentation": {
                         "sections": [
                             {
-                                "content": "If provided, all events regarding installation are forwarded here.\nOtherwise  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool.cdnEvent$\" semantic=\"attribute\">WorkersPool.cdnEvent$</mkapi-api-link>  is initialized and used.",
+                                "content": "If provided, all events regarding installation are forwarded here.\nOtherwise  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool.cdnEvent$\" semantic=\"attribute\">WorkersPool.cdnEvent$</mkapi-api-link>  is initialized and used.",
                                 "contentType": "markdown",
                                 "semantic": {
                                     "role": "",
@@ -3252,7 +3252,7 @@
                         ]
                     },
                     "path": "WorkersPoolInput.cdnEvent$",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.cdnEvent$",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.cdnEvent$",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "cdnEvent$?: Subject<CdnEventWorker>",
@@ -3260,8 +3260,8 @@
                         "startLine": 777,
                         "endLine": 778,
                         "references": {
-                            "cdnEvent$": "@nav/api/WorkersPoolModule.WorkersPoolInput.cdnEvent$",
-                            "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
+                            "cdnEvent$": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.cdnEvent$",
+                            "CdnEventWorker": "@nav[webpm-client]/WorkersPoolModule.CdnEventWorker",
                             "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                         }
                     }
@@ -3289,7 +3289,7 @@
                         ]
                     },
                     "path": "WorkersPoolInput.ctxFactory",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.ctxFactory",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.ctxFactory",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "ctxFactory?: (name: string) => ContextTrait",
@@ -3297,8 +3297,8 @@
                         "startLine": 798,
                         "endLine": 799,
                         "references": {
-                            "ctxFactory": "@nav/api/WorkersPoolModule.WorkersPoolInput.ctxFactory",
-                            "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait"
+                            "ctxFactory": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.ctxFactory",
+                            "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait"
                         }
                     }
                 },
@@ -3325,7 +3325,7 @@
                         ]
                     },
                     "path": "WorkersPoolInput.globals",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.globals",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.globals",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "globals?: Record<string, unknown>",
@@ -3333,7 +3333,7 @@
                         "startLine": 783,
                         "endLine": 784,
                         "references": {
-                            "globals": "@nav/api/WorkersPoolModule.WorkersPoolInput.globals"
+                            "globals": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.globals"
                         }
                     }
                 },
@@ -3360,7 +3360,7 @@
                         ]
                     },
                     "path": "WorkersPoolInput.install",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.install",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.install",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "install?: InstallInputs",
@@ -3368,8 +3368,8 @@
                         "startLine": 787,
                         "endLine": 788,
                         "references": {
-                            "install": "@nav/api/WorkersPoolModule.WorkersPoolInput.install",
-                            "InstallInputs": "@nav/api/MainModule.InstallInputs"
+                            "install": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.install",
+                            "InstallInputs": "@nav[webpm-client]/MainModule.InstallInputs"
                         }
                     }
                 },
@@ -3396,7 +3396,7 @@
                         ]
                     },
                     "path": "WorkersPoolInput.pool",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.pool",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.pool",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "pool?: PoolSize",
@@ -3404,8 +3404,8 @@
                         "startLine": 803,
                         "endLine": 804,
                         "references": {
-                            "pool": "@nav/api/WorkersPoolModule.WorkersPoolInput.pool",
-                            "PoolSize": "@nav/api/WorkersPoolModule.PoolSize"
+                            "pool": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.pool",
+                            "PoolSize": "@nav[webpm-client]/WorkersPoolModule.PoolSize"
                         }
                     }
                 },
@@ -3432,7 +3432,7 @@
                         ]
                     },
                     "path": "WorkersPoolInput.postInstallTasks",
-                    "navPath": "@nav/api/WorkersPoolModule.WorkersPoolInput.postInstallTasks",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.postInstallTasks",
                     "code": {
                         "filePath": "src/lib/workers-pool/workers-factory.ts",
                         "declaration": "postInstallTasks?: Task[]",
@@ -3440,8 +3440,8 @@
                         "startLine": 791,
                         "endLine": 792,
                         "references": {
-                            "postInstallTasks": "@nav/api/WorkersPoolModule.WorkersPoolInput.postInstallTasks",
-                            "Task": "@nav/api/WorkersPoolModule.Task"
+                            "postInstallTasks": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput.postInstallTasks",
+                            "Task": "@nav[webpm-client]/WorkersPoolModule.Task"
                         }
                     }
                 }
@@ -3454,12 +3454,12 @@
                 "startLine": 772,
                 "endLine": 805,
                 "references": {
-                    "WorkersPoolInput": "@nav/api/WorkersPoolModule.WorkersPoolInput",
-                    "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
-                    "ContextTrait": "@nav/api/WorkersPoolModule.ContextTrait",
-                    "InstallInputs": "@nav/api/MainModule.InstallInputs",
-                    "PoolSize": "@nav/api/WorkersPoolModule.PoolSize",
-                    "Task": "@nav/api/WorkersPoolModule.Task",
+                    "WorkersPoolInput": "@nav[webpm-client]/WorkersPoolModule.WorkersPoolInput",
+                    "CdnEventWorker": "@nav[webpm-client]/WorkersPoolModule.CdnEventWorker",
+                    "ContextTrait": "@nav[webpm-client]/WorkersPoolModule.ContextTrait",
+                    "InstallInputs": "@nav[webpm-client]/MainModule.InstallInputs",
+                    "PoolSize": "@nav[webpm-client]/WorkersPoolModule.PoolSize",
+                    "Task": "@nav[webpm-client]/WorkersPoolModule.Task",
                     "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject"
                 }
             },
@@ -3475,7 +3475,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Trait for abstracting the concept of Web Worker; default implementation is based on\nthe WebWorker API provided by the browser, see  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WebWorkerBrowser\" semantic=\"class\">WebWorkerBrowser</mkapi-api-link> .",
+                        "content": "Trait for abstracting the concept of Web Worker; default implementation is based on\nthe WebWorker API provided by the browser, see  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser\" semantic=\"class\">WebWorkerBrowser</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3487,7 +3487,7 @@
                 ]
             },
             "path": "WWorkerTrait",
-            "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait",
             "attributes": [
                 {
                     "name": "uid",
@@ -3512,7 +3512,7 @@
                         ]
                     },
                     "path": "WWorkerTrait.uid",
-                    "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait.uid",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "uid: string",
@@ -3520,7 +3520,7 @@
                         "startLine": 11,
                         "endLine": 12,
                         "references": {
-                            "uid": "@nav/api/WorkersPoolModule.WWorkerTrait.uid"
+                            "uid": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid"
                         }
                     }
                 }
@@ -3554,7 +3554,7 @@
                         ]
                     },
                     "path": "WWorkerTrait.execute",
-                    "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait.execute",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.execute",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "execute<T>(params: {\n        taskId: string\n        entryPoint: (args: EntryPointArguments<T>) => unknown\n        args: T\n    })",
@@ -3562,8 +3562,8 @@
                         "startLine": 20,
                         "endLine": 21,
                         "references": {
-                            "execute": "@nav/api/WorkersPoolModule.WWorkerTrait.execute",
-                            "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments"
+                            "execute": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.execute",
+                            "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments"
                         }
                     },
                     "semantic": {
@@ -3601,7 +3601,7 @@
                         ]
                     },
                     "path": "WWorkerTrait.send",
-                    "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait.send",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.send",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "send(params: { taskId: string; data: unknown })",
@@ -3609,7 +3609,7 @@
                         "startLine": 32,
                         "endLine": 33,
                         "references": {
-                            "send": "@nav/api/WorkersPoolModule.WWorkerTrait.send"
+                            "send": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.send"
                         }
                     },
                     "semantic": {
@@ -3636,7 +3636,7 @@
                         ]
                     },
                     "path": "WWorkerTrait.terminate",
-                    "navPath": "@nav/api/WorkersPoolModule.WWorkerTrait.terminate",
+                    "navPath": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.terminate",
                     "code": {
                         "filePath": "src/lib/workers-pool/web-worker.proxy.ts",
                         "declaration": "terminate()",
@@ -3644,7 +3644,7 @@
                         "startLine": 37,
                         "endLine": 38,
                         "references": {
-                            "terminate": "@nav/api/WorkersPoolModule.WWorkerTrait.terminate"
+                            "terminate": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.terminate"
                         }
                     },
                     "semantic": {
@@ -3662,10 +3662,10 @@
                 "startLine": 7,
                 "endLine": 39,
                 "references": {
-                    "WWorkerTrait": "@nav/api/WorkersPoolModule.WWorkerTrait",
-                    "EntryPointArguments": "@nav/api/WorkersPoolModule.EntryPointArguments",
-                    "WebWorkerBrowser": "@nav/api/WorkersPoolModule.WebWorkerBrowser",
-                    "WebWorkerJest": "@nav/api/MainModule/TestUtilsTypes.WebWorkerJest"
+                    "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait",
+                    "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments",
+                    "WebWorkerBrowser": "@nav[webpm-client]/WorkersPoolModule.WebWorkerBrowser",
+                    "WebWorkerJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest"
                 }
             },
             "semantic": {
@@ -3680,7 +3680,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Any  <mkapi-api-link nav=\"@nav/api/MainModule.CdnEvent\" semantic=\"interface\">MainModule.CdnEvent</mkapi-api-link>  emitted from a Worker ( <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link> ).",
+                        "content": "Any  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.CdnEvent\" semantic=\"interface\">MainModule.CdnEvent</mkapi-api-link>  emitted from a Worker ( <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WWorkerTrait\" semantic=\"interface\">WWorkerTrait</mkapi-api-link> ).",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3692,7 +3692,7 @@
                 ]
             },
             "path": "CdnEventWorker",
-            "navPath": "@nav/api/WorkersPoolModule.CdnEventWorker",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.CdnEventWorker",
             "attributes": [],
             "callables": [],
             "code": {
@@ -3702,8 +3702,8 @@
                 "startLine": 63,
                 "endLine": 64,
                 "references": {
-                    "CdnEventWorker": "@nav/api/WorkersPoolModule.CdnEventWorker",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent"
+                    "CdnEventWorker": "@nav[webpm-client]/WorkersPoolModule.CdnEventWorker",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent"
                 }
             },
             "semantic": {
@@ -3718,7 +3718,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Messages exchanged between the main and the workers' thread.\n\nEmitted from the worker thread to the main thread:\n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageExecute\" semantic=\"interface\">MessageExecute</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageStart\" semantic=\"interface\">MessageStart</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageCdnEvent\" semantic=\"interface\">MessageCdnEvent</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageLog\" semantic=\"interface\">MessageLog</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageData\" semantic=\"interface\">MessageData</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessagePostError\" semantic=\"interface\">MessagePostError</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MessageExit\" semantic=\"type-alias\">MessageExit</mkapi-api-link> \n\nEmitted from the main thread to the worker thread:\n*   <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.MainToWorkerMessage\" semantic=\"interface\">MainToWorkerMessage</mkapi-api-link>",
+                        "content": "Messages exchanged between the main and the workers' thread.\n\nEmitted from the worker thread to the main thread:\n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageExecute\" semantic=\"interface\">MessageExecute</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageStart\" semantic=\"interface\">MessageStart</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageCdnEvent\" semantic=\"interface\">MessageCdnEvent</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageLog\" semantic=\"interface\">MessageLog</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageData\" semantic=\"interface\">MessageData</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessagePostError\" semantic=\"interface\">MessagePostError</mkapi-api-link> \n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MessageExit\" semantic=\"type-alias\">MessageExit</mkapi-api-link> \n\nEmitted from the main thread to the worker thread:\n*   <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage\" semantic=\"interface\">MainToWorkerMessage</mkapi-api-link>",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3730,7 +3730,7 @@
                 ]
             },
             "path": "Message",
-            "navPath": "@nav/api/WorkersPoolModule.Message",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.Message",
             "attributes": [],
             "callables": [],
             "code": {
@@ -3740,15 +3740,15 @@
                 "startLine": 343,
                 "endLine": 344,
                 "references": {
-                    "Message": "@nav/api/WorkersPoolModule.Message",
-                    "MessageExecute": "@nav/api/WorkersPoolModule.MessageExecute",
-                    "MessageExit": "@nav/api/WorkersPoolModule.MessageExit",
-                    "MessageStart": "@nav/api/WorkersPoolModule.MessageStart",
-                    "MessageLog": "@nav/api/WorkersPoolModule.MessageLog",
-                    "MessageData": "@nav/api/WorkersPoolModule.MessageData",
-                    "MainToWorkerMessage": "@nav/api/WorkersPoolModule.MainToWorkerMessage",
-                    "MessagePostError": "@nav/api/WorkersPoolModule.MessagePostError",
-                    "MessageCdnEvent": "@nav/api/WorkersPoolModule.MessageCdnEvent"
+                    "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
+                    "MessageExecute": "@nav[webpm-client]/WorkersPoolModule.MessageExecute",
+                    "MessageExit": "@nav[webpm-client]/WorkersPoolModule.MessageExit",
+                    "MessageStart": "@nav[webpm-client]/WorkersPoolModule.MessageStart",
+                    "MessageLog": "@nav[webpm-client]/WorkersPoolModule.MessageLog",
+                    "MessageData": "@nav[webpm-client]/WorkersPoolModule.MessageData",
+                    "MainToWorkerMessage": "@nav[webpm-client]/WorkersPoolModule.MainToWorkerMessage",
+                    "MessagePostError": "@nav[webpm-client]/WorkersPoolModule.MessagePostError",
+                    "MessageCdnEvent": "@nav[webpm-client]/WorkersPoolModule.MessageCdnEvent"
                 }
             },
             "semantic": {
@@ -3775,7 +3775,7 @@
                 ]
             },
             "path": "MessageExit",
-            "navPath": "@nav/api/WorkersPoolModule.MessageExit",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageExit",
             "attributes": [],
             "callables": [],
             "code": {
@@ -3785,7 +3785,7 @@
                 "startLine": 227,
                 "endLine": 228,
                 "references": {
-                    "MessageExit": "@nav/api/WorkersPoolModule.MessageExit"
+                    "MessageExit": "@nav[webpm-client]/WorkersPoolModule.MessageExit"
                 }
             },
             "semantic": {
@@ -3800,7 +3800,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Represents the available  `type`  in  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.Message\" semantic=\"type-alias\">Message</mkapi-api-link> .",
+                        "content": "Represents the available  `type`  in  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.Message\" semantic=\"type-alias\">Message</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3812,7 +3812,7 @@
                 ]
             },
             "path": "MessageType",
-            "navPath": "@nav/api/WorkersPoolModule.MessageType",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule.MessageType",
             "attributes": [],
             "callables": [],
             "code": {
@@ -3822,7 +3822,7 @@
                 "startLine": 305,
                 "endLine": 306,
                 "references": {
-                    "MessageType": "@nav/api/WorkersPoolModule.MessageType"
+                    "MessageType": "@nav[webpm-client]/WorkersPoolModule.MessageType"
                 }
             },
             "semantic": {

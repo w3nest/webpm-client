@@ -3,7 +3,7 @@
     "documentation": {
         "sections": [
             {
-                "content": "This module provides UI components for visualizing installed resources and tracking real-time\ninstallation progress.\n\n<note level=\"warning\">\nThis module is **not included by default** in the main library.\nIt must be explicitly installed using  <mkapi-api-link nav=\"@nav/api/MainModule.installViewsModule\" semantic=\"function\">MainModule.installViewsModule</mkapi-api-link> .\n</note>\n\n\nKey components include:\n-  <mkapi-api-link nav=\"@nav/api/ViewsModule.installWithUI\" semantic=\"function\">installWithUI</mkapi-api-link> : A convenient wrapper around  <mkapi-api-link nav=\"@nav/api/MainModule.install\" semantic=\"function\">MainModule.install</mkapi-api-link>  that integrates a visual progress\n  indicator.\n-  <mkapi-api-link nav=\"@nav/api/ViewsModule.RuntimeView\" semantic=\"class\">RuntimeView</mkapi-api-link> : Displays a snapshot of currently installed resources.\n-  <mkapi-api-link nav=\"@nav/api/ViewsModule.WorkersPoolView\" semantic=\"class\">WorkersPoolView</mkapi-api-link> : Provides a dynamic visualization of a  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool\" semantic=\"class\">WorkersPoolModule.WorkersPool</mkapi-api-link> .\n\nAdditionally, this module offers components for building **custom views**, allowing tailored\nmonitoring and interaction with installed resources.",
+                "content": "This module provides UI components for visualizing installed resources and tracking real-time\ninstallation progress.\n\n<note level=\"warning\">\nThis module is **not included by default** in the main library.\nIt must be explicitly installed using  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.installViewsModule\" semantic=\"function\">MainModule.installViewsModule</mkapi-api-link> .\n</note>\n\n\nKey components include:\n-  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.installWithUI\" semantic=\"function\">installWithUI</mkapi-api-link> : A convenient wrapper around  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.install\" semantic=\"function\">MainModule.install</mkapi-api-link>  that integrates a visual progress\n  indicator.\n-  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.RuntimeView\" semantic=\"class\">RuntimeView</mkapi-api-link> : Displays a snapshot of currently installed resources.\n-  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.WorkersPoolView\" semantic=\"class\">WorkersPoolView</mkapi-api-link> : Provides a dynamic visualization of a  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool\" semantic=\"class\">WorkersPoolModule.WorkersPool</mkapi-api-link> .\n\nAdditionally, this module offers components for building **custom views**, allowing tailored\nmonitoring and interaction with installed resources.",
                 "contentType": "markdown",
                 "semantic": {
                     "role": "",
@@ -15,7 +15,7 @@
         ]
     },
     "path": "webpm-client/ViewsModule",
-    "navPath": "@nav/api/",
+    "navPath": "@nav[webpm-client]",
     "attributes": [
         {
             "name": "Dependencies",
@@ -28,7 +28,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "",
+                        "content": "Dependencies instance.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -40,7 +40,7 @@
                 ]
             },
             "path": "Dependencies",
-            "navPath": "@nav/api/ViewsModule.Dependencies",
+            "navPath": "@nav[webpm-client]/ViewsModule.Dependencies",
             "code": {
                 "filePath": "src/lib/views/index.ts",
                 "declaration": "Dependencies: Dependencies = {}",
@@ -48,7 +48,7 @@
                 "startLine": 43,
                 "endLine": 44,
                 "references": {
-                    "Dependencies": "@nav/api/ViewsModule.Dependencies"
+                    "Dependencies": "@nav[webpm-client]/ViewsModule.Dependencies"
                 }
             }
         },
@@ -63,7 +63,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "",
+                        "content": "Events related to installation done.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -75,7 +75,7 @@
                 ]
             },
             "path": "doneEvents",
-            "navPath": "@nav/api/ViewsModule.doneEvents",
+            "navPath": "@nav[webpm-client]/ViewsModule.doneEvents",
             "code": {
                 "filePath": "src/lib/views/events-manager.ts",
                 "declaration": "doneEvents = ['InstallDoneEvent', 'InstallErrorEvent'] as const",
@@ -83,7 +83,7 @@
                 "startLine": 82,
                 "endLine": 83,
                 "references": {
-                    "doneEvents": "@nav/api/ViewsModule.doneEvents"
+                    "doneEvents": "@nav[webpm-client]/ViewsModule.doneEvents"
                 }
             }
         },
@@ -98,7 +98,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "",
+                        "content": "Events related to pyodide module installation.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -110,7 +110,7 @@
                 ]
             },
             "path": "pyModuleEvents",
-            "navPath": "@nav/api/ViewsModule.pyModuleEvents",
+            "navPath": "@nav[webpm-client]/ViewsModule.pyModuleEvents",
             "code": {
                 "filePath": "src/lib/views/events-manager.ts",
                 "declaration": "pyModuleEvents = [\n    'InstallPyModuleEvent',\n    'PyModuleLoadedEvent',\n    'PyModuleErrorEvent',\n] as const",
@@ -118,7 +118,7 @@
                 "startLine": 24,
                 "endLine": 25,
                 "references": {
-                    "pyModuleEvents": "@nav/api/ViewsModule.pyModuleEvents"
+                    "pyModuleEvents": "@nav[webpm-client]/ViewsModule.pyModuleEvents"
                 }
             }
         },
@@ -133,7 +133,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "",
+                        "content": "Events related to pyodide runtime installation.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -145,7 +145,7 @@
                 ]
             },
             "path": "pyPyRuntimeEvents",
-            "navPath": "@nav/api/ViewsModule.pyPyRuntimeEvents",
+            "navPath": "@nav[webpm-client]/ViewsModule.pyPyRuntimeEvents",
             "code": {
                 "filePath": "src/lib/views/events-manager.ts",
                 "declaration": "pyPyRuntimeEvents = [\n    'FetchPyRuntimeEvent',\n    'FetchedPyRuntimeEvent',\n    'StartPyRuntimeEvent',\n    'PyRuntimeReadyEvent',\n] as const",
@@ -153,7 +153,7 @@
                 "startLine": 48,
                 "endLine": 49,
                 "references": {
-                    "pyPyRuntimeEvents": "@nav/api/ViewsModule.pyPyRuntimeEvents"
+                    "pyPyRuntimeEvents": "@nav[webpm-client]/ViewsModule.pyPyRuntimeEvents"
                 }
             }
         }
@@ -164,7 +164,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Represents the view gathering events w/ backend installation; each event being displayed using  <mkapi-api-link nav=\"@nav/api/ViewsModule.BackendView\" semantic=\"class\">BackendView</mkapi-api-link> .",
+                        "content": "Represents the view gathering events w/ backend installation; each event being displayed using  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.BackendView\" semantic=\"class\">BackendView</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -176,7 +176,7 @@
                 ]
             },
             "path": "BackendEventsView",
-            "navPath": "@nav/api/ViewsModule.BackendEventsView",
+            "navPath": "@nav[webpm-client]/ViewsModule.BackendEventsView",
             "attributes": [
                 {
                     "name": "children",
@@ -201,7 +201,7 @@
                         ]
                     },
                     "path": "BackendEventsView.children",
-                    "navPath": "@nav/api/ViewsModule.BackendEventsView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendEventsView.children",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -209,7 +209,7 @@
                         "startLine": 35,
                         "endLine": 36,
                         "references": {
-                            "children": "@nav/api/ViewsModule.BackendEventsView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.BackendEventsView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -237,7 +237,7 @@
                         ]
                     },
                     "path": "BackendEventsView.class",
-                    "navPath": "@nav/api/ViewsModule.BackendEventsView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendEventsView.class",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "public readonly class = BackendEventsView.CssSelector",
@@ -245,7 +245,7 @@
                         "startLine": 34,
                         "endLine": 35,
                         "references": {
-                            "class": "@nav/api/ViewsModule.BackendEventsView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.BackendEventsView.class"
                         }
                     }
                 },
@@ -272,7 +272,7 @@
                         ]
                     },
                     "path": "BackendEventsView.tag",
-                    "navPath": "@nav/api/ViewsModule.BackendEventsView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendEventsView.tag",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -280,7 +280,7 @@
                         "startLine": 33,
                         "endLine": 34,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.BackendEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.BackendEventsView.tag"
                         }
                     }
                 },
@@ -307,7 +307,7 @@
                         ]
                     },
                     "path": "BackendEventsView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.BackendEventsView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendEventsView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-BackendEventsView'",
@@ -315,7 +315,7 @@
                         "startLine": 31,
                         "endLine": 32,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.BackendEventsView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.BackendEventsView.CssSelector"
                         }
                     }
                 }
@@ -328,8 +328,8 @@
                 "startLine": 27,
                 "endLine": 50,
                 "references": {
-                    "BackendEventsView": "@nav/api/ViewsModule.BackendEventsView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "BackendEventsView": "@nav[webpm-client]/ViewsModule.BackendEventsView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -346,7 +346,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "The view for backend events targeting a specific backend.\nIt uses  <mkapi-api-link nav=\"@nav/api/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with  `download` ,  `install`  &  `start`  phases.",
+                        "content": "The view for backend events targeting a specific backend.\nIt uses  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with  `download` ,  `install`  &  `start`  phases.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -358,7 +358,7 @@
                 ]
             },
             "path": "BackendView",
-            "navPath": "@nav/api/ViewsModule.BackendView",
+            "navPath": "@nav[webpm-client]/ViewsModule.BackendView",
             "attributes": [
                 {
                     "name": "children",
@@ -383,7 +383,7 @@
                         ]
                     },
                     "path": "BackendView.children",
-                    "navPath": "@nav/api/ViewsModule.BackendView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendView.children",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -391,7 +391,7 @@
                         "startLine": 61,
                         "endLine": 62,
                         "references": {
-                            "children": "@nav/api/ViewsModule.BackendView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.BackendView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -419,7 +419,7 @@
                         ]
                     },
                     "path": "BackendView.class",
-                    "navPath": "@nav/api/ViewsModule.BackendView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendView.class",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "public readonly class = BackendView.CssSelector",
@@ -427,7 +427,7 @@
                         "startLine": 60,
                         "endLine": 61,
                         "references": {
-                            "class": "@nav/api/ViewsModule.BackendView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.BackendView.class"
                         }
                     }
                 },
@@ -454,7 +454,7 @@
                         ]
                     },
                     "path": "BackendView.tag",
-                    "navPath": "@nav/api/ViewsModule.BackendView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendView.tag",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -462,7 +462,7 @@
                         "startLine": 59,
                         "endLine": 60,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.BackendView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.BackendView.tag"
                         }
                     }
                 },
@@ -489,7 +489,7 @@
                         ]
                     },
                     "path": "BackendView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.BackendView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.BackendView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/backend.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-BackendView'",
@@ -497,7 +497,7 @@
                         "startLine": 58,
                         "endLine": 59,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.BackendView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.BackendView.CssSelector"
                         }
                     }
                 }
@@ -510,8 +510,8 @@
                 "startLine": 54,
                 "endLine": 117,
                 "references": {
-                    "BackendView": "@nav/api/ViewsModule.BackendView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "BackendView": "@nav[webpm-client]/ViewsModule.BackendView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -528,7 +528,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Represents the view gathering events w/ CSS installation; each event being displayed using  <mkapi-api-link nav=\"@nav/api/ViewsModule.CssView\" semantic=\"class\">CssView</mkapi-api-link> .",
+                        "content": "Represents the view gathering events w/ CSS installation; each event being displayed using  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.CssView\" semantic=\"class\">CssView</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -540,7 +540,7 @@
                 ]
             },
             "path": "CssEventsView",
-            "navPath": "@nav/api/ViewsModule.CssEventsView",
+            "navPath": "@nav[webpm-client]/ViewsModule.CssEventsView",
             "attributes": [
                 {
                     "name": "children",
@@ -565,7 +565,7 @@
                         ]
                     },
                     "path": "CssEventsView.children",
-                    "navPath": "@nav/api/ViewsModule.CssEventsView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssEventsView.children",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -573,7 +573,7 @@
                         "startLine": 16,
                         "endLine": 17,
                         "references": {
-                            "children": "@nav/api/ViewsModule.CssEventsView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.CssEventsView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -601,7 +601,7 @@
                         ]
                     },
                     "path": "CssEventsView.class",
-                    "navPath": "@nav/api/ViewsModule.CssEventsView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssEventsView.class",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "public readonly class = CssEventsView.CssSelector",
@@ -609,7 +609,7 @@
                         "startLine": 15,
                         "endLine": 16,
                         "references": {
-                            "class": "@nav/api/ViewsModule.CssEventsView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.CssEventsView.class"
                         }
                     }
                 },
@@ -636,7 +636,7 @@
                         ]
                     },
                     "path": "CssEventsView.tag",
-                    "navPath": "@nav/api/ViewsModule.CssEventsView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssEventsView.tag",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -644,7 +644,7 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.CssEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.CssEventsView.tag"
                         }
                     }
                 },
@@ -671,7 +671,7 @@
                         ]
                     },
                     "path": "CssEventsView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.CssEventsView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssEventsView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-CssEventsView'",
@@ -679,7 +679,7 @@
                         "startLine": 13,
                         "endLine": 14,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.CssEventsView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.CssEventsView.CssSelector"
                         }
                     }
                 }
@@ -692,8 +692,8 @@
                 "startLine": 9,
                 "endLine": 29,
                 "references": {
-                    "CssEventsView": "@nav/api/ViewsModule.CssEventsView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "CssEventsView": "@nav[webpm-client]/ViewsModule.CssEventsView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -710,7 +710,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "The view for CSS events targeting a specific resource.\nIt uses  <mkapi-api-link nav=\"@nav/api/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with a single  `install`  phase.",
+                        "content": "The view for CSS events targeting a specific resource.\nIt uses  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with a single  `install`  phase.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -722,7 +722,7 @@
                 ]
             },
             "path": "CssView",
-            "navPath": "@nav/api/ViewsModule.CssView",
+            "navPath": "@nav[webpm-client]/ViewsModule.CssView",
             "attributes": [
                 {
                     "name": "children",
@@ -747,7 +747,7 @@
                         ]
                     },
                     "path": "CssView.children",
-                    "navPath": "@nav/api/ViewsModule.CssView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssView.children",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -755,7 +755,7 @@
                         "startLine": 40,
                         "endLine": 41,
                         "references": {
-                            "children": "@nav/api/ViewsModule.CssView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.CssView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -783,7 +783,7 @@
                         ]
                     },
                     "path": "CssView.class",
-                    "navPath": "@nav/api/ViewsModule.CssView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssView.class",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "public readonly class = CssView.CssSelector",
@@ -791,7 +791,7 @@
                         "startLine": 39,
                         "endLine": 40,
                         "references": {
-                            "class": "@nav/api/ViewsModule.CssView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.CssView.class"
                         }
                     }
                 },
@@ -818,7 +818,7 @@
                         ]
                     },
                     "path": "CssView.tag",
-                    "navPath": "@nav/api/ViewsModule.CssView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssView.tag",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -826,7 +826,7 @@
                         "startLine": 38,
                         "endLine": 39,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.CssView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.CssView.tag"
                         }
                     }
                 },
@@ -853,7 +853,7 @@
                         ]
                     },
                     "path": "CssView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.CssView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.CssView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/css.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-CssView'",
@@ -861,7 +861,7 @@
                         "startLine": 37,
                         "endLine": 38,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.CssView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.CssView.CssSelector"
                         }
                     }
                 }
@@ -874,8 +874,8 @@
                 "startLine": 33,
                 "endLine": 85,
                 "references": {
-                    "CssView": "@nav/api/ViewsModule.CssView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "CssView": "@nav[webpm-client]/ViewsModule.CssView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -892,7 +892,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Represents the view gathering events w/ ESM installation; each event being displayed using  <mkapi-api-link nav=\"@nav/api/ViewsModule.EsmView\" semantic=\"class\">EsmView</mkapi-api-link> .",
+                        "content": "Represents the view gathering events w/ ESM installation; each event being displayed using  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.EsmView\" semantic=\"class\">EsmView</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -904,7 +904,7 @@
                 ]
             },
             "path": "EsmEventsView",
-            "navPath": "@nav/api/ViewsModule.EsmEventsView",
+            "navPath": "@nav[webpm-client]/ViewsModule.EsmEventsView",
             "attributes": [
                 {
                     "name": "children",
@@ -929,7 +929,7 @@
                         ]
                     },
                     "path": "EsmEventsView.children",
-                    "navPath": "@nav/api/ViewsModule.EsmEventsView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmEventsView.children",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -937,7 +937,7 @@
                         "startLine": 16,
                         "endLine": 17,
                         "references": {
-                            "children": "@nav/api/ViewsModule.EsmEventsView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.EsmEventsView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -965,7 +965,7 @@
                         ]
                     },
                     "path": "EsmEventsView.class",
-                    "navPath": "@nav/api/ViewsModule.EsmEventsView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmEventsView.class",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "public readonly class = EsmEventsView.CssSelector",
@@ -973,7 +973,7 @@
                         "startLine": 15,
                         "endLine": 16,
                         "references": {
-                            "class": "@nav/api/ViewsModule.EsmEventsView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.EsmEventsView.class"
                         }
                     }
                 },
@@ -1000,7 +1000,7 @@
                         ]
                     },
                     "path": "EsmEventsView.tag",
-                    "navPath": "@nav/api/ViewsModule.EsmEventsView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmEventsView.tag",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -1008,7 +1008,7 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.EsmEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.EsmEventsView.tag"
                         }
                     }
                 },
@@ -1035,7 +1035,7 @@
                         ]
                     },
                     "path": "EsmEventsView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.EsmEventsView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmEventsView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-EsmEventsView'",
@@ -1043,7 +1043,7 @@
                         "startLine": 13,
                         "endLine": 14,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.EsmEventsView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.EsmEventsView.CssSelector"
                         }
                     }
                 }
@@ -1056,8 +1056,8 @@
                 "startLine": 9,
                 "endLine": 28,
                 "references": {
-                    "EsmEventsView": "@nav/api/ViewsModule.EsmEventsView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "EsmEventsView": "@nav[webpm-client]/ViewsModule.EsmEventsView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -1074,7 +1074,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "The view for ESM events targeting a specific module.\nIt uses  <mkapi-api-link nav=\"@nav/api/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with  `loading`  &  `parsing`  phases.",
+                        "content": "The view for ESM events targeting a specific module.\nIt uses  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with  `loading`  &  `parsing`  phases.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -1086,7 +1086,7 @@
                 ]
             },
             "path": "EsmView",
-            "navPath": "@nav/api/ViewsModule.EsmView",
+            "navPath": "@nav[webpm-client]/ViewsModule.EsmView",
             "attributes": [
                 {
                     "name": "children",
@@ -1111,7 +1111,7 @@
                         ]
                     },
                     "path": "EsmView.children",
-                    "navPath": "@nav/api/ViewsModule.EsmView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmView.children",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -1119,7 +1119,7 @@
                         "startLine": 40,
                         "endLine": 41,
                         "references": {
-                            "children": "@nav/api/ViewsModule.EsmView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.EsmView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -1147,7 +1147,7 @@
                         ]
                     },
                     "path": "EsmView.class",
-                    "navPath": "@nav/api/ViewsModule.EsmView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmView.class",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "public readonly class = EsmView.CssSelector",
@@ -1155,7 +1155,7 @@
                         "startLine": 39,
                         "endLine": 40,
                         "references": {
-                            "class": "@nav/api/ViewsModule.EsmView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.EsmView.class"
                         }
                     }
                 },
@@ -1182,7 +1182,7 @@
                         ]
                     },
                     "path": "EsmView.tag",
-                    "navPath": "@nav/api/ViewsModule.EsmView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmView.tag",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -1190,7 +1190,7 @@
                         "startLine": 38,
                         "endLine": 39,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.EsmView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.EsmView.tag"
                         }
                     }
                 },
@@ -1217,7 +1217,7 @@
                         ]
                     },
                     "path": "EsmView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.EsmView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.EsmView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/esm.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-EsmView'",
@@ -1225,7 +1225,7 @@
                         "startLine": 37,
                         "endLine": 38,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.EsmView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.EsmView.CssSelector"
                         }
                     }
                 }
@@ -1238,8 +1238,8 @@
                 "startLine": 33,
                 "endLine": 102,
                 "references": {
-                    "EsmView": "@nav/api/ViewsModule.EsmView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "EsmView": "@nav[webpm-client]/ViewsModule.EsmView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -1268,7 +1268,7 @@
                 ]
             },
             "path": "EventsManager",
-            "navPath": "@nav/api/ViewsModule.EventsManager",
+            "navPath": "@nav[webpm-client]/ViewsModule.EventsManager",
             "attributes": [],
             "callables": [],
             "code": {
@@ -1278,37 +1278,37 @@
                 "startLine": 102,
                 "endLine": 195,
                 "references": {
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
-                    "DownloadBackendEvent": "@nav/api/MainModule.DownloadBackendEvent",
-                    "InstallBackendEvent": "@nav/api/MainModule.InstallBackendEvent",
-                    "StartBackendEvent": "@nav/api/MainModule.StartBackendEvent",
-                    "BackendErrorEvent": "@nav/api/MainModule.BackendErrorEvent",
-                    "ConsoleEvent": "@nav/api/MainModule.ConsoleEvent",
-                    "CssLoadingEvent": "@nav/api/MainModule.CssLoadingEvent",
-                    "CssParsedEvent": "@nav/api/MainModule.CssParsedEvent",
-                    "UnauthorizedEvent": "@nav/api/MainModule.UnauthorizedEvent",
-                    "UrlNotFoundEvent": "@nav/api/MainModule.UrlNotFoundEvent",
-                    "StartEvent": "@nav/api/MainModule.StartEvent",
-                    "SourceLoadingEvent": "@nav/api/MainModule.SourceLoadingEvent",
-                    "SourceLoadedEvent": "@nav/api/MainModule.SourceLoadedEvent",
-                    "SourceParsedEvent": "@nav/api/MainModule.SourceParsedEvent",
-                    "ParseErrorEvent": "@nav/api/MainModule.ParseErrorEvent",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent",
-                    "InstallDoneEvent": "@nav/api/MainModule.InstallDoneEvent",
-                    "InstallErrorEvent": "@nav/api/MainModule.InstallErrorEvent",
-                    "CdnLoadingGraphQueryEvent": "@nav/api/MainModule.CdnLoadingGraphQueryEvent",
-                    "CdnLoadingGraphResolvedEvent": "@nav/api/MainModule.CdnLoadingGraphResolvedEvent",
-                    "CdnLoadingGraphErrorEvent": "@nav/api/MainModule.CdnLoadingGraphErrorEvent",
-                    "FetchPyRuntimeEvent": "@nav/api/MainModule.FetchPyRuntimeEvent",
-                    "FetchedPyRuntimeEvent": "@nav/api/MainModule.FetchedPyRuntimeEvent",
-                    "StartPyRuntimeEvent": "@nav/api/MainModule.StartPyRuntimeEvent",
-                    "PyRuntimeReadyEvent": "@nav/api/MainModule.PyRuntimeReadyEvent",
-                    "StartPyEnvironmentInstallEvent": "@nav/api/MainModule.StartPyEnvironmentInstallEvent",
-                    "InstallPyModuleEvent": "@nav/api/MainModule.InstallPyModuleEvent",
-                    "PyModuleLoadedEvent": "@nav/api/MainModule.PyModuleLoadedEvent",
-                    "PyModuleErrorEvent": "@nav/api/MainModule.PyModuleErrorEvent",
-                    "PyEnvironmentReadyEvent": "@nav/api/MainModule.PyEnvironmentReadyEvent",
-                    "PyEnvironmentErrorEvent": "@nav/api/MainModule.PyEnvironmentErrorEvent",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
+                    "DownloadBackendEvent": "@nav[webpm-client]/MainModule.DownloadBackendEvent",
+                    "InstallBackendEvent": "@nav[webpm-client]/MainModule.InstallBackendEvent",
+                    "StartBackendEvent": "@nav[webpm-client]/MainModule.StartBackendEvent",
+                    "BackendErrorEvent": "@nav[webpm-client]/MainModule.BackendErrorEvent",
+                    "ConsoleEvent": "@nav[webpm-client]/MainModule.ConsoleEvent",
+                    "CssLoadingEvent": "@nav[webpm-client]/MainModule.CssLoadingEvent",
+                    "CssParsedEvent": "@nav[webpm-client]/MainModule.CssParsedEvent",
+                    "UnauthorizedEvent": "@nav[webpm-client]/MainModule.UnauthorizedEvent",
+                    "UrlNotFoundEvent": "@nav[webpm-client]/MainModule.UrlNotFoundEvent",
+                    "StartEvent": "@nav[webpm-client]/MainModule.StartEvent",
+                    "SourceLoadingEvent": "@nav[webpm-client]/MainModule.SourceLoadingEvent",
+                    "SourceLoadedEvent": "@nav[webpm-client]/MainModule.SourceLoadedEvent",
+                    "SourceParsedEvent": "@nav[webpm-client]/MainModule.SourceParsedEvent",
+                    "ParseErrorEvent": "@nav[webpm-client]/MainModule.ParseErrorEvent",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent",
+                    "InstallDoneEvent": "@nav[webpm-client]/MainModule.InstallDoneEvent",
+                    "InstallErrorEvent": "@nav[webpm-client]/MainModule.InstallErrorEvent",
+                    "CdnLoadingGraphQueryEvent": "@nav[webpm-client]/MainModule.CdnLoadingGraphQueryEvent",
+                    "CdnLoadingGraphResolvedEvent": "@nav[webpm-client]/MainModule.CdnLoadingGraphResolvedEvent",
+                    "CdnLoadingGraphErrorEvent": "@nav[webpm-client]/MainModule.CdnLoadingGraphErrorEvent",
+                    "FetchPyRuntimeEvent": "@nav[webpm-client]/MainModule.FetchPyRuntimeEvent",
+                    "FetchedPyRuntimeEvent": "@nav[webpm-client]/MainModule.FetchedPyRuntimeEvent",
+                    "StartPyRuntimeEvent": "@nav[webpm-client]/MainModule.StartPyRuntimeEvent",
+                    "PyRuntimeReadyEvent": "@nav[webpm-client]/MainModule.PyRuntimeReadyEvent",
+                    "StartPyEnvironmentInstallEvent": "@nav[webpm-client]/MainModule.StartPyEnvironmentInstallEvent",
+                    "InstallPyModuleEvent": "@nav[webpm-client]/MainModule.InstallPyModuleEvent",
+                    "PyModuleLoadedEvent": "@nav[webpm-client]/MainModule.PyModuleLoadedEvent",
+                    "PyModuleErrorEvent": "@nav[webpm-client]/MainModule.PyModuleErrorEvent",
+                    "PyEnvironmentReadyEvent": "@nav[webpm-client]/MainModule.PyEnvironmentReadyEvent",
+                    "PyEnvironmentErrorEvent": "@nav[webpm-client]/MainModule.PyEnvironmentErrorEvent",
                     "Observable": "https://rxjs.dev/guide/observable",
                     "ReplaySubject": "https://www.learnrxjs.io/learn-rxjs/subjects/replaysubject"
                 }
@@ -1325,7 +1325,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Footer view for  <mkapi-api-link nav=\"@nav/api/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link>  displaying a given message.",
+                        "content": "Footer view for  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link>  displaying a given message.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -1337,7 +1337,7 @@
                 ]
             },
             "path": "FooterView",
-            "navPath": "@nav/api/ViewsModule.FooterView",
+            "navPath": "@nav[webpm-client]/ViewsModule.FooterView",
             "attributes": [
                 {
                     "name": "children",
@@ -1362,7 +1362,7 @@
                         ]
                     },
                     "path": "FooterView.children",
-                    "navPath": "@nav/api/ViewsModule.FooterView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.FooterView.children",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -1370,7 +1370,7 @@
                         "startLine": 238,
                         "endLine": 239,
                         "references": {
-                            "children": "@nav/api/ViewsModule.FooterView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.FooterView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -1398,7 +1398,7 @@
                         ]
                     },
                     "path": "FooterView.class",
-                    "navPath": "@nav/api/ViewsModule.FooterView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.FooterView.class",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly class = `${FooterView.CssSelector} my-2`",
@@ -1406,7 +1406,7 @@
                         "startLine": 237,
                         "endLine": 238,
                         "references": {
-                            "class": "@nav/api/ViewsModule.FooterView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.FooterView.class"
                         }
                     }
                 },
@@ -1433,7 +1433,7 @@
                         ]
                     },
                     "path": "FooterView.style",
-                    "navPath": "@nav/api/ViewsModule.FooterView.style",
+                    "navPath": "@nav[webpm-client]/ViewsModule.FooterView.style",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly style = { fontWeight: 'bold' as const }",
@@ -1441,7 +1441,7 @@
                         "startLine": 239,
                         "endLine": 240,
                         "references": {
-                            "style": "@nav/api/ViewsModule.FooterView.style"
+                            "style": "@nav[webpm-client]/ViewsModule.FooterView.style"
                         }
                     }
                 },
@@ -1468,7 +1468,7 @@
                         ]
                     },
                     "path": "FooterView.tag",
-                    "navPath": "@nav/api/ViewsModule.FooterView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.FooterView.tag",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -1476,7 +1476,7 @@
                         "startLine": 236,
                         "endLine": 237,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.FooterView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.FooterView.tag"
                         }
                     }
                 },
@@ -1503,7 +1503,7 @@
                         ]
                     },
                     "path": "FooterView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.FooterView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.FooterView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-FooterView'",
@@ -1511,7 +1511,7 @@
                         "startLine": 235,
                         "endLine": 236,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.FooterView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.FooterView.CssSelector"
                         }
                     }
                 }
@@ -1524,7 +1524,7 @@
                 "startLine": 231,
                 "endLine": 249,
                 "references": {
-                    "FooterView": "@nav/api/ViewsModule.FooterView",
+                    "FooterView": "@nav[webpm-client]/ViewsModule.FooterView",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -1541,7 +1541,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Header bar for  <mkapi-api-link nav=\"@nav/api/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link> .",
+                        "content": "Header bar for  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -1553,7 +1553,7 @@
                 ]
             },
             "path": "InstallHeaderBar",
-            "navPath": "@nav/api/ViewsModule.InstallHeaderBar",
+            "navPath": "@nav[webpm-client]/ViewsModule.InstallHeaderBar",
             "attributes": [
                 {
                     "name": "children",
@@ -1578,7 +1578,7 @@
                         ]
                     },
                     "path": "InstallHeaderBar.children",
-                    "navPath": "@nav/api/ViewsModule.InstallHeaderBar.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.children",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -1586,7 +1586,7 @@
                         "startLine": 141,
                         "endLine": 142,
                         "references": {
-                            "children": "@nav/api/ViewsModule.InstallHeaderBar.children",
+                            "children": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -1614,7 +1614,7 @@
                         ]
                     },
                     "path": "InstallHeaderBar.class",
-                    "navPath": "@nav/api/ViewsModule.InstallHeaderBar.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.class",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly class: AttributeLike<string>",
@@ -1622,7 +1622,7 @@
                         "startLine": 140,
                         "endLine": 141,
                         "references": {
-                            "class": "@nav/api/ViewsModule.InstallHeaderBar.class",
+                            "class": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.class",
                             "AttributeLike": "/apps/@rx-vdom/doc/latest?nav=/api.AttributeLike"
                         }
                     }
@@ -1650,7 +1650,7 @@
                         ]
                     },
                     "path": "InstallHeaderBar.style",
-                    "navPath": "@nav/api/ViewsModule.InstallHeaderBar.style",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.style",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly style = {\n        fontWeight: 'bolder' as const,\n    }",
@@ -1658,7 +1658,7 @@
                         "startLine": 143,
                         "endLine": 144,
                         "references": {
-                            "style": "@nav/api/ViewsModule.InstallHeaderBar.style"
+                            "style": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.style"
                         }
                     }
                 },
@@ -1685,7 +1685,7 @@
                         ]
                     },
                     "path": "InstallHeaderBar.tag",
-                    "navPath": "@nav/api/ViewsModule.InstallHeaderBar.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.tag",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -1693,7 +1693,7 @@
                         "startLine": 139,
                         "endLine": 140,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.InstallHeaderBar.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.tag"
                         }
                     }
                 },
@@ -1720,7 +1720,7 @@
                         ]
                     },
                     "path": "InstallHeaderBar.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.InstallHeaderBar.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-InstallHeaderBar'",
@@ -1728,7 +1728,7 @@
                         "startLine": 137,
                         "endLine": 138,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.InstallHeaderBar.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.CssSelector"
                         }
                     }
                 }
@@ -1741,9 +1741,9 @@
                 "startLine": 133,
                 "endLine": 227,
                 "references": {
-                    "InstallHeaderBar": "@nav/api/ViewsModule.InstallHeaderBar",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
-                    "ExpandedMode": "@nav/api/ViewsModule.ExpandedMode",
+                    "InstallHeaderBar": "@nav[webpm-client]/ViewsModule.InstallHeaderBar",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
+                    "ExpandedMode": "@nav[webpm-client]/ViewsModule.ExpandedMode",
                     "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "AttributeLike": "/apps/@rx-vdom/doc/latest?nav=/api.AttributeLike",
@@ -1762,7 +1762,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "A virtual DOM component that displays the installation process of various dependencies\n(ESM, Pyodide, Backend, and CSS) with real-time updates.\n\nIt is an expandable group with header defined by  <mkapi-api-link nav=\"@nav/api/ViewsModule.InstallHeaderBar\" semantic=\"class\">InstallHeaderBar</mkapi-api-link> , and content including (if applicable):\n\n*   <mkapi-api-link nav=\"@nav/api/ViewsModule.LoadingGraphEventsView\" semantic=\"class\">LoadingGraphEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav/api/ViewsModule.EsmEventsView\" semantic=\"class\">EsmEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav/api/ViewsModule.PyEventsView\" semantic=\"class\">PyEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav/api/ViewsModule.BackendEventsView\" semantic=\"class\">BackendEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav/api/ViewsModule.CssEventsView\" semantic=\"class\">CssEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav/api/ViewsModule.FooterView\" semantic=\"class\">FooterView</mkapi-api-link>",
+                        "content": "A virtual DOM component that displays the installation process of various dependencies\n(ESM, Pyodide, Backend, and CSS) with real-time updates.\n\nIt is an expandable group with header defined by  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.InstallHeaderBar\" semantic=\"class\">InstallHeaderBar</mkapi-api-link> , and content including (if applicable):\n\n*   <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.LoadingGraphEventsView\" semantic=\"class\">LoadingGraphEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.EsmEventsView\" semantic=\"class\">EsmEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.PyEventsView\" semantic=\"class\">PyEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.BackendEventsView\" semantic=\"class\">BackendEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.CssEventsView\" semantic=\"class\">CssEventsView</mkapi-api-link> \n\n*   <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.FooterView\" semantic=\"class\">FooterView</mkapi-api-link>",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -1774,7 +1774,7 @@
                 ]
             },
             "path": "InstallView",
-            "navPath": "@nav/api/ViewsModule.InstallView",
+            "navPath": "@nav[webpm-client]/ViewsModule.InstallView",
             "attributes": [
                 {
                     "name": "children",
@@ -1799,7 +1799,7 @@
                         ]
                     },
                     "path": "InstallView.children",
-                    "navPath": "@nav/api/ViewsModule.InstallView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallView.children",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -1807,7 +1807,7 @@
                         "startLine": 53,
                         "endLine": 54,
                         "references": {
-                            "children": "@nav/api/ViewsModule.InstallView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.InstallView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -1835,7 +1835,7 @@
                         ]
                     },
                     "path": "InstallView.class",
-                    "navPath": "@nav/api/ViewsModule.InstallView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallView.class",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly class = `${InstallView.CssSelector} border rounded w-100`",
@@ -1843,7 +1843,7 @@
                         "startLine": 52,
                         "endLine": 53,
                         "references": {
-                            "class": "@nav/api/ViewsModule.InstallView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.InstallView.class"
                         }
                     }
                 },
@@ -1870,7 +1870,7 @@
                         ]
                     },
                     "path": "InstallView.tag",
-                    "navPath": "@nav/api/ViewsModule.InstallView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallView.tag",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -1878,7 +1878,7 @@
                         "startLine": 51,
                         "endLine": 52,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.InstallView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.InstallView.tag"
                         }
                     }
                 },
@@ -1905,7 +1905,7 @@
                         ]
                     },
                     "path": "InstallView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.InstallView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-InstallView'",
@@ -1913,7 +1913,7 @@
                         "startLine": 50,
                         "endLine": 51,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.InstallView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.InstallView.CssSelector"
                         }
                     }
                 }
@@ -1947,7 +1947,7 @@
                         ]
                     },
                     "path": "InstallView.constructor",
-                    "navPath": "@nav/api/ViewsModule.InstallView.constructor",
+                    "navPath": "@nav[webpm-client]/ViewsModule.InstallView.constructor",
                     "code": {
                         "filePath": "src/lib/views/install.view.ts",
                         "declaration": "constructor(\n    params: { eventsMgr?: EventsManager; expandedMode?: ExpandedMode } = {},\n)",
@@ -1955,9 +1955,9 @@
                         "startLine": 65,
                         "endLine": 119,
                         "references": {
-                            "InstallView": "@nav/api/ViewsModule.InstallView",
-                            "EventsManager": "@nav/api/ViewsModule.EventsManager",
-                            "ExpandedMode": "@nav/api/ViewsModule.ExpandedMode"
+                            "InstallView": "@nav[webpm-client]/ViewsModule.InstallView",
+                            "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
+                            "ExpandedMode": "@nav[webpm-client]/ViewsModule.ExpandedMode"
                         }
                     },
                     "semantic": {
@@ -1975,10 +1975,10 @@
                 "startLine": 46,
                 "endLine": 128,
                 "references": {
-                    "InstallView": "@nav/api/ViewsModule.InstallView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
-                    "ExpandedMode": "@nav/api/ViewsModule.ExpandedMode",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent",
+                    "InstallView": "@nav[webpm-client]/ViewsModule.InstallView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
+                    "ExpandedMode": "@nav[webpm-client]/ViewsModule.ExpandedMode",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
@@ -2008,7 +2008,7 @@
                 ]
             },
             "path": "ItemView",
-            "navPath": "@nav/api/ViewsModule.ItemView",
+            "navPath": "@nav[webpm-client]/ViewsModule.ItemView",
             "attributes": [
                 {
                     "name": "children",
@@ -2033,7 +2033,7 @@
                         ]
                     },
                     "path": "ItemView.children",
-                    "navPath": "@nav/api/ViewsModule.ItemView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ItemView.children",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -2041,7 +2041,7 @@
                         "startLine": 78,
                         "endLine": 79,
                         "references": {
-                            "children": "@nav/api/ViewsModule.ItemView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.ItemView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -2069,7 +2069,7 @@
                         ]
                     },
                     "path": "ItemView.class",
-                    "navPath": "@nav/api/ViewsModule.ItemView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ItemView.class",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "public readonly class = `${ItemView.CssSelector} d-flex align-items-center`",
@@ -2077,7 +2077,7 @@
                         "startLine": 77,
                         "endLine": 78,
                         "references": {
-                            "class": "@nav/api/ViewsModule.ItemView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.ItemView.class"
                         }
                     }
                 },
@@ -2104,7 +2104,7 @@
                         ]
                     },
                     "path": "ItemView.tag",
-                    "navPath": "@nav/api/ViewsModule.ItemView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ItemView.tag",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -2112,7 +2112,7 @@
                         "startLine": 76,
                         "endLine": 77,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.ItemView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.ItemView.tag"
                         }
                     }
                 },
@@ -2139,7 +2139,7 @@
                         ]
                     },
                     "path": "ItemView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.ItemView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ItemView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-ItemView'",
@@ -2147,7 +2147,7 @@
                         "startLine": 74,
                         "endLine": 75,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.ItemView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.ItemView.CssSelector"
                         }
                     }
                 }
@@ -2160,9 +2160,9 @@
                 "startLine": 70,
                 "endLine": 138,
                 "references": {
-                    "ItemView": "@nav/api/ViewsModule.ItemView",
-                    "Phase": "@nav/api/ViewsModule.Phase",
-                    "Topic": "@nav/api/MainModule.Topic",
+                    "ItemView": "@nav[webpm-client]/ViewsModule.ItemView",
+                    "Phase": "@nav[webpm-client]/ViewsModule.Phase",
+                    "Topic": "@nav[webpm-client]/MainModule.Topic",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -2179,7 +2179,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Represents the view gathering events w/ loading graph installation.\n\nIt uses  <mkapi-api-link nav=\"@nav/api/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with a single  `resolution`  phase.",
+                        "content": "Represents the view gathering events w/ loading graph installation.\n\nIt uses  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with a single  `resolution`  phase.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2191,7 +2191,7 @@
                 ]
             },
             "path": "LoadingGraphEventsView",
-            "navPath": "@nav/api/ViewsModule.LoadingGraphEventsView",
+            "navPath": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView",
             "attributes": [
                 {
                     "name": "children",
@@ -2216,7 +2216,7 @@
                         ]
                     },
                     "path": "LoadingGraphEventsView.children",
-                    "navPath": "@nav/api/ViewsModule.LoadingGraphEventsView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.children",
                     "code": {
                         "filePath": "src/lib/views/loading-graph.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -2224,7 +2224,7 @@
                         "startLine": 19,
                         "endLine": 20,
                         "references": {
-                            "children": "@nav/api/ViewsModule.LoadingGraphEventsView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -2252,7 +2252,7 @@
                         ]
                     },
                     "path": "LoadingGraphEventsView.class",
-                    "navPath": "@nav/api/ViewsModule.LoadingGraphEventsView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.class",
                     "code": {
                         "filePath": "src/lib/views/loading-graph.view.ts",
                         "declaration": "public readonly class = LoadingGraphEventsView.CssSelector",
@@ -2260,7 +2260,7 @@
                         "startLine": 18,
                         "endLine": 19,
                         "references": {
-                            "class": "@nav/api/ViewsModule.LoadingGraphEventsView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.class"
                         }
                     }
                 },
@@ -2287,7 +2287,7 @@
                         ]
                     },
                     "path": "LoadingGraphEventsView.tag",
-                    "navPath": "@nav/api/ViewsModule.LoadingGraphEventsView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.tag",
                     "code": {
                         "filePath": "src/lib/views/loading-graph.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -2295,7 +2295,7 @@
                         "startLine": 17,
                         "endLine": 18,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.LoadingGraphEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.tag"
                         }
                     }
                 },
@@ -2322,7 +2322,7 @@
                         ]
                     },
                     "path": "LoadingGraphEventsView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.LoadingGraphEventsView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/loading-graph.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-LoadingGraphEventsView'",
@@ -2330,7 +2330,7 @@
                         "startLine": 16,
                         "endLine": 17,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.LoadingGraphEventsView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.CssSelector"
                         }
                     }
                 }
@@ -2343,8 +2343,8 @@
                 "startLine": 12,
                 "endLine": 51,
                 "references": {
-                    "LoadingGraphEventsView": "@nav/api/ViewsModule.LoadingGraphEventsView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "LoadingGraphEventsView": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -2373,7 +2373,7 @@
                 ]
             },
             "path": "LogsView",
-            "navPath": "@nav/api/ViewsModule.LogsView",
+            "navPath": "@nav[webpm-client]/ViewsModule.LogsView",
             "attributes": [
                 {
                     "name": "children",
@@ -2398,7 +2398,7 @@
                         ]
                     },
                     "path": "LogsView.children",
-                    "navPath": "@nav/api/ViewsModule.LogsView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LogsView.children",
                     "code": {
                         "filePath": "src/lib/views/logs.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -2406,7 +2406,7 @@
                         "startLine": 16,
                         "endLine": 17,
                         "references": {
-                            "children": "@nav/api/ViewsModule.LogsView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.LogsView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -2434,7 +2434,7 @@
                         ]
                     },
                     "path": "LogsView.class",
-                    "navPath": "@nav/api/ViewsModule.LogsView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LogsView.class",
                     "code": {
                         "filePath": "src/lib/views/logs.view.ts",
                         "declaration": "public readonly class = `${LogsView.CssSelector} bg-dark text-light w-100 h-100 px-1 py-2 overflow-auto`",
@@ -2442,7 +2442,7 @@
                         "startLine": 15,
                         "endLine": 16,
                         "references": {
-                            "class": "@nav/api/ViewsModule.LogsView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.LogsView.class"
                         }
                     }
                 },
@@ -2469,7 +2469,7 @@
                         ]
                     },
                     "path": "LogsView.style",
-                    "navPath": "@nav/api/ViewsModule.LogsView.style",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LogsView.style",
                     "code": {
                         "filePath": "src/lib/views/logs.view.ts",
                         "declaration": "public readonly style = {\n        fontSize: 'medium' as const,\n        maxHeight: '25vh',\n        fontFamily: 'monospace',\n        whiteSpace: 'nowrap' as const,\n    }",
@@ -2477,7 +2477,7 @@
                         "startLine": 17,
                         "endLine": 18,
                         "references": {
-                            "style": "@nav/api/ViewsModule.LogsView.style"
+                            "style": "@nav[webpm-client]/ViewsModule.LogsView.style"
                         }
                     }
                 },
@@ -2504,7 +2504,7 @@
                         ]
                     },
                     "path": "LogsView.tag",
-                    "navPath": "@nav/api/ViewsModule.LogsView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LogsView.tag",
                     "code": {
                         "filePath": "src/lib/views/logs.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -2512,7 +2512,7 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.LogsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.LogsView.tag"
                         }
                     }
                 },
@@ -2539,7 +2539,7 @@
                         ]
                     },
                     "path": "LogsView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.LogsView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.LogsView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/logs.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-LogsView'",
@@ -2547,7 +2547,7 @@
                         "startLine": 13,
                         "endLine": 14,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.LogsView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.LogsView.CssSelector"
                         }
                     }
                 }
@@ -2560,8 +2560,8 @@
                 "startLine": 9,
                 "endLine": 55,
                 "references": {
-                    "LogsView": "@nav/api/ViewsModule.LogsView",
-                    "ConsoleEvent": "@nav/api/MainModule.ConsoleEvent",
+                    "LogsView": "@nav[webpm-client]/ViewsModule.LogsView",
+                    "ConsoleEvent": "@nav[webpm-client]/MainModule.ConsoleEvent",
                     "Observable": "https://rxjs.dev/guide/observable",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
@@ -2579,7 +2579,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Represents the view gathering events w/ pyodide installation; each event being displayed using  <mkapi-api-link nav=\"@nav/api/ViewsModule.PyModuleView\" semantic=\"class\">PyModuleView</mkapi-api-link> .",
+                        "content": "Represents the view gathering events w/ pyodide installation; each event being displayed using  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.PyModuleView\" semantic=\"class\">PyModuleView</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2591,7 +2591,7 @@
                 ]
             },
             "path": "PyEventsView",
-            "navPath": "@nav/api/ViewsModule.PyEventsView",
+            "navPath": "@nav[webpm-client]/ViewsModule.PyEventsView",
             "attributes": [
                 {
                     "name": "children",
@@ -2616,7 +2616,7 @@
                         ]
                     },
                     "path": "PyEventsView.children",
-                    "navPath": "@nav/api/ViewsModule.PyEventsView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyEventsView.children",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -2624,7 +2624,7 @@
                         "startLine": 15,
                         "endLine": 16,
                         "references": {
-                            "children": "@nav/api/ViewsModule.PyEventsView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.PyEventsView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -2652,7 +2652,7 @@
                         ]
                     },
                     "path": "PyEventsView.class",
-                    "navPath": "@nav/api/ViewsModule.PyEventsView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyEventsView.class",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "public readonly class = PyEventsView.CssSelector",
@@ -2660,7 +2660,7 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "class": "@nav/api/ViewsModule.PyEventsView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.PyEventsView.class"
                         }
                     }
                 },
@@ -2687,7 +2687,7 @@
                         ]
                     },
                     "path": "PyEventsView.tag",
-                    "navPath": "@nav/api/ViewsModule.PyEventsView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyEventsView.tag",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -2695,7 +2695,7 @@
                         "startLine": 13,
                         "endLine": 14,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.PyEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.PyEventsView.tag"
                         }
                     }
                 },
@@ -2722,7 +2722,7 @@
                         ]
                     },
                     "path": "PyEventsView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.PyEventsView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyEventsView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-PyEventsView'",
@@ -2730,7 +2730,7 @@
                         "startLine": 12,
                         "endLine": 13,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.PyEventsView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.PyEventsView.CssSelector"
                         }
                     }
                 }
@@ -2743,8 +2743,8 @@
                 "startLine": 8,
                 "endLine": 82,
                 "references": {
-                    "PyEventsView": "@nav/api/ViewsModule.PyEventsView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "PyEventsView": "@nav[webpm-client]/ViewsModule.PyEventsView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -2761,7 +2761,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "The view for pyodide events targeting a specific module.\nIt uses  <mkapi-api-link nav=\"@nav/api/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with a single  `install`  phase.",
+                        "content": "The view for pyodide events targeting a specific module.\nIt uses  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.ItemView\" semantic=\"class\">ItemView</mkapi-api-link>  with a single  `install`  phase.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -2773,7 +2773,7 @@
                 ]
             },
             "path": "PyModuleView",
-            "navPath": "@nav/api/ViewsModule.PyModuleView",
+            "navPath": "@nav[webpm-client]/ViewsModule.PyModuleView",
             "attributes": [
                 {
                     "name": "children",
@@ -2798,7 +2798,7 @@
                         ]
                     },
                     "path": "PyModuleView.children",
-                    "navPath": "@nav/api/ViewsModule.PyModuleView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyModuleView.children",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -2806,7 +2806,7 @@
                         "startLine": 93,
                         "endLine": 94,
                         "references": {
-                            "children": "@nav/api/ViewsModule.PyModuleView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.PyModuleView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -2834,7 +2834,7 @@
                         ]
                     },
                     "path": "PyModuleView.class",
-                    "navPath": "@nav/api/ViewsModule.PyModuleView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyModuleView.class",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "public readonly class = PyModuleView.CssSelector",
@@ -2842,7 +2842,7 @@
                         "startLine": 92,
                         "endLine": 93,
                         "references": {
-                            "class": "@nav/api/ViewsModule.PyModuleView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.PyModuleView.class"
                         }
                     }
                 },
@@ -2869,7 +2869,7 @@
                         ]
                     },
                     "path": "PyModuleView.tag",
-                    "navPath": "@nav/api/ViewsModule.PyModuleView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyModuleView.tag",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -2877,7 +2877,7 @@
                         "startLine": 91,
                         "endLine": 92,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.PyModuleView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.PyModuleView.tag"
                         }
                     }
                 },
@@ -2904,7 +2904,7 @@
                         ]
                     },
                     "path": "PyModuleView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.PyModuleView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.PyModuleView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/pyodide.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-PyModuleView'",
@@ -2912,7 +2912,7 @@
                         "startLine": 90,
                         "endLine": 91,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.PyModuleView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.PyModuleView.CssSelector"
                         }
                     }
                 }
@@ -2925,8 +2925,8 @@
                 "startLine": 86,
                 "endLine": 122,
                 "references": {
-                    "PyModuleView": "@nav/api/ViewsModule.PyModuleView",
-                    "EventsManager": "@nav/api/ViewsModule.EventsManager",
+                    "PyModuleView": "@nav[webpm-client]/ViewsModule.PyModuleView",
+                    "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -2955,7 +2955,7 @@
                 ]
             },
             "path": "RuntimeView",
-            "navPath": "@nav/api/ViewsModule.RuntimeView",
+            "navPath": "@nav[webpm-client]/ViewsModule.RuntimeView",
             "attributes": [
                 {
                     "name": "children",
@@ -2980,7 +2980,7 @@
                         ]
                     },
                     "path": "RuntimeView.children",
-                    "navPath": "@nav/api/ViewsModule.RuntimeView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.RuntimeView.children",
                     "code": {
                         "filePath": "src/lib/views/runtime.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -2988,7 +2988,7 @@
                         "startLine": 11,
                         "endLine": 12,
                         "references": {
-                            "children": "@nav/api/ViewsModule.RuntimeView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.RuntimeView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -3016,7 +3016,7 @@
                         ]
                     },
                     "path": "RuntimeView.tag",
-                    "navPath": "@nav/api/ViewsModule.RuntimeView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.RuntimeView.tag",
                     "code": {
                         "filePath": "src/lib/views/runtime.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -3024,7 +3024,7 @@
                         "startLine": 10,
                         "endLine": 11,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.RuntimeView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.RuntimeView.tag"
                         }
                     }
                 }
@@ -3037,7 +3037,7 @@
                 "startLine": 9,
                 "endLine": 25,
                 "references": {
-                    "RuntimeView": "@nav/api/ViewsModule.RuntimeView",
+                    "RuntimeView": "@nav[webpm-client]/ViewsModule.RuntimeView",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -3054,7 +3054,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Toggle button to display  `items`  or  `logs`  view within  <mkapi-api-link nav=\"@nav/api/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link> .",
+                        "content": "Toggle button to display  `items`  or  `logs`  view within  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3066,7 +3066,7 @@
                 ]
             },
             "path": "ToggleViewMode",
-            "navPath": "@nav/api/ViewsModule.ToggleViewMode",
+            "navPath": "@nav[webpm-client]/ViewsModule.ToggleViewMode",
             "attributes": [
                 {
                     "name": "children",
@@ -3091,7 +3091,7 @@
                         ]
                     },
                     "path": "ToggleViewMode.children",
-                    "navPath": "@nav/api/ViewsModule.ToggleViewMode.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ToggleViewMode.children",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -3099,7 +3099,7 @@
                         "startLine": 15,
                         "endLine": 16,
                         "references": {
-                            "children": "@nav/api/ViewsModule.ToggleViewMode.children",
+                            "children": "@nav[webpm-client]/ViewsModule.ToggleViewMode.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -3127,7 +3127,7 @@
                         ]
                     },
                     "path": "ToggleViewMode.class",
-                    "navPath": "@nav/api/ViewsModule.ToggleViewMode.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ToggleViewMode.class",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "public readonly class = `${ToggleViewMode.CssSelector} d-flex align-items-center`",
@@ -3135,7 +3135,7 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "class": "@nav/api/ViewsModule.ToggleViewMode.class"
+                            "class": "@nav[webpm-client]/ViewsModule.ToggleViewMode.class"
                         }
                     }
                 },
@@ -3162,7 +3162,7 @@
                         ]
                     },
                     "path": "ToggleViewMode.style",
-                    "navPath": "@nav/api/ViewsModule.ToggleViewMode.style",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ToggleViewMode.style",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "public readonly style = {\n        fontWeight: 'bolder' as const,\n    }",
@@ -3170,7 +3170,7 @@
                         "startLine": 16,
                         "endLine": 17,
                         "references": {
-                            "style": "@nav/api/ViewsModule.ToggleViewMode.style"
+                            "style": "@nav[webpm-client]/ViewsModule.ToggleViewMode.style"
                         }
                     }
                 },
@@ -3197,7 +3197,7 @@
                         ]
                     },
                     "path": "ToggleViewMode.tag",
-                    "navPath": "@nav/api/ViewsModule.ToggleViewMode.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ToggleViewMode.tag",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -3205,7 +3205,7 @@
                         "startLine": 13,
                         "endLine": 14,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.ToggleViewMode.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.ToggleViewMode.tag"
                         }
                     }
                 },
@@ -3232,7 +3232,7 @@
                         ]
                     },
                     "path": "ToggleViewMode.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.ToggleViewMode.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.ToggleViewMode.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/common.view.ts",
                         "declaration": "static readonly CssSelector = 'webpm-ToggleViewMode'",
@@ -3240,7 +3240,7 @@
                         "startLine": 12,
                         "endLine": 13,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.ToggleViewMode.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.ToggleViewMode.CssSelector"
                         }
                     }
                 }
@@ -3253,7 +3253,7 @@
                 "startLine": 8,
                 "endLine": 46,
                 "references": {
-                    "ToggleViewMode": "@nav/api/ViewsModule.ToggleViewMode",
+                    "ToggleViewMode": "@nav[webpm-client]/ViewsModule.ToggleViewMode",
                     "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
@@ -3283,7 +3283,7 @@
                 ]
             },
             "path": "WorkerCard",
-            "navPath": "@nav/api/ViewsModule.WorkerCard",
+            "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard",
             "attributes": [
                 {
                     "name": "children",
@@ -3308,7 +3308,7 @@
                         ]
                     },
                     "path": "WorkerCard.children",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.children",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -3316,7 +3316,7 @@
                         "startLine": 90,
                         "endLine": 91,
                         "references": {
-                            "children": "@nav/api/ViewsModule.WorkerCard.children",
+                            "children": "@nav[webpm-client]/ViewsModule.WorkerCard.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -3344,7 +3344,7 @@
                         ]
                     },
                     "path": "WorkerCard.class",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.class",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly class = `${WorkerCard.CssSelector} p-2 m-2 rounded border`",
@@ -3352,7 +3352,7 @@
                         "startLine": 76,
                         "endLine": 77,
                         "references": {
-                            "class": "@nav/api/ViewsModule.WorkerCard.class"
+                            "class": "@nav[webpm-client]/ViewsModule.WorkerCard.class"
                         }
                     }
                 },
@@ -3379,7 +3379,7 @@
                         ]
                     },
                     "path": "WorkerCard.connectedCallback",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.connectedCallback",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.connectedCallback",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly connectedCallback: (elem: RxHTMLElement<'div'>) => void",
@@ -3387,7 +3387,7 @@
                         "startLine": 102,
                         "endLine": 103,
                         "references": {
-                            "connectedCallback": "@nav/api/ViewsModule.WorkerCard.connectedCallback",
+                            "connectedCallback": "@nav[webpm-client]/ViewsModule.WorkerCard.connectedCallback",
                             "RxHTMLElement": "/apps/@rx-vdom/doc/latest?nav=/api.RxHTMLElement"
                         }
                     }
@@ -3415,7 +3415,7 @@
                         ]
                     },
                     "path": "WorkerCard.style",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.style",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.style",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly style = {\n        height: 'fit-content',\n        width: 'fit-content',\n        maxWidth: '100%',\n    }",
@@ -3423,7 +3423,7 @@
                         "startLine": 81,
                         "endLine": 82,
                         "references": {
-                            "style": "@nav/api/ViewsModule.WorkerCard.style"
+                            "style": "@nav[webpm-client]/ViewsModule.WorkerCard.style"
                         }
                     }
                 },
@@ -3450,7 +3450,7 @@
                         ]
                     },
                     "path": "WorkerCard.tag",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.tag",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -3458,7 +3458,7 @@
                         "startLine": 72,
                         "endLine": 73,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.WorkerCard.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.WorkerCard.tag"
                         }
                     }
                 },
@@ -3485,7 +3485,7 @@
                         ]
                     },
                     "path": "WorkerCard.workerId",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.workerId",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.workerId",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly workerId: string",
@@ -3493,7 +3493,7 @@
                         "startLine": 95,
                         "endLine": 96,
                         "references": {
-                            "workerId": "@nav/api/ViewsModule.WorkerCard.workerId"
+                            "workerId": "@nav[webpm-client]/ViewsModule.WorkerCard.workerId"
                         }
                     }
                 },
@@ -3520,7 +3520,7 @@
                         ]
                     },
                     "path": "WorkerCard.workersPool",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.workersPool",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.workersPool",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly workersPool: WorkersPool",
@@ -3528,8 +3528,8 @@
                         "startLine": 100,
                         "endLine": 101,
                         "references": {
-                            "workersPool": "@nav/api/ViewsModule.WorkerCard.workersPool",
-                            "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool"
+                            "workersPool": "@nav[webpm-client]/ViewsModule.WorkerCard.workersPool",
+                            "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool"
                         }
                     }
                 },
@@ -3556,7 +3556,7 @@
                         ]
                     },
                     "path": "WorkerCard.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.WorkerCard.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCard.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "static CssSelector = 'webpm-WorkerCard'",
@@ -3564,7 +3564,7 @@
                         "startLine": 68,
                         "endLine": 69,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.WorkerCard.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.WorkerCard.CssSelector"
                         }
                     }
                 }
@@ -3577,9 +3577,9 @@
                 "startLine": 64,
                 "endLine": 123,
                 "references": {
-                    "WorkerCard": "@nav/api/ViewsModule.WorkerCard",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent",
-                    "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool",
+                    "WorkerCard": "@nav[webpm-client]/ViewsModule.WorkerCard",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent",
+                    "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
                     "Observable": "https://rxjs.dev/guide/observable",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "RxHTMLElement": "/apps/@rx-vdom/doc/latest?nav=/api.RxHTMLElement",
@@ -3598,7 +3598,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Component representing the title of a  <mkapi-api-link nav=\"@nav/api/ViewsModule.WorkerCard\" semantic=\"class\">WorkerCard</mkapi-api-link> .",
+                        "content": "Component representing the title of a  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.WorkerCard\" semantic=\"class\">WorkerCard</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3610,7 +3610,7 @@
                 ]
             },
             "path": "WorkerCardTitleView",
-            "navPath": "@nav/api/ViewsModule.WorkerCardTitleView",
+            "navPath": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView",
             "attributes": [
                 {
                     "name": "children",
@@ -3635,7 +3635,7 @@
                         ]
                     },
                     "path": "WorkerCardTitleView.children",
-                    "navPath": "@nav/api/ViewsModule.WorkerCardTitleView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.children",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -3643,7 +3643,7 @@
                         "startLine": 147,
                         "endLine": 148,
                         "references": {
-                            "children": "@nav/api/ViewsModule.WorkerCardTitleView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -3671,7 +3671,7 @@
                         ]
                     },
                     "path": "WorkerCardTitleView.class",
-                    "navPath": "@nav/api/ViewsModule.WorkerCardTitleView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.class",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly class = `${WorkerCardTitleView.CssSelector} d-flex align-items-center`",
@@ -3679,7 +3679,7 @@
                         "startLine": 142,
                         "endLine": 143,
                         "references": {
-                            "class": "@nav/api/ViewsModule.WorkerCardTitleView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.class"
                         }
                     }
                 },
@@ -3706,7 +3706,7 @@
                         ]
                     },
                     "path": "WorkerCardTitleView.tag",
-                    "navPath": "@nav/api/ViewsModule.WorkerCardTitleView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.tag",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -3714,7 +3714,7 @@
                         "startLine": 138,
                         "endLine": 139,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.WorkerCardTitleView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.tag"
                         }
                     }
                 },
@@ -3741,7 +3741,7 @@
                         ]
                     },
                     "path": "WorkerCardTitleView.workerId",
-                    "navPath": "@nav/api/ViewsModule.WorkerCardTitleView.workerId",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.workerId",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly workerId: string",
@@ -3749,7 +3749,7 @@
                         "startLine": 152,
                         "endLine": 153,
                         "references": {
-                            "workerId": "@nav/api/ViewsModule.WorkerCardTitleView.workerId"
+                            "workerId": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.workerId"
                         }
                     }
                 },
@@ -3776,7 +3776,7 @@
                         ]
                     },
                     "path": "WorkerCardTitleView.workersPool",
-                    "navPath": "@nav/api/ViewsModule.WorkerCardTitleView.workersPool",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.workersPool",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly workersPool: WorkersPool",
@@ -3784,8 +3784,8 @@
                         "startLine": 157,
                         "endLine": 158,
                         "references": {
-                            "workersPool": "@nav/api/ViewsModule.WorkerCardTitleView.workersPool",
-                            "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool"
+                            "workersPool": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.workersPool",
+                            "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool"
                         }
                     }
                 },
@@ -3812,7 +3812,7 @@
                         ]
                     },
                     "path": "WorkerCardTitleView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.WorkerCardTitleView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "static CssSelector = 'webpm-WorkerCardTitleView'",
@@ -3820,7 +3820,7 @@
                         "startLine": 134,
                         "endLine": 135,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.WorkerCardTitleView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.CssSelector"
                         }
                     }
                 }
@@ -3833,8 +3833,8 @@
                 "startLine": 130,
                 "endLine": 199,
                 "references": {
-                    "WorkerCardTitleView": "@nav/api/ViewsModule.WorkerCardTitleView",
-                    "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool",
+                    "WorkerCardTitleView": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView",
+                    "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -3851,7 +3851,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Displays installation progress in  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule.WorkersPool\" semantic=\"class\">WorkersPoolModule.WorkersPool</mkapi-api-link> .",
+                        "content": "Displays installation progress in  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule.WorkersPool\" semantic=\"class\">WorkersPoolModule.WorkersPool</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -3863,7 +3863,7 @@
                 ]
             },
             "path": "WorkersPoolView",
-            "navPath": "@nav/api/ViewsModule.WorkersPoolView",
+            "navPath": "@nav[webpm-client]/ViewsModule.WorkersPoolView",
             "attributes": [
                 {
                     "name": "children",
@@ -3888,7 +3888,7 @@
                         ]
                     },
                     "path": "WorkersPoolView.children",
-                    "navPath": "@nav/api/ViewsModule.WorkersPoolView.children",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkersPoolView.children",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly children: ChildrenLike",
@@ -3896,7 +3896,7 @@
                         "startLine": 31,
                         "endLine": 32,
                         "references": {
-                            "children": "@nav/api/ViewsModule.WorkersPoolView.children",
+                            "children": "@nav[webpm-client]/ViewsModule.WorkersPoolView.children",
                             "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
                         }
                     }
@@ -3924,7 +3924,7 @@
                         ]
                     },
                     "path": "WorkersPoolView.class",
-                    "navPath": "@nav/api/ViewsModule.WorkersPoolView.class",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkersPoolView.class",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public class = `${WorkersPoolView.CssSelector} w-100 h-100 d-flex flex-column`",
@@ -3932,7 +3932,7 @@
                         "startLine": 26,
                         "endLine": 27,
                         "references": {
-                            "class": "@nav/api/ViewsModule.WorkersPoolView.class"
+                            "class": "@nav[webpm-client]/ViewsModule.WorkersPoolView.class"
                         }
                     }
                 },
@@ -3959,7 +3959,7 @@
                         ]
                     },
                     "path": "WorkersPoolView.tag",
-                    "navPath": "@nav/api/ViewsModule.WorkersPoolView.tag",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkersPoolView.tag",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "public readonly tag = 'div'",
@@ -3967,7 +3967,7 @@
                         "startLine": 22,
                         "endLine": 23,
                         "references": {
-                            "tag": "@nav/api/ViewsModule.WorkersPoolView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.WorkersPoolView.tag"
                         }
                     }
                 },
@@ -3994,7 +3994,7 @@
                         ]
                     },
                     "path": "WorkersPoolView.CssSelector",
-                    "navPath": "@nav/api/ViewsModule.WorkersPoolView.CssSelector",
+                    "navPath": "@nav[webpm-client]/ViewsModule.WorkersPoolView.CssSelector",
                     "code": {
                         "filePath": "src/lib/views/workers-pool.views.ts",
                         "declaration": "static CssSelector = 'webpm-WorkersPoolView'",
@@ -4002,7 +4002,7 @@
                         "startLine": 17,
                         "endLine": 18,
                         "references": {
-                            "CssSelector": "@nav/api/ViewsModule.WorkersPoolView.CssSelector"
+                            "CssSelector": "@nav[webpm-client]/ViewsModule.WorkersPoolView.CssSelector"
                         }
                     }
                 }
@@ -4015,8 +4015,8 @@
                 "startLine": 13,
                 "endLine": 58,
                 "references": {
-                    "WorkersPoolView": "@nav/api/ViewsModule.WorkersPoolView",
-                    "WorkersPool": "@nav/api/WorkersPoolModule.WorkersPool",
+                    "WorkersPoolView": "@nav[webpm-client]/ViewsModule.WorkersPoolView",
+                    "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
@@ -4045,7 +4045,7 @@
                 ]
             },
             "path": "Dependencies",
-            "navPath": "@nav/api/ViewsModule.Dependencies",
+            "navPath": "@nav[webpm-client]/ViewsModule.Dependencies",
             "attributes": [
                 {
                     "name": "webpm",
@@ -4070,7 +4070,7 @@
                         ]
                     },
                     "path": "Dependencies.webpm",
-                    "navPath": "@nav/api/ViewsModule.Dependencies.webpm",
+                    "navPath": "@nav[webpm-client]/ViewsModule.Dependencies.webpm",
                     "code": {
                         "filePath": "src/lib/views/index.ts",
                         "declaration": "webpm?: typeof WebPM",
@@ -4078,7 +4078,7 @@
                         "startLine": 47,
                         "endLine": 48,
                         "references": {
-                            "webpm": "@nav/api/ViewsModule.Dependencies.webpm"
+                            "webpm": "@nav[webpm-client]/ViewsModule.Dependencies.webpm"
                         }
                     }
                 }
@@ -4091,7 +4091,7 @@
                 "startLine": 43,
                 "endLine": 44,
                 "references": {
-                    "Dependencies": "@nav/api/ViewsModule.Dependencies"
+                    "Dependencies": "@nav[webpm-client]/ViewsModule.Dependencies"
                 }
             },
             "semantic": {
@@ -4106,7 +4106,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "<mkapi-api-link nav=\"@nav/api/ViewsModule.doneEvents\" semantic=\"global\">doneEvents</mkapi-api-link>  as type union of  <mkapi-api-link nav=\"@nav/api/MainModule.AllEvents\" semantic=\"interface\">AllEvents</mkapi-api-link> .",
+                        "content": "<mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.doneEvents\" semantic=\"global\">doneEvents</mkapi-api-link>  as type union of  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.AllEvents\" semantic=\"interface\">AllEvents</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4118,7 +4118,7 @@
                 ]
             },
             "path": "DoneEvents",
-            "navPath": "@nav/api/ViewsModule.DoneEvents",
+            "navPath": "@nav[webpm-client]/ViewsModule.DoneEvents",
             "attributes": [],
             "callables": [],
             "code": {
@@ -4128,9 +4128,9 @@
                 "startLine": 90,
                 "endLine": 91,
                 "references": {
-                    "DoneEvents": "@nav/api/ViewsModule.DoneEvents",
-                    "DoneEventType": "@nav/api/ViewsModule.DoneEventType",
-                    "AllEvents": "@nav/api/MainModule.AllEvents"
+                    "DoneEvents": "@nav[webpm-client]/ViewsModule.DoneEvents",
+                    "DoneEventType": "@nav[webpm-client]/ViewsModule.DoneEventType",
+                    "AllEvents": "@nav[webpm-client]/MainModule.AllEvents"
                 }
             },
             "semantic": {
@@ -4145,7 +4145,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "<mkapi-api-link nav=\"@nav/api/ViewsModule.doneEvents\" semantic=\"global\">doneEvents</mkapi-api-link>  as type literal union.",
+                        "content": "<mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.doneEvents\" semantic=\"global\">doneEvents</mkapi-api-link>  as type literal union.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4157,7 +4157,7 @@
                 ]
             },
             "path": "DoneEventType",
-            "navPath": "@nav/api/ViewsModule.DoneEventType",
+            "navPath": "@nav[webpm-client]/ViewsModule.DoneEventType",
             "attributes": [],
             "callables": [],
             "code": {
@@ -4167,8 +4167,8 @@
                 "startLine": 86,
                 "endLine": 87,
                 "references": {
-                    "DoneEventType": "@nav/api/ViewsModule.DoneEventType",
-                    "doneEvents": "@nav/api/ViewsModule.doneEvents"
+                    "DoneEventType": "@nav[webpm-client]/ViewsModule.DoneEventType",
+                    "doneEvents": "@nav[webpm-client]/ViewsModule.doneEvents"
                 }
             },
             "semantic": {
@@ -4183,7 +4183,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Initial expanded mode for  <mkapi-api-link nav=\"@nav/api/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link>  widget.\n\nThe value  `auto`  means expanded until the installation finished successfully (with 1s delay).",
+                        "content": "Initial expanded mode for  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link>  widget.\n\nThe value  `auto`  means expanded until the installation finished successfully (with 1s delay).",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4195,7 +4195,7 @@
                 ]
             },
             "path": "ExpandedMode",
-            "navPath": "@nav/api/ViewsModule.ExpandedMode",
+            "navPath": "@nav[webpm-client]/ViewsModule.ExpandedMode",
             "attributes": [],
             "callables": [],
             "code": {
@@ -4205,7 +4205,7 @@
                 "startLine": 26,
                 "endLine": 27,
                 "references": {
-                    "ExpandedMode": "@nav/api/ViewsModule.ExpandedMode"
+                    "ExpandedMode": "@nav[webpm-client]/ViewsModule.ExpandedMode"
                 }
             },
             "semantic": {
@@ -4220,7 +4220,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "<mkapi-api-link nav=\"@nav/api/ViewsModule.pyModuleEvents\" semantic=\"global\">pyModuleEvents</mkapi-api-link>  as type union of  <mkapi-api-link nav=\"@nav/api/MainModule.AllEvents\" semantic=\"interface\">AllEvents</mkapi-api-link> .",
+                        "content": "<mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.pyModuleEvents\" semantic=\"global\">pyModuleEvents</mkapi-api-link>  as type union of  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.AllEvents\" semantic=\"interface\">AllEvents</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4232,7 +4232,7 @@
                 ]
             },
             "path": "PyModuleEvent",
-            "navPath": "@nav/api/ViewsModule.PyModuleEvent",
+            "navPath": "@nav[webpm-client]/ViewsModule.PyModuleEvent",
             "attributes": [],
             "callables": [],
             "code": {
@@ -4242,9 +4242,9 @@
                 "startLine": 37,
                 "endLine": 38,
                 "references": {
-                    "PyModuleEvent": "@nav/api/ViewsModule.PyModuleEvent",
-                    "PyModuleEventType": "@nav/api/ViewsModule.PyModuleEventType",
-                    "AllEvents": "@nav/api/MainModule.AllEvents"
+                    "PyModuleEvent": "@nav[webpm-client]/ViewsModule.PyModuleEvent",
+                    "PyModuleEventType": "@nav[webpm-client]/ViewsModule.PyModuleEventType",
+                    "AllEvents": "@nav[webpm-client]/MainModule.AllEvents"
                 }
             },
             "semantic": {
@@ -4259,7 +4259,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "<mkapi-api-link nav=\"@nav/api/ViewsModule.pyModuleEvents\" semantic=\"global\">pyModuleEvents</mkapi-api-link>  as type literal union.",
+                        "content": "<mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.pyModuleEvents\" semantic=\"global\">pyModuleEvents</mkapi-api-link>  as type literal union.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4271,7 +4271,7 @@
                 ]
             },
             "path": "PyModuleEventType",
-            "navPath": "@nav/api/ViewsModule.PyModuleEventType",
+            "navPath": "@nav[webpm-client]/ViewsModule.PyModuleEventType",
             "attributes": [],
             "callables": [],
             "code": {
@@ -4281,8 +4281,8 @@
                 "startLine": 33,
                 "endLine": 34,
                 "references": {
-                    "PyModuleEventType": "@nav/api/ViewsModule.PyModuleEventType",
-                    "pyModuleEvents": "@nav/api/ViewsModule.pyModuleEvents"
+                    "PyModuleEventType": "@nav[webpm-client]/ViewsModule.PyModuleEventType",
+                    "pyModuleEvents": "@nav[webpm-client]/ViewsModule.pyModuleEvents"
                 }
             },
             "semantic": {
@@ -4297,7 +4297,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "<mkapi-api-link nav=\"@nav/api/ViewsModule.pyPyRuntimeEvents\" semantic=\"global\">pyPyRuntimeEvents</mkapi-api-link>  as type union of  <mkapi-api-link nav=\"@nav/api/MainModule.AllEvents\" semantic=\"interface\">AllEvents</mkapi-api-link> .",
+                        "content": "<mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.pyPyRuntimeEvents\" semantic=\"global\">pyPyRuntimeEvents</mkapi-api-link>  as type union of  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.AllEvents\" semantic=\"interface\">AllEvents</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4309,7 +4309,7 @@
                 ]
             },
             "path": "PyRuntimeEvent",
-            "navPath": "@nav/api/ViewsModule.PyRuntimeEvent",
+            "navPath": "@nav[webpm-client]/ViewsModule.PyRuntimeEvent",
             "attributes": [],
             "callables": [],
             "code": {
@@ -4319,9 +4319,9 @@
                 "startLine": 63,
                 "endLine": 64,
                 "references": {
-                    "PyRuntimeEvent": "@nav/api/ViewsModule.PyRuntimeEvent",
-                    "PyRuntimeEventType": "@nav/api/ViewsModule.PyRuntimeEventType",
-                    "AllEvents": "@nav/api/MainModule.AllEvents"
+                    "PyRuntimeEvent": "@nav[webpm-client]/ViewsModule.PyRuntimeEvent",
+                    "PyRuntimeEventType": "@nav[webpm-client]/ViewsModule.PyRuntimeEventType",
+                    "AllEvents": "@nav[webpm-client]/MainModule.AllEvents"
                 }
             },
             "semantic": {
@@ -4336,7 +4336,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "<mkapi-api-link nav=\"@nav/api/ViewsModule.pyModuleEvents\" semantic=\"global\">pyModuleEvents</mkapi-api-link>  as type literal union.",
+                        "content": "<mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.pyModuleEvents\" semantic=\"global\">pyModuleEvents</mkapi-api-link>  as type literal union.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4348,7 +4348,7 @@
                 ]
             },
             "path": "PyRuntimeEventType",
-            "navPath": "@nav/api/ViewsModule.PyRuntimeEventType",
+            "navPath": "@nav[webpm-client]/ViewsModule.PyRuntimeEventType",
             "attributes": [],
             "callables": [],
             "code": {
@@ -4358,8 +4358,8 @@
                 "startLine": 58,
                 "endLine": 59,
                 "references": {
-                    "PyRuntimeEventType": "@nav/api/ViewsModule.PyRuntimeEventType",
-                    "pyPyRuntimeEvents": "@nav/api/ViewsModule.pyPyRuntimeEvents"
+                    "PyRuntimeEventType": "@nav[webpm-client]/ViewsModule.PyRuntimeEventType",
+                    "pyPyRuntimeEvents": "@nav[webpm-client]/ViewsModule.pyPyRuntimeEvents"
                 }
             },
             "semantic": {
@@ -4376,7 +4376,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Installs dependencies while displaying a real-time installation progress UI.\n\n**Functionality Overview:**\n- Creates an  <mkapi-api-link nav=\"@nav/api/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link>  to visualize and respond to  <mkapi-api-link nav=\"@nav/api/MainModule.CdnEvent\" semantic=\"interface\">MainModule.CdnEvent</mkapi-api-link>  updates.\n- Calls the user-provided  `display`  callback with the generated view.\n  - The consumer is responsible for inserting this view into the DOM,\n    optionally converting it into a standard  `HTMLElement`  using  <mkapi-ext-link href=\"/apps/@rx-vdom/doc/latest?nav=/api.render\">rx-vdom.render</mkapi-ext-link> .\n- Invokes  <mkapi-api-link nav=\"@nav/api/MainModule.install\" semantic=\"function\">MainModule.install</mkapi-api-link> , forwarding the provided  `inputs`  argument.",
+                        "content": "Installs dependencies while displaying a real-time installation progress UI.\n\n**Functionality Overview:**\n- Creates an  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.InstallView\" semantic=\"class\">InstallView</mkapi-api-link>  to visualize and respond to  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.CdnEvent\" semantic=\"interface\">MainModule.CdnEvent</mkapi-api-link>  updates.\n- Calls the user-provided  `display`  callback with the generated view.\n  - The consumer is responsible for inserting this view into the DOM,\n    optionally converting it into a standard  `HTMLElement`  using  <mkapi-ext-link href=\"/apps/@rx-vdom/doc/latest?nav=/api.render\">rx-vdom.render</mkapi-ext-link> .\n- Invokes  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.install\" semantic=\"function\">MainModule.install</mkapi-api-link> , forwarding the provided  `inputs`  argument.",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4410,7 +4410,7 @@
                 ]
             },
             "path": "installWithUI",
-            "navPath": "@nav/api/ViewsModule.installWithUI",
+            "navPath": "@nav[webpm-client]/ViewsModule.installWithUI",
             "code": {
                 "filePath": "src/lib/views/index.ts",
                 "declaration": "export function installWithUI(\n    inputs: InstallInputs & { display: (v: AnyVirtualDOM) => void },\n)",
@@ -4418,8 +4418,8 @@
                 "startLine": 69,
                 "endLine": 89,
                 "references": {
-                    "installWithUI": "@nav/api/ViewsModule.installWithUI",
-                    "InstallInputs": "@nav/api/MainModule.InstallInputs",
+                    "installWithUI": "@nav[webpm-client]/ViewsModule.installWithUI",
+                    "InstallInputs": "@nav[webpm-client]/MainModule.InstallInputs",
                     "AnyVirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.AnyVirtualDOM"
                 }
             },
@@ -4435,7 +4435,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Type guard for  <mkapi-api-link nav=\"@nav/api/MainModule.ConsoleEvent\" semantic=\"class\">ConsoleEvent</mkapi-api-link> .",
+                        "content": "Type guard for  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule.ConsoleEvent\" semantic=\"class\">ConsoleEvent</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4447,7 +4447,7 @@
                 ]
             },
             "path": "isConsoleEvent",
-            "navPath": "@nav/api/ViewsModule.isConsoleEvent",
+            "navPath": "@nav[webpm-client]/ViewsModule.isConsoleEvent",
             "code": {
                 "filePath": "src/lib/views/events-manager.ts",
                 "declaration": "export function isConsoleEvent(event: CdnEvent): event is ConsoleEvent",
@@ -4455,9 +4455,9 @@
                 "startLine": 75,
                 "endLine": 78,
                 "references": {
-                    "isConsoleEvent": "@nav/api/ViewsModule.isConsoleEvent",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent",
-                    "ConsoleEvent": "@nav/api/MainModule.ConsoleEvent"
+                    "isConsoleEvent": "@nav[webpm-client]/ViewsModule.isConsoleEvent",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent",
+                    "ConsoleEvent": "@nav[webpm-client]/MainModule.ConsoleEvent"
                 }
             },
             "semantic": {
@@ -4472,7 +4472,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Type guard for  <mkapi-api-link nav=\"@nav/api/ViewsModule.DoneEvents\" semantic=\"type-alias\">DoneEvents</mkapi-api-link> .",
+                        "content": "Type guard for  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.DoneEvents\" semantic=\"type-alias\">DoneEvents</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4484,7 +4484,7 @@
                 ]
             },
             "path": "isInstallDoneEvent",
-            "navPath": "@nav/api/ViewsModule.isInstallDoneEvent",
+            "navPath": "@nav[webpm-client]/ViewsModule.isInstallDoneEvent",
             "code": {
                 "filePath": "src/lib/views/events-manager.ts",
                 "declaration": "export function isInstallDoneEvent(event: CdnEvent): event is DoneEvents",
@@ -4492,9 +4492,9 @@
                 "startLine": 95,
                 "endLine": 98,
                 "references": {
-                    "isInstallDoneEvent": "@nav/api/ViewsModule.isInstallDoneEvent",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent",
-                    "DoneEvents": "@nav/api/ViewsModule.DoneEvents"
+                    "isInstallDoneEvent": "@nav[webpm-client]/ViewsModule.isInstallDoneEvent",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent",
+                    "DoneEvents": "@nav[webpm-client]/ViewsModule.DoneEvents"
                 }
             },
             "semantic": {
@@ -4509,7 +4509,7 @@
             "documentation": {
                 "sections": [
                     {
-                        "content": "Type guard for  <mkapi-api-link nav=\"@nav/api/ViewsModule.PyRuntimeEvent\" semantic=\"type-alias\">PyRuntimeEvent</mkapi-api-link> .",
+                        "content": "Type guard for  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule.PyRuntimeEvent\" semantic=\"type-alias\">PyRuntimeEvent</mkapi-api-link> .",
                         "contentType": "markdown",
                         "semantic": {
                             "role": "",
@@ -4521,7 +4521,7 @@
                 ]
             },
             "path": "isPyRuntimeEvent",
-            "navPath": "@nav/api/ViewsModule.isPyRuntimeEvent",
+            "navPath": "@nav[webpm-client]/ViewsModule.isPyRuntimeEvent",
             "code": {
                 "filePath": "src/lib/views/events-manager.ts",
                 "declaration": "export function isPyRuntimeEvent(event: CdnEvent): event is PyRuntimeEvent",
@@ -4529,9 +4529,9 @@
                 "startLine": 68,
                 "endLine": 71,
                 "references": {
-                    "isPyRuntimeEvent": "@nav/api/ViewsModule.isPyRuntimeEvent",
-                    "CdnEvent": "@nav/api/MainModule.CdnEvent",
-                    "PyRuntimeEvent": "@nav/api/ViewsModule.PyRuntimeEvent"
+                    "isPyRuntimeEvent": "@nav[webpm-client]/ViewsModule.isPyRuntimeEvent",
+                    "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent",
+                    "PyRuntimeEvent": "@nav[webpm-client]/ViewsModule.PyRuntimeEvent"
                 }
             },
             "semantic": {

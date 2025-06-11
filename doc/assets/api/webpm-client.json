@@ -3,7 +3,7 @@
     "documentation": {
         "sections": [
             {
-                "content": "The **webpm-client** library provides a powerful and flexible way to manage and install components in both the main\nthread and Web Workers.\n\n*  The primary entry point is  <mkapi-api-link nav=\"@nav/api/MainModule\" semantic=\"module\"> MainModule</mkapi-api-link> , which serves as the core module for installing components in the main \n   thread.\n\n*  The  <mkapi-api-link nav=\"@nav/api/WorkersPoolModule\" semantic=\"module\"> WorkersPoolModule</mkapi-api-link>  extends functionality by enabling component installation in Web Workers, as well as \n  task execution and monitoring.\n\n*  The  <mkapi-api-link nav=\"@nav/api/ViewsModule\" semantic=\"module\"> ViewsModule</mkapi-api-link>  provides components to visualize the installed resources or to track the progress of their \n   installation.\n\n\nUse this documentation to explore the available modules, APIs, and best practices for integrating **webpm-client** \ninto your project.",
+                "content": "The **webpm-client** library provides a powerful and flexible way to manage and install components in both the main\nthread and Web Workers.\n\n*  The primary entry point is  <mkapi-api-link nav=\"@nav[webpm-client]/MainModule\" semantic=\"module\"> MainModule</mkapi-api-link> , which serves as the core module for installing components in the main \n   thread.\n\n*  The  <mkapi-api-link nav=\"@nav[webpm-client]/WorkersPoolModule\" semantic=\"module\"> WorkersPoolModule</mkapi-api-link>  extends functionality by enabling component installation in Web Workers, as well as \n  task execution and monitoring.\n\n*  The  <mkapi-api-link nav=\"@nav[webpm-client]/ViewsModule\" semantic=\"module\"> ViewsModule</mkapi-api-link>  provides components to visualize the installed resources or to track the progress of their \n   installation.\n\n\nUse this documentation to explore the available modules, APIs, and best practices for integrating **webpm-client** \ninto your project.",
                 "contentType": "markdown",
                 "semantic": {
                     "role": "",
@@ -15,7 +15,7 @@
         ]
     },
     "path": "webpm-client",
-    "navPath": "@nav/api/",
+    "navPath": "@nav[webpm-client]",
     "attributes": [],
     "types": [],
     "callables": [],
@@ -85,7 +85,7 @@
                 "relations": {}
             },
             "path": "webpm-client.MainModule",
-            "navPath": "@nav/api/MainModule",
+            "navPath": "@nav[webpm-client]/MainModule",
             "isLeaf": false
         },
         {
@@ -97,7 +97,7 @@
                 "relations": {}
             },
             "path": "webpm-client.ViewsModule",
-            "navPath": "@nav/api/ViewsModule",
+            "navPath": "@nav[webpm-client]/ViewsModule",
             "isLeaf": true
         },
         {
@@ -109,7 +109,7 @@
                 "relations": {}
             },
             "path": "webpm-client.WorkersPoolModule",
-            "navPath": "@nav/api/WorkersPoolModule",
+            "navPath": "@nav[webpm-client]/WorkersPoolModule",
             "isLeaf": true
         }
     ],
