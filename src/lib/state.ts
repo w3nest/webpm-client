@@ -184,7 +184,7 @@ export class StateImplementation {
             .filter((v) => v.apiKey === apiKey)
             .find((installedVersion) => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                return gt(installedVersion, version)
+                return gt(installedVersion.version, version)
             })
 
         if (compatibleVersion) {
