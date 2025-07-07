@@ -273,6 +273,13 @@ export async function addScriptElements(
     }
     executingWindow ??= window
     const sideEffects = sources
+        .filter((script) => {
+            return (
+                StateImplementation.installedScripts.find(
+                    (url) => url === script.url,
+                ) === undefined
+            )
+        })
         .map(
             ({
                 name,
@@ -293,6 +300,8 @@ export async function addScriptElements(
                           executingWindow: executingWindow,
                       })
                     : importScriptWebWorker({ url })
+
+                StateImplementation.installedScripts.push(url)
 
                 if (
                     scriptOrError instanceof Error ||

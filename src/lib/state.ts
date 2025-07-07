@@ -103,10 +103,16 @@ export class StateImplementation {
     static importedLoadingGraphs = new Map<string, Promise<Window>>()
 
     /**
-     * Installed script: mapping between a script's uid and a {@link FetchedScript}.
+     * Fetched scripts: mapping between a script's uid and their source as {@link FetchedScript}.
      * @hidden
      */
-    static importedScripts = new Map<string, Promise<FetchedScript>>()
+    static fetchedScripts = new Map<string, Promise<FetchedScript>>()
+
+    /**
+     * Installed scripts: list of scripts' URL installed.
+     * @hidden
+     */
+    static installedScripts: string[] = []
 
     static webSocketsStore: Record<
         string,

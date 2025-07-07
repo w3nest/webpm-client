@@ -222,9 +222,9 @@ export class Client {
         const assetId = parts[1]
         const version = parts[2]
         name ??= parts[parts.length - 1]
-        const importedScript = StateImplementation.importedScripts.get(url)
-        if (importedScript) {
-            const { progressEvent } = await importedScript
+        const fetchedScript = StateImplementation.fetchedScripts.get(url)
+        if (fetchedScript) {
+            const { progressEvent } = await fetchedScript
             onEvent?.(
                 new SourceLoadedEvent(
                     name,
@@ -234,7 +234,7 @@ export class Client {
                     progressEvent,
                 ),
             )
-            return importedScript
+            return fetchedScript
         }
         if (!isInstanceOfWindow(globalThis)) {
             // In a web-worker the script will be imported using self.importScripts(url).
@@ -288,7 +288,7 @@ export class Client {
             req.send()
             onEvent?.(new StartEvent(name, assetId, url, version))
         })
-        StateImplementation.importedScripts.set(url, scriptPromise)
+        StateImplementation.fetchedScripts.set(url, scriptPromise)
         return scriptPromise
     }
 
