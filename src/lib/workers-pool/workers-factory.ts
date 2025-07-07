@@ -414,7 +414,7 @@ export function entryPointWorker(messageEvent: MessageEvent) {
         } catch (e: unknown) {
             console.error(
                 `Failed to post message from worker to main thread.`,
-                message,
+                { message, error: e },
             )
             if (message.type === 'Exit') {
                 const data = message.data as MessageExit
@@ -598,26 +598,34 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
         })
     }
 
-    /**
-     * The function 'importScriptsXMLHttpRequest' is used in place of
-     * [importScripts](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/importScripts)
-     * when 'FrontendConfiguration.crossOrigin' is "anonymous". Using 'importScripts' fails in this case
-     * (request are blocked).
-     */
-    function importScriptsXMLHttpRequest(...urls: string[]) {
-        urls.forEach((url) => {
-            const request = new XMLHttpRequest()
-            request.open('GET', url, false)
-            request.send(null)
-            eval(request.responseText)
-        })
-    }
+    // The following lines have been commented out the 07/07/2025.
+    // When 'importScriptsXMLHttpRequest' (used by default), the 'var' declarations were actually not exposed in
+    // 'globalThis' (or 'self') for some scripts, making the symbols defined in the script unreachable.
+    // For now, only `WorkerGlobalScope.importScripts` is used.
+    //
+    // /**
+    //  * The function 'importScriptsXMLHttpRequest' is used in place of
+    //  * [importScripts](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/importScripts)
+    //  * when 'FrontendConfiguration.crossOrigin' is "anonymous". Using 'importScripts' fails in this case
+    //  * (request are blocked).
+    //  */
+    // function importScriptsXMLHttpRequest(...urls: string[]) {
+    //     urls.forEach((url) => {
+    //         const request = new XMLHttpRequest()
+    //         request.open('GET', url, false)
+    //         request.send(null)
+    //         eval(request.responseText)
+    //     })
+    // }
     // @ts-expect-error need refactoring
-    self.customImportScripts = ['', 'anonymous'].includes(
-        input.args.frontendConfiguration.crossOrigin ?? '',
-    )
-        ? importScriptsXMLHttpRequest
-        : (self as unknown as WorkerGlobalScope).importScripts
+    // self.customImportScripts = ['', 'anonymous'].includes(
+    //     input.args.frontendConfiguration.crossOrigin ?? '',
+    // )
+    //     ? importScriptsXMLHttpRequest
+    //     : (self as unknown as WorkerGlobalScope).importScripts
+    self.customImportScripts = (
+        self as unknown as WorkerGlobalScope
+    ).importScripts
 
     console.log('Install environment in worker', input)
 
