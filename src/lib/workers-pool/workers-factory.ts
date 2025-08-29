@@ -561,7 +561,7 @@ export interface MessageInstall {
     backendsPartitionId: string
     backendConfiguration: BackendConfiguration
     frontendConfiguration: FrontendConfiguration
-    cdnUrl: string
+    webpmClientUrl: string
     variables: WorkerVariable<unknown>[]
     functions: { id: string; target: string }[]
     cdnInstallation: InstallInputs
@@ -631,7 +631,7 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
 
     // @ts-expect-error need refactoring
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    self.customImportScripts(input.args.cdnUrl)
+    self.customImportScripts(input.args.webpmClientUrl)
     const webpm = self['@w3nest/webpm-client'] as typeof WebpmClient
 
     webpm.Client.BackendConfiguration = input.args.backendConfiguration
@@ -1280,8 +1280,8 @@ export class WorkersPool {
                 context: ctx,
             })
             const taskChannel$ = this.getTaskChannel$(p, taskId, context)
-            const cdnPackage = '@w3nest/webpm-client'
-            const cdnUrl = `${
+            const cdnPackage = pkgJson.name
+            const webpmClientUrl = `${
                 WorkersPool.BackendConfiguration.urlResource
             }/${getAssetId(cdnPackage)}/${pkgJson.version}/dist/${cdnPackage}.js`
 
@@ -1292,7 +1292,7 @@ export class WorkersPool {
                 backendsPartitionId: WorkersPool.backendsPartitionId,
                 backendConfiguration: WorkersPool.BackendConfiguration,
                 frontendConfiguration: WorkersPool.FrontendConfiguration,
-                cdnUrl: cdnUrl,
+                webpmClientUrl,
                 variables: this.environment.variables,
                 functions: this.environment.functions.map(
                     ({
