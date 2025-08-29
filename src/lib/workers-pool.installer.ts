@@ -13,21 +13,24 @@ function setupWorkersPoolModule(module: WorkersModule) {
     let config = {
         ...webpmClient.Client.BackendConfiguration,
     }
-    if (config.origin === '') {
-        /**
-         * In worker, it is not possible to use relative URL for request => we make it explicit here
-         * from the window's location.
-         * This is only when the cdnClient lib is used with 'standard' configuration.
-         */
-        config = backendConfiguration({
-            pathLoadingGraph: config.urlLoadingGraph,
-            pathResource: config.urlResource,
-            origin:
-                window.location.origin === 'null'
-                    ? window.location.ancestorOrigins[0]
-                    : window.location.origin,
-        })
-    }
+    /*
+     * The next piece of code seems un-relevant anymore. Keep it for now (08/04/2025) to see how it goes.
+     */
+    // if (config.origin === '') {
+    //     /**
+    //      * In worker, it is not possible to use relative URL for request => we make it explicit here
+    //      * from the window's location.
+    //      * This is only when the cdnClient lib is used with 'standard' configuration.
+    //      */
+    //     config = backendConfiguration({
+    //         pathLoadingGraph: config.urlLoadingGraph,
+    //         pathResource: config.urlResource,
+    //         origin: config.origin,
+    //         // window.location.origin === 'null'
+    //         //     ? window.location.ancestorOrigins[0]
+    //         //     : window.location.origin,
+    //     })
+    // }
     module.WorkersPool.backendsPartitionId =
         webpmClient.Client.backendsPartitionId
     module.WorkersPool.BackendConfiguration = config
