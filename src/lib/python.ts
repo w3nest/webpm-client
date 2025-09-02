@@ -29,8 +29,14 @@ interface Pyodide {
     loadPackage: (...modules: string[]) => Promise<void>
     runPythonAsync: (src: string) => Promise<unknown>
     version: string
+    /**
+     * Not available until at least 0.27.2 => use `_api.repodata_packages`.
+     * Available at least since 0.28.2.
+     */
+    lockfile?: Record<string, { name: string; version: string }>
     _api: {
-        repodata_packages: Record<string, { name: string; version: string }>
+        // repodata_packages is not available in recent pyodide (checked with 0.28.2)
+        repodata_packages?: Record<string, { name: string; version: string }>
     }
 }
 export async function installPython(
@@ -120,7 +126,9 @@ export async function installPython(
 
     const piPyUrl = pyodideInputs.standardUrlPypi
     const installModule = (module: string) => {
-        if (module in pyodide._api.repodata_packages) {
+        const lockfile_packages =
+            pyodide.lockfile ?? pyodide._api.repodata_packages
+        if (lockfile_packages && module in lockfile_packages) {
             log(
                 `Package ${module} part of Pyodide distribution, load using pyodide.loadPackage`,
                 onEvent,
