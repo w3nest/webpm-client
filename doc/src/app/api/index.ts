@@ -3,7 +3,7 @@ import { AppNav, createRootContext, placeholders } from '../common'
 import { companionNodes$ } from '../on-load'
 import type * as CodeApiModule from '@mkdocs-ts/code-api'
 import * as webpm from '@w3nest/webpm-client'
-import * as pkgJson from '../../../package.json'
+import pkgJson from '../../../package.json'
 
 export async function installCodeApiModule() {
     const codeApiVersion = pkgJson.webpm.dependencies['@mkdocs-ts/code-api']
