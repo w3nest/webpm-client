@@ -210,7 +210,8 @@
                         "endLine": 36,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.BackendEventsView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -280,7 +281,8 @@
                         "startLine": 33,
                         "endLine": 34,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.BackendEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.BackendEventsView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -331,6 +333,8 @@
                     "BackendEventsView": "@nav[webpm-client]/ViewsModule.BackendEventsView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -392,7 +396,8 @@
                         "endLine": 62,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.BackendView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -462,7 +467,8 @@
                         "startLine": 59,
                         "endLine": 60,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.BackendView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.BackendView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -513,6 +519,8 @@
                     "BackendView": "@nav[webpm-client]/ViewsModule.BackendView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -574,7 +582,8 @@
                         "endLine": 17,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.CssEventsView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -644,7 +653,8 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.CssEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.CssEventsView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -695,6 +705,8 @@
                     "CssEventsView": "@nav[webpm-client]/ViewsModule.CssEventsView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -756,7 +768,8 @@
                         "endLine": 41,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.CssView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -826,7 +839,8 @@
                         "startLine": 38,
                         "endLine": 39,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.CssView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.CssView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -877,6 +891,8 @@
                     "CssView": "@nav[webpm-client]/ViewsModule.CssView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -938,7 +954,8 @@
                         "endLine": 17,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.EsmEventsView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -1008,7 +1025,8 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.EsmEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.EsmEventsView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -1059,6 +1077,8 @@
                     "EsmEventsView": "@nav[webpm-client]/ViewsModule.EsmEventsView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -1120,7 +1140,8 @@
                         "endLine": 41,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.EsmView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -1190,7 +1211,8 @@
                         "startLine": 38,
                         "endLine": 39,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.EsmView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.EsmView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -1241,6 +1263,8 @@
                     "EsmView": "@nav[webpm-client]/ViewsModule.EsmView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -1371,7 +1395,8 @@
                         "endLine": 239,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.FooterView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -1476,7 +1501,8 @@
                         "startLine": 236,
                         "endLine": 237,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.FooterView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.FooterView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -1526,6 +1552,8 @@
                 "references": {
                     "FooterView": "@nav[webpm-client]/ViewsModule.FooterView",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -1587,7 +1615,8 @@
                         "endLine": 142,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -1693,7 +1722,8 @@
                         "startLine": 139,
                         "endLine": 140,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.InstallHeaderBar.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -1746,7 +1776,9 @@
                     "ExpandedMode": "@nav[webpm-client]/ViewsModule.ExpandedMode",
                     "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
                     "AttributeLike": "/apps/@rx-vdom/doc/latest?nav=/api.AttributeLike",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -1808,7 +1840,8 @@
                         "endLine": 54,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.InstallView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -1878,7 +1911,8 @@
                         "startLine": 51,
                         "endLine": 52,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.InstallView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.InstallView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -1980,7 +2014,9 @@
                     "ExpandedMode": "@nav[webpm-client]/ViewsModule.ExpandedMode",
                     "CdnEvent": "@nav[webpm-client]/MainModule.CdnEvent",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
                     "BehaviorSubject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -2042,7 +2078,8 @@
                         "endLine": 79,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.ItemView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -2112,7 +2149,8 @@
                         "startLine": 76,
                         "endLine": 77,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.ItemView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.ItemView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -2164,6 +2202,8 @@
                     "Phase": "@nav[webpm-client]/ViewsModule.Phase",
                     "Topic": "@nav[webpm-client]/MainModule.Topic",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -2225,7 +2265,8 @@
                         "endLine": 20,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -2295,7 +2336,8 @@
                         "startLine": 17,
                         "endLine": 18,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -2346,6 +2388,8 @@
                     "LoadingGraphEventsView": "@nav[webpm-client]/ViewsModule.LoadingGraphEventsView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -2407,7 +2451,8 @@
                         "endLine": 17,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.LogsView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -2512,7 +2557,8 @@
                         "startLine": 14,
                         "endLine": 15,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.LogsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.LogsView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -2564,6 +2610,8 @@
                     "ConsoleEvent": "@nav[webpm-client]/MainModule.ConsoleEvent",
                     "Observable": "https://rxjs.dev/guide/observable",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -2625,7 +2673,8 @@
                         "endLine": 16,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.PyEventsView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -2695,7 +2744,8 @@
                         "startLine": 13,
                         "endLine": 14,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.PyEventsView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.PyEventsView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -2746,6 +2796,8 @@
                     "PyEventsView": "@nav[webpm-client]/ViewsModule.PyEventsView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -2807,7 +2859,8 @@
                         "endLine": 94,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.PyModuleView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -2877,7 +2930,8 @@
                         "startLine": 91,
                         "endLine": 92,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.PyModuleView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.PyModuleView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -2928,6 +2982,8 @@
                     "PyModuleView": "@nav[webpm-client]/ViewsModule.PyModuleView",
                     "EventsManager": "@nav[webpm-client]/ViewsModule.EventsManager",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -2989,7 +3045,8 @@
                         "endLine": 12,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.RuntimeView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -3024,7 +3081,8 @@
                         "startLine": 10,
                         "endLine": 11,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.RuntimeView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.RuntimeView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 }
@@ -3039,6 +3097,8 @@
                 "references": {
                     "RuntimeView": "@nav[webpm-client]/ViewsModule.RuntimeView",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -3100,7 +3160,8 @@
                         "endLine": 16,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.ToggleViewMode.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -3205,7 +3266,8 @@
                         "startLine": 13,
                         "endLine": 14,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.ToggleViewMode.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.ToggleViewMode.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -3256,6 +3318,8 @@
                     "ToggleViewMode": "@nav[webpm-client]/ViewsModule.ToggleViewMode",
                     "Subject": "https://www.learnrxjs.io/learn-rxjs/subjects/subject",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -3317,7 +3381,8 @@
                         "endLine": 91,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.WorkerCard.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -3388,7 +3453,8 @@
                         "endLine": 103,
                         "references": {
                             "connectedCallback": "@nav[webpm-client]/ViewsModule.WorkerCard.connectedCallback",
-                            "RxHTMLElement": "/apps/@rx-vdom/doc/latest?nav=/api.RxHTMLElement"
+                            "RxHTMLElement": "/apps/@rx-vdom/doc/latest?nav=/api.RxHTMLElement",
+                            "VirtualDOM.connectedCallback": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.connectedCallback"
                         }
                     }
                 },
@@ -3458,7 +3524,8 @@
                         "startLine": 72,
                         "endLine": 73,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.WorkerCard.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.WorkerCard.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -3582,7 +3649,10 @@
                     "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
                     "Observable": "https://rxjs.dev/guide/observable",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
                     "RxHTMLElement": "/apps/@rx-vdom/doc/latest?nav=/api.RxHTMLElement",
+                    "VirtualDOM.connectedCallback": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.connectedCallback",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -3644,7 +3714,8 @@
                         "endLine": 148,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -3714,7 +3785,8 @@
                         "startLine": 138,
                         "endLine": 139,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -3836,6 +3908,8 @@
                     "WorkerCardTitleView": "@nav[webpm-client]/ViewsModule.WorkerCardTitleView",
                     "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -3897,7 +3971,8 @@
                         "endLine": 32,
                         "references": {
                             "children": "@nav[webpm-client]/ViewsModule.WorkersPoolView.children",
-                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike"
+                            "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                            "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children"
                         }
                     }
                 },
@@ -3967,7 +4042,8 @@
                         "startLine": 22,
                         "endLine": 23,
                         "references": {
-                            "tag": "@nav[webpm-client]/ViewsModule.WorkersPoolView.tag"
+                            "tag": "@nav[webpm-client]/ViewsModule.WorkersPoolView.tag",
+                            "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag"
                         }
                     }
                 },
@@ -4018,6 +4094,8 @@
                     "WorkersPoolView": "@nav[webpm-client]/ViewsModule.WorkersPoolView",
                     "WorkersPool": "@nav[webpm-client]/WorkersPoolModule.WorkersPool",
                     "ChildrenLike": "/apps/@rx-vdom/doc/latest?nav=/api.ChildrenLike",
+                    "VirtualDOM.children": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.children",
+                    "VirtualDOM.tag": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM.tag",
                     "VirtualDOM": "/apps/@rx-vdom/doc/latest?nav=/api.VirtualDOM"
                 }
             },
@@ -4547,216 +4625,84 @@
             "name": "backend.view.ts",
             "path": "src/lib/views/backend.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "css.view.ts",
             "path": "src/lib/views/css.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "esm.view.ts",
             "path": "src/lib/views/esm.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "events-manager.ts",
             "path": "src/lib/views/events-manager.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "install.view.ts",
             "path": "src/lib/views/install.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "common.view.ts",
             "path": "src/lib/views/common.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "loading-graph.view.ts",
             "path": "src/lib/views/loading-graph.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "logs.view.ts",
             "path": "src/lib/views/logs.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "pyodide.view.ts",
             "path": "src/lib/views/pyodide.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "runtime.view.ts",
             "path": "src/lib/views/runtime.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "workers-pool.views.ts",
             "path": "src/lib/views/workers-pool.views.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "index.ts",
             "path": "src/lib/views/index.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "This module provides UI components for visualizing installed resources and tracking real-time\ninstallation progress.\n\n<note level=\"warning\">\nThis module is **not included by default** in the main library.\nIt must be explicitly installed using .\n</note>\n\n\nKey components include:\n- : A convenient wrapper around  that integrates a visual progress\n  indicator.\n- : Displays a snapshot of currently installed resources.\n- : Provides a dynamic visualization of a .\n\nAdditionally, this module offers components for building **custom views**, allowing tailored\nmonitoring and interaction with installed resources.",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         }
     ],

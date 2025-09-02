@@ -24,18 +24,7 @@
             "name": "index-types.ts",
             "path": "src/lib/workers-pool/index-types.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "This module export in the  the types included in the module \n(types only, no implementation).\n\nIt serves as helper when working with typescript, e.g.:\n```ts\nimport { installWorkersPoolModule, WorkersType } from '@youwol/webpm-client'\n\nasync function foo(){\n     const WPModule = await installWorkersPoolModule()\n     const pool : WorkersType.WorkersPool = new WPModule.WorkersPool({})\n}\n```\n\nSee .",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         }
     ],

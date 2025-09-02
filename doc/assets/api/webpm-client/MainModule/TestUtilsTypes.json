@@ -57,8 +57,7 @@
                         "startLine": 20,
                         "endLine": 21,
                         "references": {
-                            "uid": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.uid",
-                            "WWorkerTrait.uid": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid"
+                            "uid": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest.uid"
                         }
                     }
                 }
@@ -180,16 +179,12 @@
                 "references": {
                     "WebWorkerJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest",
                     "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
-                    "WWorkerTrait.uid": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.uid",
                     "EntryPointArguments": "@nav[webpm-client]/WorkersPoolModule.EntryPointArguments",
-                    "WWorkerTrait.execute": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.execute",
-                    "WWorkerTrait.send": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.send",
-                    "WWorkerTrait.terminate": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait.terminate",
                     "WWorkerTrait": "@nav[webpm-client]/WorkersPoolModule.WWorkerTrait"
                 }
             },
             "semantic": {
-                "role": "class",
+                "role": "interface",
                 "labels": [],
                 "attributes": {},
                 "relations": {}
@@ -246,8 +241,7 @@
                         "endLine": 91,
                         "references": {
                             "onAfterWorkerInstall": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.onAfterWorkerInstall",
-                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
-                            "IWWorkerProxy.onAfterWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall"
+                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction"
                         }
                     }
                 },
@@ -283,8 +277,7 @@
                         "endLine": 90,
                         "references": {
                             "onBeforeWorkerInstall": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest.onBeforeWorkerInstall",
-                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
-                            "IWWorkerProxy.onBeforeWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall"
+                            "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction"
                         }
                     }
                 }
@@ -372,18 +365,13 @@
                 "references": {
                     "WebWorkersJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkersJest",
                     "InWorkerAction": "@nav[webpm-client]/WorkersPoolModule.InWorkerAction",
-                    "IWWorkerProxy.onAfterWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onAfterWorkerInstall",
-                    "IWWorkerProxy.onBeforeWorkerInstall": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.onBeforeWorkerInstall",
-                    "IWWorkerProxy.type": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.type",
-                    "WebWorkerJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest",
                     "Message": "@nav[webpm-client]/WorkersPoolModule.Message",
-                    "IWWorkerProxy.createWorker": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.createWorker",
-                    "IWWorkerProxy.serializeFunction": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy.serializeFunction",
+                    "WebWorkerJest": "@nav[webpm-client]/MainModule/TestUtilsTypes.WebWorkerJest",
                     "IWWorkerProxy": "@nav[webpm-client]/WorkersPoolModule.IWWorkerProxy"
                 }
             },
             "semantic": {
-                "role": "class",
+                "role": "interface",
                 "labels": [],
                 "attributes": {},
                 "relations": {}
@@ -396,18 +384,7 @@
             "name": "index.ts",
             "path": "src/lib/test-utils/index.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         }
     ],

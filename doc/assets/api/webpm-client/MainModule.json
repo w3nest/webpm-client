@@ -1835,7 +1835,8 @@
                         "startLine": 386,
                         "endLine": 387,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.CssLoadingEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.CssLoadingEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -1954,6 +1955,7 @@
                 "endLine": 399,
                 "references": {
                     "CssLoadingEvent": "@nav[webpm-client]/MainModule.CssLoadingEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -2014,7 +2016,8 @@
                         "startLine": 405,
                         "endLine": 406,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.CssParsedEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.CssParsedEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -2133,6 +2136,7 @@
                 "endLine": 418,
                 "references": {
                     "CssParsedEvent": "@nav[webpm-client]/MainModule.CssParsedEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -3894,7 +3898,7 @@
             "code": {
                 "filePath": "src/lib/loading-screen.view.ts",
                 "declaration": "export class LoadingScreen",
-                "implementation": "export class LoadingScreen {\n    /**\n     * The actual display options used by the class.\n     */\n    public readonly options: Required<DisplayOptions>\n\n    /**\n     * The HTMLDivElement encapsulating the view.\n     */\n    public readonly wrapperDiv: HTMLDivElement\n\n    private contentDiv: HTMLDivElement\n    private progressBarDiv: HTMLDivElement\n    private detailsDiv: HTMLDivElement\n\n    private installedCount = 1\n    private events: CdnEvent[] = []\n    private startEvent: StartInstallEvent\n    private loadingGraph: LoadingGraph\n    private detailsView?: DetailsView = undefined\n    private t0: number\n\n    /**\n     * @param options see {@link DisplayOptions}.\n     */\n    constructor(options: DisplayOptions) {\n        const defaultDisplayOptions: Omit<\n            Required<DisplayOptions>,\n            'logo' | 'name' | 'description'\n        > = {\n            id: 'loading-screen',\n            fadingTimeout: 500,\n            container: document.body,\n            minimumDisplayTime: 1000,\n            wrapperStyle: {\n                position: 'absolute',\n                top: '0',\n                left: '0',\n                width: '100vw',\n                height: '100vh',\n                padding: 'inherit',\n                'font-weight': 'bolder',\n                'z-index': '1000',\n            },\n            autoRender: true,\n        }\n\n        this.options = {\n            ...defaultDisplayOptions,\n            ...options,\n        }\n        const wrapperStyle = {\n            ...this.options.wrapperStyle,\n            ...(options.wrapperStyle ?? {}),\n        }\n        this.wrapperDiv = document.createElement('div')\n        Object.entries(wrapperStyle).forEach(([k, v]) => {\n            this.wrapperDiv.style.setProperty(k, v)\n        })\n        this.wrapperDiv.innerHTML = `\n        <div id='${String(this.options.id)}' style='display: flex;justify-content: space-around; background-color: #0f172a;\n        width:100%; height:100%; opacity:1;\n        transition: opacity 1s;'>\n            <div style='margin-top: auto;margin-bottom: auto; padding:40px; border-radius: 25px;min-width: 50%; max-height:75%;max-width:75%; overflow: auto;\n            display: flex;flex-direction: column'\n            >\n                <div  style='display: flex;justify-content: space-around;' >\n                    <img src='${this.options.logo}' style='width: clamp(80px, 20vw, 140px)'></img>\n                </div> \n                <div style='margin-left: auto;margin-right: auto; text-align: center; margin-top: 1rem;'>\n                \n                    <h2 style='color:#f4f4f5'>\n                    ${this.options.name}\n                    </h2>\n                    \n                    <h3 style='color:#94a3b8'>\n                    ${this.options.description}\n                    </h3>\n                </div>\n                <div style='width: 100%; display: flex;'>\n                    <div id=\"webpm-client-pbar\" style='margin-top:5px;margin-bottom:5px; width: 0%; display: flex; background-color:green'></div>\n                    <div style='flex-grow: 1; margin-top:5px;margin-bottom:5px; min-width:0px, height: 100%; background-color:gray'></div>\n                    <div id=\"webpm-client-details-btn\" style=\"margin-left:5px;font-size:smaller;cursor:pointer\">ℹ️</div>\n                </div>\n                <div id=\"webpm-client-details\">Details</div>\n                <div  class='screen-messages-container' style='color: green; font-family: monospace;font-size:small; margin-left: auto;margin-right: auto; '>\n    \n                </div>\n            </div>\n        </div>\n        `\n        if (this.options.autoRender) {\n            this.render()\n        }\n    }\n\n    /**\n     * Actualize the view given a new {@link CdnEvent} (provided that {@link LoadingScreen.render}\n     * has been called before).\n     *\n     * @param event event to account for\n     */\n    next(event: CdnEvent) {\n        if (!isCdnEvent(event)) {\n            return\n        }\n        if (!this.detailsView) {\n            this.events.push(event)\n        } else {\n            this.detailsView.onEvent(event)\n        }\n        if (event.step === 'CdnLoadingGraphResolvedEvent') {\n            this.loadingGraph = (event as CdnLoadingGraphResolvedEvent).resp\n        }\n        if (event.step === 'StartInstallEvent') {\n            this.startEvent = event as StartInstallEvent\n        }\n        if (isErrorEvent(event)) {\n            displayError(this.contentDiv, event)\n        }\n        if (\n            [\n                'SourceParsedEvent',\n                'PyModuleLoadedEvent',\n                'StartBackendEvent',\n            ].includes(event.step)\n        ) {\n            const total =\n                this.loadingGraph.lock.length +\n                this.startEvent.pyodide.modules.length\n\n            this.installedCount++\n            const progress = Math.floor((100 * this.installedCount) / total)\n            this.progressBarDiv.style.width = `${String(progress)}%`\n        }\n    }\n\n    /**\n     * Render the view.\n     */\n    render() {\n        if (this.t0) {\n            return\n        }\n        this.t0 = Date.now()\n        this.options.container.appendChild(this.wrapperDiv)\n\n        this.contentDiv = this.wrapperDiv.querySelector(\n            '.screen-messages-container',\n        ) as unknown as HTMLDivElement\n        this.progressBarDiv = document.getElementById(\n            'webpm-client-pbar',\n        ) as HTMLDivElement\n\n        this.detailsDiv = document.getElementById(\n            'webpm-client-details',\n        ) as HTMLDivElement\n\n        const button = document.getElementById(\n            'webpm-client-details-btn',\n        ) as HTMLButtonElement\n\n        button.onclick = () => {\n            void installViewsModule().then((mdle) => {\n                const detailsView = new mdle.InstallView({\n                    expandedMode: 'expanded',\n                })\n                this.detailsView = detailsView\n                this.events.forEach((ev) => {\n                    detailsView.onEvent(ev)\n                })\n                this.detailsDiv.append(detailsView.toHTML())\n            })\n        }\n    }\n\n    /**\n     * Remove the loading screen (see {@link DisplayOptions.fadingTimeout}).\n     */\n    done() {\n        const elapsed = Date.now() - this.t0\n        setTimeout(() => {\n            this.wrapperDiv.style.setProperty(\n                'transition',\n                `opacity ${String(this.options.fadingTimeout)}ms`,\n            )\n            this.wrapperDiv.style.setProperty('opacity', '0')\n            setTimeout(() => {\n                this.wrapperDiv.remove()\n            }, 1000)\n        }, this.options.minimumDisplayTime - elapsed)\n    }\n}",
+                "implementation": "export class LoadingScreen {\n    /**\n     * The actual display options used by the class.\n     */\n    public readonly options: Required<DisplayOptions>\n\n    /**\n     * The HTMLDivElement encapsulating the view.\n     */\n    public readonly wrapperDiv: HTMLDivElement\n\n    private contentDiv: HTMLDivElement\n    private progressBarDiv: HTMLDivElement\n    private detailsDiv: HTMLDivElement\n\n    private installedCount = 1\n    private events: CdnEvent[] = []\n    private startEvent: StartInstallEvent\n    private loadingGraph: LoadingGraph\n    private detailsView?: DetailsView = undefined\n    private t0: number\n\n    /**\n     * @param options see {@link DisplayOptions}.\n     */\n    constructor(options: DisplayOptions) {\n        const defaultDisplayOptions: Omit<\n            Required<DisplayOptions>,\n            'logo' | 'name' | 'description'\n        > = {\n            id: 'loading-screen',\n            fadingTimeout: 500,\n            container: document.body,\n            minimumDisplayTime: 1000,\n            wrapperStyle: {\n                position: 'absolute',\n                top: '0',\n                left: '0',\n                width: '100vw',\n                height: '100vh',\n                padding: 'inherit',\n                'font-weight': 'bolder',\n                'z-index': '1000',\n            },\n            autoRender: true,\n        }\n\n        this.options = {\n            ...defaultDisplayOptions,\n            ...options,\n        }\n        const wrapperStyle = {\n            ...this.options.wrapperStyle,\n            ...(options.wrapperStyle ?? {}),\n        }\n        this.wrapperDiv = document.createElement('div')\n        Object.entries(wrapperStyle).forEach(([k, v]) => {\n            this.wrapperDiv.style.setProperty(k, v)\n        })\n        this.wrapperDiv.innerHTML = `\n        <div id='${this.options.id}' style='display: flex;justify-content: space-around; background-color: #0f172a;\n        width:100%; height:100%; opacity:1;\n        transition: opacity 1s;'>\n            <div style='margin-top: auto;margin-bottom: auto; padding:40px; border-radius: 25px;min-width: 50%; max-height:75%;max-width:75%; overflow: auto;\n            display: flex;flex-direction: column'\n            >\n                <div  style='display: flex;justify-content: space-around;' >\n                    <img src='${this.options.logo}' style='width: clamp(80px, 20vw, 140px)'></img>\n                </div> \n                <div style='margin-left: auto;margin-right: auto; text-align: center; margin-top: 1rem;'>\n                \n                    <h2 style='color:#f4f4f5'>\n                    ${this.options.name}\n                    </h2>\n                    \n                    <h3 style='color:#94a3b8'>\n                    ${this.options.description}\n                    </h3>\n                </div>\n                <div style='width: 100%; display: flex;'>\n                    <div id=\"webpm-client-pbar\" style='margin-top:5px;margin-bottom:5px; width: 0%; display: flex; background-color:green'></div>\n                    <div style='flex-grow: 1; margin-top:5px;margin-bottom:5px; min-width:0px, height: 100%; background-color:gray'></div>\n                    <div id=\"webpm-client-details-btn\" style=\"margin-left:5px;font-size:smaller;cursor:pointer\">ℹ️</div>\n                </div>\n                <div id=\"webpm-client-details\">Details</div>\n                <div  class='screen-messages-container' style='color: green; font-family: monospace;font-size:small; margin-left: auto;margin-right: auto; '>\n    \n                </div>\n            </div>\n        </div>\n        `\n        if (this.options.autoRender) {\n            this.render()\n        }\n    }\n\n    /**\n     * Actualize the view given a new {@link CdnEvent} (provided that {@link LoadingScreen.render}\n     * has been called before).\n     *\n     * @param event event to account for\n     */\n    next(event: CdnEvent) {\n        if (!isCdnEvent(event)) {\n            return\n        }\n        if (!this.detailsView) {\n            this.events.push(event)\n        } else {\n            this.detailsView.onEvent(event)\n        }\n        if (event.step === 'CdnLoadingGraphResolvedEvent') {\n            this.loadingGraph = (event as CdnLoadingGraphResolvedEvent).resp\n        }\n        if (event.step === 'StartInstallEvent') {\n            this.startEvent = event as StartInstallEvent\n        }\n        if (isErrorEvent(event)) {\n            displayError(this.contentDiv, event)\n        }\n        if (\n            [\n                'SourceParsedEvent',\n                'PyModuleLoadedEvent',\n                'StartBackendEvent',\n            ].includes(event.step)\n        ) {\n            const total =\n                this.loadingGraph.lock.length +\n                this.startEvent.pyodide.modules.length\n\n            this.installedCount++\n            const progress = Math.floor((100 * this.installedCount) / total)\n            this.progressBarDiv.style.width = `${String(progress)}%`\n        }\n    }\n\n    /**\n     * Render the view.\n     */\n    render() {\n        if (this.t0) {\n            return\n        }\n        this.t0 = Date.now()\n        this.options.container.appendChild(this.wrapperDiv)\n\n        this.contentDiv = this.wrapperDiv.querySelector(\n            '.screen-messages-container',\n        ) as unknown as HTMLDivElement\n        this.progressBarDiv = document.getElementById(\n            'webpm-client-pbar',\n        ) as HTMLDivElement\n\n        this.detailsDiv = document.getElementById(\n            'webpm-client-details',\n        ) as HTMLDivElement\n\n        const button = document.getElementById(\n            'webpm-client-details-btn',\n        ) as HTMLButtonElement\n\n        button.onclick = () => {\n            void installViewsModule().then((mdle) => {\n                const detailsView = new mdle.InstallView({\n                    expandedMode: 'expanded',\n                })\n                this.detailsView = detailsView\n                this.events.forEach((ev) => {\n                    detailsView.onEvent(ev)\n                })\n                this.detailsDiv.append(detailsView.toHTML())\n            })\n        }\n    }\n\n    /**\n     * Remove the loading screen (see {@link DisplayOptions.fadingTimeout}).\n     */\n    done() {\n        const elapsed = Date.now() - this.t0\n        setTimeout(() => {\n            this.wrapperDiv.style.setProperty(\n                'transition',\n                `opacity ${String(this.options.fadingTimeout)}ms`,\n            )\n            this.wrapperDiv.style.setProperty('opacity', '0')\n            setTimeout(() => {\n                this.wrapperDiv.remove()\n            }, 1000)\n        }, this.options.minimumDisplayTime - elapsed)\n    }\n}",
                 "startLine": 87,
                 "endLine": 280,
                 "references": {
@@ -4040,7 +4044,8 @@
                         "startLine": 462,
                         "endLine": 463,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.ParseErrorEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.ParseErrorEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -4159,6 +4164,7 @@
                 "endLine": 475,
                 "references": {
                     "ParseErrorEvent": "@nav[webpm-client]/MainModule.ParseErrorEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -5114,7 +5120,8 @@
                         "startLine": 347,
                         "endLine": 348,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.SourceLoadedEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.SourceLoadedEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -5233,6 +5240,7 @@
                 "endLine": 361,
                 "references": {
                     "SourceLoadedEvent": "@nav[webpm-client]/MainModule.SourceLoadedEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -5293,7 +5301,8 @@
                         "startLine": 327,
                         "endLine": 328,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.SourceLoadingEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.SourceLoadingEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -5412,6 +5421,7 @@
                 "endLine": 341,
                 "references": {
                     "SourceLoadingEvent": "@nav[webpm-client]/MainModule.SourceLoadingEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -5472,7 +5482,8 @@
                         "startLine": 367,
                         "endLine": 368,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.SourceParsedEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.SourceParsedEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -5591,6 +5602,7 @@
                 "endLine": 380,
                 "references": {
                     "SourceParsedEvent": "@nav[webpm-client]/MainModule.SourceParsedEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -5923,7 +5935,8 @@
                         "startLine": 308,
                         "endLine": 309,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.StartEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.StartEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -6042,6 +6055,7 @@
                 "endLine": 321,
                 "references": {
                     "StartEvent": "@nav[webpm-client]/MainModule.StartEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -6796,8 +6810,8 @@
                         "filePath": "src/lib/state.ts",
                         "declaration": "static isCompatibleEsmInstalled(\n    name: string,\n    version: string,\n    apiKey: string,\n): boolean",
                         "implementation": "static isCompatibleEsmInstalled(\n    name: string,\n    version: string,\n    apiKey: string,\n): boolean {\n    if (name === pkgJson.name) {\n        const symbol = `${pkgJson.name}_APIv${pkgJson.webpack.apiVersion}`\n        const alreadyHere = (window as unknown as never)[symbol] as\n            | { version: string }\n            | undefined\n        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment\n        const compatibleInstalled: boolean | undefined =\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n            alreadyHere && gte(alreadyHere.version, version)\n        return compatibleInstalled ?? false\n    }\n    const module = StateImplementation.esModules.get(name)\n    if (!module) {\n        return false\n    }\n    const versions = module.map((item) => item.version)\n    if (versions.includes(version)) {\n        return true\n    }\n\n    const compatibleVersion = module\n        .filter((v) => v.apiKey === apiKey)\n        .find((installedVersion) => {\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n            return gt(installedVersion.version, version)\n        })\n\n    if (compatibleVersion) {\n        console.log(\n            `${name}: a greater compatible version is already installed (${compatibleVersion.version}), skip install`,\n            {\n                libName: name,\n                queriedVersion: version,\n                compatibleVersion,\n            },\n        )\n    }\n    return compatibleVersion !== undefined\n}",
-                        "startLine": 158,
-                        "endLine": 202,
+                        "startLine": 164,
+                        "endLine": 208,
                         "references": {
                             "isCompatibleEsmInstalled": "@nav[webpm-client]/MainModule.StateImplementation.isCompatibleEsmInstalled"
                         }
@@ -6842,8 +6856,8 @@
                         "filePath": "src/lib/state.ts",
                         "declaration": "static isEsmSatisfied(name: string, semver: string)",
                         "implementation": "static isEsmSatisfied(name: string, semver: string) {\n    const versions = StateImplementation.esModules.get(name)\n    if (!versions) {\n        return false\n    }\n    return versions.find((v) =>\n        // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n        satisfies(\n            v.version.replace('-wip', ''),\n            semver.replace('-wip', ''),\n        ),\n    )\n}",
-                        "startLine": 138,
-                        "endLine": 151,
+                        "startLine": 144,
+                        "endLine": 157,
                         "references": {
                             "isEsmSatisfied": "@nav[webpm-client]/MainModule.StateImplementation.isEsmSatisfied"
                         }
@@ -6859,9 +6873,9 @@
             "code": {
                 "filePath": "src/lib/state.ts",
                 "declaration": "export class StateImplementation",
-                "implementation": "export class StateImplementation {\n    /**\n     * Union of all elements retrieved from `locks` attribute of installed loading graph.\n     */\n    static locks: Library[] = []\n    /**\n     * ES modules installed.\n     */\n    static esModules = new Map<\n        LibraryName,\n        {\n            version: Version\n            versionNumber: number\n            exportPath: string[]\n            apiKey: string\n        }[]\n    >([\n        [\n            pkgJson.name,\n            [\n                {\n                    version: pkgJson.version,\n                    apiKey: pkgJson.webpack.apiVersion,\n                    exportPath: [pkgJson.name],\n                    versionNumber: 0,\n                },\n            ],\n        ],\n    ])\n    /**\n     * Pyodide modules installed.\n     */\n    static pyModules: string[] = []\n\n    /**\n     * Fetched loading graph: mapping between a loading graph's body uid and corresponding computed loading graph.\n     * @hidden\n     */\n    static fetchedLoadingGraph = new Map<\n        string,\n        Promise<LoadingGraph | CdnError>\n    >()\n\n    /**\n     * Installed loading graph: mapping between a loading graph's body uid and window state\n     */\n    static importedLoadingGraphs = new Map<string, Promise<Window>>()\n\n    /**\n     * Installed script: mapping between a script's uid and a {@link FetchedScript}.\n     * @hidden\n     */\n    static importedScripts = new Map<string, Promise<FetchedScript>>()\n\n    static webSocketsStore: Record<\n        string,\n        Promise<Observable<ContextMessage>>\n    > = {}\n\n    static getWebSocket(wsUrl: string): Promise<Observable<ContextMessage>> {\n        if (wsUrl in StateImplementation.webSocketsStore) {\n            return StateImplementation.webSocketsStore[wsUrl]\n        }\n        StateImplementation.webSocketsStore[wsUrl] =\n            installBackendClientDeps().then(\n                ({ http }: { http: typeof HttpClients }) => {\n                    return new http.WebSocketClient<ContextMessage>(\n                        wsUrl,\n                    ).connectWs()\n                },\n            )\n        return StateImplementation.webSocketsStore[wsUrl]\n    }\n\n    /**\n     * Return whether an ESM already installed match a given semver query.\n     *\n     * @param name Module's name.\n     * @param semver Semantic versioning query.\n     */\n\n    static isEsmSatisfied(name: string, semver: string) {\n        const versions = StateImplementation.esModules.get(name)\n        if (!versions) {\n            return false\n        }\n        return versions.find((v) =>\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n            satisfies(\n                v.version.replace('-wip', ''),\n                semver.replace('-wip', ''),\n            ),\n        )\n    }\n    /**\n     * Return whether a library at given version is already installed with a compatible version.\n     * Compatible version means a greater version with same API key.\n     *\n     * @param name library name\n     * @param version version\n     */\n    static isCompatibleEsmInstalled(\n        name: string,\n        version: string,\n        apiKey: string,\n    ): boolean {\n        if (name === pkgJson.name) {\n            const symbol = `${pkgJson.name}_APIv${pkgJson.webpack.apiVersion}`\n            const alreadyHere = (window as unknown as never)[symbol] as\n                | { version: string }\n                | undefined\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment\n            const compatibleInstalled: boolean | undefined =\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                alreadyHere && gte(alreadyHere.version, version)\n            return compatibleInstalled ?? false\n        }\n        const module = StateImplementation.esModules.get(name)\n        if (!module) {\n            return false\n        }\n        const versions = module.map((item) => item.version)\n        if (versions.includes(version)) {\n            return true\n        }\n\n        const compatibleVersion = module\n            .filter((v) => v.apiKey === apiKey)\n            .find((installedVersion) => {\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                return gt(installedVersion.version, version)\n            })\n\n        if (compatibleVersion) {\n            console.log(\n                `${name}: a greater compatible version is already installed (${compatibleVersion.version}), skip install`,\n                {\n                    libName: name,\n                    queriedVersion: version,\n                    compatibleVersion,\n                },\n            )\n        }\n        return compatibleVersion !== undefined\n    }\n\n    /**\n     * @param aliases\n     * @param executingWindow\n     * @hidden\n     */\n    static extractAliases(\n        aliases: Record<string, string | ((Window) => unknown)>,\n        unwrapDefault: boolean,\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        return Object.entries(aliases).reduce((acc, [alias, original]) => {\n            let pointed: MaybeModule = undefined\n            if (typeof original == 'string') {\n                const name = original.split('#')[0]\n                const semver = original\n                    .split('#')[1]\n                    .replace('-wip', '')\n                    .replace('latest', 'x')\n                const versions = StateImplementation.esModules.get(name)\n                if (!versions) {\n                    console.warn(\n                        `Can not create alias: target module '${name}' is not installed`,\n                    )\n                    return acc\n                }\n                const version = versions.find((v) =>\n                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                    satisfies(v.version.replace('-wip', ''), semver),\n                )\n                if (!version) {\n                    console.warn(\n                        `Can not create alias: no versions of '${name}' match the target semver ${semver}`,\n                        { versions },\n                    )\n                    return acc\n                }\n\n                const path = version.exportPath\n                pointed = path.reduce((acc: MaybeModule, e: string) => {\n                    if (!acc) {\n                        return undefined\n                    }\n                    if (unwrapDefault) {\n                        return unwrapPreserveDefault(acc[e])\n                    }\n                    return acc[e]\n                }, executingWindow) as MaybeModule\n            } else {\n                pointed = original(executingWindow) as MaybeModule\n            }\n            if (!pointed) {\n                console.warn('can not create alias', { alias, original })\n                return acc\n            }\n            return { ...acc, [alias]: pointed }\n        }, {})\n    }\n\n    /**\n     * Update the various properties after new modules have been imported.\n     *\n     * @param modules modules installed\n     * @param executingWindow the executing window (where to expose the latest version if change need be).\n     * @hidden\n     */\n    static registerEsmModules(\n        modules: {\n            name: string\n            version: string\n            exportPath: string[]\n            aliases?: string[]\n            apiKey: string\n            versionNumber: number\n        }[],\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        modules.forEach(\n            ({ name, version, exportPath, apiKey, versionNumber, aliases }) => {\n                const existingVersions =\n                    StateImplementation.esModules.get(name) ?? []\n                const item = {\n                    version,\n                    exportPath,\n                    aliases,\n                    apiKey,\n                    versionNumber,\n                }\n                const versions = [...existingVersions, item].sort(\n                    (a, b) => b.versionNumber - a.versionNumber,\n                )\n                StateImplementation.esModules.set(name, versions)\n                const exported = exportPath.reduce(\n                    (acc: MaybeModule, e: string) => (acc ? acc[e] : undefined),\n                    executingWindow,\n                ) as MaybeModule\n                if (!exported) {\n                    console.error(\n                        `Can not find exported symbol of '${name}#${version}' at export: ${String(exportPath)}`,\n                    )\n                    return\n                }\n                if (!aliases) {\n                    return\n                }\n                aliases.forEach((alias) => {\n                    if (alias.includes(':')) {\n                        const baseName = alias.split(':')[0]\n                        const property = alias.split(':')[1]\n                        executingWindow[baseName] = exported[property]\n                        return\n                    }\n                    executingWindow[alias] = exported\n                })\n            },\n        )\n    }\n    /**\n     * Register imported python modules.\n     *\n     * @param pyModules Name of the python modules.\n     * @hidden\n     */\n    static registerImportedPyModules(pyModules: string[]) {\n        StateImplementation.pyModules = [\n            ...StateImplementation.pyModules,\n            ...pyModules,\n        ]\n    }\n}",
+                "implementation": "export class StateImplementation {\n    /**\n     * Union of all elements retrieved from `locks` attribute of installed loading graph.\n     */\n    static locks: Library[] = []\n    /**\n     * ES modules installed.\n     */\n    static esModules = new Map<\n        LibraryName,\n        {\n            version: Version\n            versionNumber: number\n            exportPath: string[]\n            apiKey: string\n        }[]\n    >([\n        [\n            pkgJson.name,\n            [\n                {\n                    version: pkgJson.version,\n                    apiKey: pkgJson.webpack.apiVersion,\n                    exportPath: [pkgJson.name],\n                    versionNumber: 0,\n                },\n            ],\n        ],\n    ])\n    /**\n     * Pyodide modules installed.\n     */\n    static pyModules: string[] = []\n\n    /**\n     * Fetched loading graph: mapping between a loading graph's body uid and corresponding computed loading graph.\n     * @hidden\n     */\n    static fetchedLoadingGraph = new Map<\n        string,\n        Promise<LoadingGraph | CdnError>\n    >()\n\n    /**\n     * Installed loading graph: mapping between a loading graph's body uid and window state\n     */\n    static importedLoadingGraphs = new Map<string, Promise<Window>>()\n\n    /**\n     * Fetched scripts: mapping between a script's uid and their source as {@link FetchedScript}.\n     * @hidden\n     */\n    static fetchedScripts = new Map<string, Promise<FetchedScript>>()\n\n    /**\n     * Installed scripts: list of scripts' URL installed.\n     * @hidden\n     */\n    static installedScripts: string[] = []\n\n    static webSocketsStore: Record<\n        string,\n        Promise<Observable<ContextMessage>>\n    > = {}\n\n    static getWebSocket(wsUrl: string): Promise<Observable<ContextMessage>> {\n        if (wsUrl in StateImplementation.webSocketsStore) {\n            return StateImplementation.webSocketsStore[wsUrl]\n        }\n        StateImplementation.webSocketsStore[wsUrl] =\n            installBackendClientDeps().then(\n                ({ http }: { http: typeof HttpClients }) => {\n                    return new http.WebSocketClient<ContextMessage>(\n                        wsUrl,\n                    ).connectWs()\n                },\n            )\n        return StateImplementation.webSocketsStore[wsUrl]\n    }\n\n    /**\n     * Return whether an ESM already installed match a given semver query.\n     *\n     * @param name Module's name.\n     * @param semver Semantic versioning query.\n     */\n\n    static isEsmSatisfied(name: string, semver: string) {\n        const versions = StateImplementation.esModules.get(name)\n        if (!versions) {\n            return false\n        }\n        return versions.find((v) =>\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n            satisfies(\n                v.version.replace('-wip', ''),\n                semver.replace('-wip', ''),\n            ),\n        )\n    }\n    /**\n     * Return whether a library at given version is already installed with a compatible version.\n     * Compatible version means a greater version with same API key.\n     *\n     * @param name library name\n     * @param version version\n     */\n    static isCompatibleEsmInstalled(\n        name: string,\n        version: string,\n        apiKey: string,\n    ): boolean {\n        if (name === pkgJson.name) {\n            const symbol = `${pkgJson.name}_APIv${pkgJson.webpack.apiVersion}`\n            const alreadyHere = (window as unknown as never)[symbol] as\n                | { version: string }\n                | undefined\n            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment\n            const compatibleInstalled: boolean | undefined =\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                alreadyHere && gte(alreadyHere.version, version)\n            return compatibleInstalled ?? false\n        }\n        const module = StateImplementation.esModules.get(name)\n        if (!module) {\n            return false\n        }\n        const versions = module.map((item) => item.version)\n        if (versions.includes(version)) {\n            return true\n        }\n\n        const compatibleVersion = module\n            .filter((v) => v.apiKey === apiKey)\n            .find((installedVersion) => {\n                // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                return gt(installedVersion.version, version)\n            })\n\n        if (compatibleVersion) {\n            console.log(\n                `${name}: a greater compatible version is already installed (${compatibleVersion.version}), skip install`,\n                {\n                    libName: name,\n                    queriedVersion: version,\n                    compatibleVersion,\n                },\n            )\n        }\n        return compatibleVersion !== undefined\n    }\n\n    /**\n     * @param aliases\n     * @param executingWindow\n     * @hidden\n     */\n    static extractAliases(\n        aliases: Record<string, string | ((Window) => unknown)>,\n        unwrapDefault: boolean,\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        return Object.entries(aliases).reduce((acc, [alias, original]) => {\n            let pointed: MaybeModule = undefined\n            if (typeof original == 'string') {\n                const name = original.split('#')[0]\n                const semver = original\n                    .split('#')[1]\n                    .replace('-wip', '')\n                    .replace('latest', 'x')\n                const versions = StateImplementation.esModules.get(name)\n                if (!versions) {\n                    console.warn(\n                        `Can not create alias: target module '${name}' is not installed`,\n                    )\n                    return acc\n                }\n                const version = versions.find((v) =>\n                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call\n                    satisfies(v.version.replace('-wip', ''), semver),\n                )\n                if (!version) {\n                    console.warn(\n                        `Can not create alias: no versions of '${name}' match the target semver ${semver}`,\n                        { versions },\n                    )\n                    return acc\n                }\n\n                const path = version.exportPath\n                pointed = path.reduce((acc: MaybeModule, e: string) => {\n                    if (!acc) {\n                        return undefined\n                    }\n                    if (unwrapDefault) {\n                        return unwrapPreserveDefault(acc[e])\n                    }\n                    return acc[e]\n                }, executingWindow) as MaybeModule\n            } else {\n                pointed = original(executingWindow) as MaybeModule\n            }\n            if (!pointed) {\n                console.warn('can not create alias', { alias, original })\n                return acc\n            }\n            return { ...acc, [alias]: pointed }\n        }, {})\n    }\n\n    /**\n     * Update the various properties after new modules have been imported.\n     *\n     * @param modules modules installed\n     * @param executingWindow the executing window (where to expose the latest version if change need be).\n     * @hidden\n     */\n    static registerEsmModules(\n        modules: {\n            name: string\n            version: string\n            exportPath: string[]\n            aliases?: string[]\n            apiKey: string\n            versionNumber: number\n        }[],\n        executingWindow: WindowOrWorkerGlobalScope,\n    ) {\n        type Module = Record<string, unknown>\n        type MaybeModule = Module | undefined\n        modules.forEach(\n            ({ name, version, exportPath, apiKey, versionNumber, aliases }) => {\n                const existingVersions =\n                    StateImplementation.esModules.get(name) ?? []\n                const item = {\n                    version,\n                    exportPath,\n                    aliases,\n                    apiKey,\n                    versionNumber,\n                }\n                const versions = [...existingVersions, item].sort(\n                    (a, b) => b.versionNumber - a.versionNumber,\n                )\n                StateImplementation.esModules.set(name, versions)\n                const exported = exportPath.reduce(\n                    (acc: MaybeModule, e: string) => (acc ? acc[e] : undefined),\n                    executingWindow,\n                ) as MaybeModule\n                if (!exported) {\n                    console.error(\n                        `Can not find exported symbol of '${name}#${version}' at export: ${String(exportPath)}`,\n                    )\n                    return\n                }\n                if (!aliases) {\n                    return\n                }\n                aliases.forEach((alias) => {\n                    if (alias.includes(':')) {\n                        const baseName = alias.split(':')[0]\n                        const property = alias.split(':')[1]\n                        executingWindow[baseName] = exported[property]\n                        return\n                    }\n                    executingWindow[alias] = exported\n                })\n            },\n        )\n    }\n    /**\n     * Register imported python modules.\n     *\n     * @param pyModules Name of the python modules.\n     * @hidden\n     */\n    static registerImportedPyModules(pyModules: string[]) {\n        StateImplementation.pyModules = [\n            ...StateImplementation.pyModules,\n            ...pyModules,\n        ]\n    }\n}",
                 "startLine": 57,
-                "endLine": 336,
+                "endLine": 342,
                 "references": {
                     "StateImplementation": "@nav[webpm-client]/MainModule.StateImplementation",
                     "Library": "@nav[webpm-client]/MainModule.Library",
@@ -7005,7 +7019,8 @@
                         "startLine": 424,
                         "endLine": 425,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.UnauthorizedEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.UnauthorizedEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -7124,6 +7139,7 @@
                 "endLine": 437,
                 "references": {
                     "UnauthorizedEvent": "@nav[webpm-client]/MainModule.UnauthorizedEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -7264,7 +7280,8 @@
                         "startLine": 443,
                         "endLine": 444,
                         "references": {
-                            "id": "@nav[webpm-client]/MainModule.UrlNotFoundEvent.id"
+                            "id": "@nav[webpm-client]/MainModule.UrlNotFoundEvent.id",
+                            "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id"
                         }
                     }
                 },
@@ -7383,6 +7400,7 @@
                 "endLine": 456,
                 "references": {
                     "UrlNotFoundEvent": "@nav[webpm-client]/MainModule.UrlNotFoundEvent",
+                    "CdnFetchEvent.id": "@nav[webpm-client]/MainModule.CdnEvent.id",
                     "CdnFetchEvent": "@nav[webpm-client]/MainModule.CdnFetchEvent"
                 }
             },
@@ -11803,8 +11821,8 @@
                 "filePath": "src/lib/workers-pool.installer.ts",
                 "declaration": "export type WorkersModule = typeof import('./workers-pool')",
                 "implementation": "",
-                "startLine": 8,
-                "endLine": 9,
+                "startLine": 7,
+                "endLine": 8,
                 "references": {
                     "WorkersModule": "@nav[webpm-client]/MainModule.WorkersModule",
                     "__module": "@nav[webpm-client]/WorkersPoolModule"
@@ -11946,8 +11964,8 @@
                 "filePath": "src/lib/utils.ts",
                 "declaration": "export function getAssetId(name: string)",
                 "implementation": "export function getAssetId(name: string) {\n    return window.btoa(name)\n}",
-                "startLine": 343,
-                "endLine": 346,
+                "startLine": 352,
+                "endLine": 355,
                 "references": {
                     "getAssetId": "@nav[webpm-client]/MainModule.getAssetId"
                 }
@@ -12003,8 +12021,8 @@
                 "filePath": "src/lib/utils.ts",
                 "declaration": "export function getUrlBase(name: string, version: string)",
                 "implementation": "export function getUrlBase(name: string, version: string) {\n    const assetId = getAssetId(name)\n    return `${Client.BackendConfiguration.urlResource}/${assetId}/${version}`\n}",
-                "startLine": 356,
-                "endLine": 360,
+                "startLine": 365,
+                "endLine": 369,
                 "references": {
                     "getUrlBase": "@nav[webpm-client]/MainModule.getUrlBase"
                 }
@@ -12612,270 +12630,105 @@
             "name": "index-types.ts",
             "path": "src/lib/test-utils/index-types.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "index-types.ts",
             "path": "src/lib/workers-pool/index-types.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "This module export in the  the types included in the module \n(types only, no implementation).\n\nIt serves as helper when working with typescript, e.g.:\n```ts\nimport { installWorkersPoolModule, WorkersType } from '@youwol/webpm-client'\n\nasync function foo(){\n     const WPModule = await installWorkersPoolModule()\n     const pool : WorkersType.WorkersPool = new WPModule.WorkersPool({})\n}\n```\n\nSee .",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "events.models.ts",
             "path": "src/lib/events.models.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "errors.models.ts",
             "path": "src/lib/errors.models.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "Base class of Errors.",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "loading-screen.view.ts",
             "path": "src/lib/loading-screen.view.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "state.ts",
             "path": "src/lib/state.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "backends.ts",
             "path": "src/lib/backends.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "inputs.models.ts",
             "path": "src/lib/inputs.models.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "backend-configuration.ts",
             "path": "src/lib/backend-configuration.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "frontend-configuration.ts",
             "path": "src/lib/frontend-configuration.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "Defines the client-side configuration.",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "utils.ts",
             "path": "src/lib/utils.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "workers-pool.installer.ts",
             "path": "src/lib/workers-pool.installer.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "views.installer.ts",
             "path": "src/lib/views.installer.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "index.ts",
             "path": "src/lib/index.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         },
         {
             "name": "client.ts",
             "path": "src/lib/client.ts",
             "documentation": {
-                "sections": [
-                    {
-                        "semantic": {
-                            "role": "",
-                            "labels": [],
-                            "attributes": {},
-                            "relations": {}
-                        },
-                        "content": "",
-                        "contentType": "markdown"
-                    }
-                ]
+                "sections": []
             }
         }
     ],
