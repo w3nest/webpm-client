@@ -5,14 +5,18 @@
     "author": "reinisch.gui@gmail.com",
     "homepage": "https://github.com/w3nest/webpm-client#README.md",
     "main": "./dist/@w3nest/webpm-client.js",
-    "types": "src/index.ts",
+    "files": [
+        "dist",
+        "assets"
+    ],
     "scripts": {
         "clean": "del-cli dist",
         "setup": "python .w3nest/setup.py",
         "build": "yarn build:prod",
         "pre-build": "yarn clean",
-        "build:dev": "yarn pre-build && webpack --mode development",
-        "build:prod": "yarn pre-build && webpack --mode production",
+        "post-build": "del-cli dist/src/tests",
+        "build:dev": "yarn pre-build && webpack --mode development && yarn post-build",
+        "build:prod": "yarn pre-build && webpack --mode production && yarn post-build",
         "lint-check": "yarn lint-prettier-check && yarn lint-eslint-check",
         "lint-prettier-check": "prettier --check ./src",
         "lint-prettier-write": "prettier --write ./src",
@@ -25,7 +29,7 @@
     "exports": {
         ".": {
             "default": "./dist/@w3nest/webpm-client.js",
-            "types": "./src/index.ts",
+            "types": "./dist/src/index.d.ts",
             "webpm": {
                 "dependencies": [],
                 "aliases": [
@@ -35,7 +39,7 @@
         },
         "./workersPool": {
             "default": "./dist/workersPool.js",
-            "types": "./src/lib/workers-pool/index.ts",
+            "types": "./dist/src/lib/workers-pool/index.d.ts",
             "webpm": {
                 "dependencies": [
                     "rxjs"
@@ -45,7 +49,7 @@
         },
         "./testUtils": {
             "default": "./dist/testUtils.js",
-            "types": "./src/lib/test-utils/index.ts",
+            "types": "./dist/src/lib/test-utils/index.d.ts",
             "webpm": {
                 "dependencies": [],
                 "aliases": []
@@ -53,7 +57,7 @@
         },
         "./views": {
             "default": "./dist/views.js",
-            "types": "./src/lib/views/index.ts",
+            "types": "./dist/src/lib/views/index.d.ts",
             "webpm": {
                 "dependencies": [
                     "rxjs",
@@ -116,6 +120,9 @@
             "views": "./lib/views/index.ts"
         },
         "externals": {
+            "@w3nest/http-clients": [
+                "@w3nest/http-clients_APIv01"
+            ],
             "rxjs": [
                 "rxjs_APIv7"
             ],

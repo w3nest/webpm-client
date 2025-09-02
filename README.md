@@ -2,20 +2,12 @@
 
 Library for dynamic npm's libraries installation from W3 Nest ecosystem.
 
-This library is part of the hybrid cloud/local ecosystem
-[YouWol](https://platform.youwol.com/apps/@youwol/platform/latest).
+## Links 
 
-## Links
+* <a href='https://w3nest.org/apps/@webpm-client/doc/0.1.12-wip' target='_blank'>Documentation</a>
+* <a href='https://w3nest.org' target='_blank'>W3Nest</a>
 
-<!-- no user guide provided -->
-
-[Developers documentation](https://platform.youwol.com/apps/@youwol/cdn-explorer/latest?package=@w3nest/webpm-client&tab=doc)
-
-[Package on npm](https://www.npmjs.com/package/@w3nest/webpm-client)
-
-[Source on GitHub](https://github.com/w3nest/webpm-client)
-
-# Installation, Build, Test
+## Installation, Build, Test
 
 To install the required dependencies:
 
@@ -39,7 +31,7 @@ yarn build:prod
 
 ---
 
-Tests require [py-youwol](https://l.youwol.com/doc/py-youwol) to run on port 2001 using the configuration defined [here](https://github.com/youwol/integration-tests-conf).
+Tests require [w3nest](https://w3nest.org) local server to run on port 2001 using the configuration defined [here](https://github.com/youwol/integration-tests-conf).
 
 To run tests:
 
@@ -47,7 +39,7 @@ To run tests:
 yarn test
 ```
 
-Coverage can be evaluated using:
+To measure test coverage:
 
 ```shell
 yarn test-coverage

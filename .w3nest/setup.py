@@ -42,7 +42,6 @@ config = ProjectConfig(
         },
     ),
     testConfig="https://github.com/youwol/integration-tests-conf",
-    userGuide=False,
     bundles=Bundles(
         mainModule=MainModule(entryFile="./index.ts", aliases=["webpm"]),
         auxiliaryModules=[
@@ -63,6 +62,10 @@ config = ProjectConfig(
             ),
         ],
     ),
+    links={
+        "Documentation": f"https://w3nest.org/apps/@webpm-client/doc/{pkg_json['version']}",
+        "W3Nest": "https://w3nest.org",
+    },
 )
 
 template_folder = project_folder / ".w3nest" / ".template"
