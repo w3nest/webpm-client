@@ -1,7 +1,7 @@
 {
     "name": "@w3nest/webpm-client",
     "description": "Library for dynamic npm's libraries installation from W3 Nest ecosystem.",
-    "version": "0.1.12-wip",
+    "version": "0.1.12",
     "author": "reinisch.gui@gmail.com",
     "homepage": "https://github.com/w3nest/webpm-client#README.md",
     "main": "./dist/@w3nest/webpm-client.js",
@@ -120,14 +120,14 @@
             "views": "./lib/views/index.ts"
         },
         "externals": {
-            "@w3nest/http-clients": [
-                "@w3nest/http-clients_APIv01"
+            "rx-vdom": [
+                "rx-vdom_APIv01"
             ],
             "rxjs": [
                 "rxjs_APIv7"
             ],
-            "rx-vdom": [
-                "rx-vdom_APIv01"
+            "@w3nest/http-clients": [
+                "@w3nest/http-clients_APIv01"
             ]
         }
     }

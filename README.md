@@ -4,7 +4,7 @@ Library for dynamic npm's libraries installation from W3 Nest ecosystem.
 
 ## Links 
 
-* <a href='https://w3nest.org/apps/@webpm-client/doc/0.1.12-wip' target='_blank'>Documentation</a>
+* <a href='https://w3nest.org/apps/@webpm-client/doc/0.1.12' target='_blank'>Documentation</a>
 * <a href='https://w3nest.org' target='_blank'>W3Nest</a>
 
 ## Installation, Build, Test
