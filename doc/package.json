@@ -1,18 +1,22 @@
 {
     "name": "@webpm-client/doc",
     "description": "Doc. app for WebPM client usage",
-    "version": "0.1.11",
+    "version": "0.1.12-wip",
     "author": "reinisch.gui@gmail.com",
     "homepage": "https://github.com/webpm-client/doc#README.md",
     "main": "./dist/@webpm-client/doc.js",
-    "types": "src/index.ts",
+    "files": [
+        "dist",
+        "assets"
+    ],
     "scripts": {
         "clean": "del-cli dist",
         "setup": "python .w3nest/setup.py",
         "build": "yarn build:prod",
         "pre-build": "yarn clean",
-        "build:dev": "yarn pre-build && webpack --mode development",
-        "build:prod": "yarn pre-build && webpack --mode production",
+        "post-build": "del-cli dist/src/tests",
+        "build:dev": "yarn pre-build && webpack --mode development && yarn post-build",
+        "build:prod": "yarn pre-build && webpack --mode production && yarn post-build",
         "lint-check": "yarn lint-prettier-check && yarn lint-eslint-check",
         "lint-prettier-check": "prettier --check ./src",
         "lint-prettier-write": "prettier --write ./src",
@@ -26,7 +30,7 @@
     "exports": {
         ".": {
             "default": "./dist/@webpm-client/doc.js",
-            "types": "./src/app/main.ts",
+            "types": "./dist/src/app/main.d.ts",
             "webpm": {
                 "dependencies": [
                     "mkdocs-ts",
@@ -104,15 +108,36 @@
         "main": "app/main.ts",
         "additionalEntries": {},
         "externals": {
-            "mkdocs-ts": "window['mkdocs-ts_APIv05']",
-            "@mkdocs-ts/code-api": "window['@mkdocs-ts/code-api_APIv02']",
-            "@mkdocs-ts/notebook": "window['@mkdocs-ts/notebook_APIv01']",
-            "@w3nest/webpm-client": "window['@w3nest/webpm-client_APIv01']",
-            "rxjs": "window['rxjs_APIv7']",
-            "@w3nest/http-clients": "window['@w3nest/http-clients_APIv01']",
-            "rx-vdom": "window['rx-vdom_APIv01']",
-            "@w3nest/ui-tk/Badges": "window['@w3nest/ui-tk_APIv01/Badges']",
-            "@w3nest/ui-tk/Mkdocs": "window['@w3nest/ui-tk_APIv01/Mkdocs']"
+            "@w3nest/ui-tk": [
+                "@w3nest/ui-tk_APIv01"
+            ],
+            "mkdocs-ts": [
+                "mkdocs-ts_APIv05"
+            ],
+            "rx-vdom": [
+                "rx-vdom_APIv01"
+            ],
+            "@mkdocs-ts/notebook": [
+                "@mkdocs-ts/notebook_APIv01"
+            ],
+            "@w3nest/http-clients": [
+                "@w3nest/http-clients_APIv01"
+            ],
+            "@mkdocs-ts/code-api": [
+                "@mkdocs-ts/code-api_APIv02"
+            ],
+            "rxjs": [
+                "rxjs_APIv7"
+            ],
+            "@w3nest/webpm-client": [
+                "@w3nest/webpm-client_APIv01"
+            ],
+            "@w3nest/ui-tk/Mkdocs": [
+                "@w3nest/ui-tk_APIv01/Mkdocs"
+            ],
+            "@w3nest/ui-tk/Badges": [
+                "@w3nest/ui-tk_APIv01/Badges"
+            ]
         }
     }
 }

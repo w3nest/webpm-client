@@ -11,13 +11,26 @@ const WP_INPUTS = pkgJson.webpack
 const ROOT = path.resolve(__dirname, WP_INPUTS.root)
 const DESTINATION = path.resolve(__dirname, 'dist')
 const ASSET_ID = btoa(pkgJson.name)
-const EXTERNALS = Object.entries(WP_INPUTS.externals).reduce(
+
+const EXTERNALS_APP = Object.entries(WP_INPUTS.externals)
+    .map(([k, v]) => {
+        const symbol = v.reduce((acc, e) => `${acc}['${e}']`, 'window')
+        return [k, symbol]
+    })
+    .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
+
+const EXTERNALS_MDL = Object.entries(WP_INPUTS.externals).reduce(
     (acc, [k, v]) => ({
         ...acc,
-        [k]: v,
+        [k]: {
+            commonjs: k,
+            commonjs2: k,
+            root: v,
+        },
     }),
     {},
 )
+
 const base = {
     context: ROOT,
     mode: 'production' as const,
@@ -34,7 +47,6 @@ const base = {
         extensions: ['.ts', 'tsx', '.js'],
         modules: [ROOT, 'node_modules'],
     },
-    externals: EXTERNALS,
     module: {
         rules: [
             {
@@ -52,6 +64,7 @@ const webpackConfigApp: webpack.Configuration = {
     entry: {
         main: WP_INPUTS.main,
     },
+    externals: EXTERNALS_APP,
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'style.[contenthash].css',
@@ -64,7 +77,7 @@ const webpackConfigApp: webpack.Configuration = {
         }),
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
-            reportFilename: './bundle-analysis.html',
+            reportFilename: '../tooling/bundle-analyzer/bundle-analysis.html',
             openAnalyzer: false,
         }),
     ],
@@ -95,26 +108,25 @@ const webpackConfigApp: webpack.Configuration = {
     },
 }
 
-const webpackConfigSubModules: webpack.Configuration[] = Object.entries(
-    WP_INPUTS.additionalEntries,
-).map(([k, v]: [string, string]) => ({
+const webpackConfigSubModules: webpack.Configuration = {
     ...base,
     plugins: [
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
-            reportFilename: `./bundle-analysis-${k}.html`,
+            reportFilename: `../tooling/bundle-analyzer/bundle-analysis-auxiliaries.html`,
             openAnalyzer: false,
         }),
     ],
-    entry: { [k]: v },
+    entry: WP_INPUTS.additionalEntries,
+    externals: EXTERNALS_MDL,
     output: {
         ...base.output,
         library: {
-            root: [`${pkgJson.name}_APIv${WP_INPUTS.apiVersion}/${k}`],
+            root: [`${pkgJson.name}_APIv${WP_INPUTS.apiVersion}/[name]`],
             amd: '[name]',
             commonjs: '[name]',
         },
     },
-}))
+}
 
-export default [webpackConfigApp, ...webpackConfigSubModules]
+export default [webpackConfigApp, webpackConfigSubModules]
