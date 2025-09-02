@@ -245,7 +245,7 @@ export function importScriptWebWorker({
     url: string
 }): undefined | Error {
     const cacheKey = 'cdnClientImportedScriptUrls'
-    const importedScripts = (self[cacheKey] || []) as unknown as string[]
+    const importedScripts = (self[cacheKey] ?? []) as unknown as string[]
     if (importedScripts.includes(url)) {
         return
     }

@@ -69,9 +69,8 @@ export async function installPython(
             pyodideVersion = latest.tag_name
             log(`Found latest Pyodide version: ${pyodideVersion}`, onEvent)
         }
-        const indexURLBase = pyodideInputs.indexUrl
-            ? pyodideInputs.indexUrl
-            : pyodideInputs.standardUrlPyodide
+        const indexURLBase =
+            pyodideInputs.indexUrl ?? pyodideInputs.standardUrlPyodide
 
         const indexURL = indexURLBase.replace('$VERSION', pyodideVersion)
 

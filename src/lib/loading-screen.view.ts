@@ -144,7 +144,7 @@ export class LoadingScreen {
             this.wrapperDiv.style.setProperty(k, v)
         })
         this.wrapperDiv.innerHTML = `
-        <div id='${String(this.options.id)}' style='display: flex;justify-content: space-around; background-color: #0f172a;
+        <div id='${this.options.id}' style='display: flex;justify-content: space-around; background-color: #0f172a;
         width:100%; height:100%; opacity:1;
         transition: opacity 1s;'>
             <div style='margin-top: auto;margin-bottom: auto; padding:40px; border-radius: 25px;min-width: 50%; max-height:75%;max-width:75%; overflow: auto;

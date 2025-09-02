@@ -1,5 +1,4 @@
 import * as webpmClient from '.'
-import { backendConfiguration } from '.'
 import { InWorkerAction } from './workers-pool'
 import pkgJson from '../../package.json'
 /**
@@ -10,9 +9,7 @@ export type WorkersModule = typeof import('./workers-pool')
 export type TestUtilsModule = typeof import('./test-utils')
 
 function setupWorkersPoolModule(module: WorkersModule) {
-    let config = {
-        ...webpmClient.Client.BackendConfiguration,
-    }
+    const config = webpmClient.Client.BackendConfiguration
     /*
      * The next piece of code seems un-relevant anymore. Keep it for now (08/04/2025) to see how it goes.
      */

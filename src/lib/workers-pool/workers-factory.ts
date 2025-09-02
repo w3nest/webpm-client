@@ -402,7 +402,7 @@ export function entryPointWorker(messageEvent: MessageEvent) {
     // contextByTasks allows to communicate from main to worker after tasks have started execution.
     // In worker's implementation, the developer has to define the property `onMessage` of the received `context`.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    globalThis.contextByTasks = globalThis.contextByTasks || {}
+    globalThis.contextByTasks = globalThis.contextByTasks ?? {}
     const contextByTasks = globalThis.contextByTasks as Record<
         string,
         WorkerContext
