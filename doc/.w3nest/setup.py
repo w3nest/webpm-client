@@ -20,8 +20,8 @@ pkg_json_webpm = parse_json(project_folder / ".." / "package.json")
 # (cd ./node_modules/@youwol/mkdocs-ts/bin/ && node index.js --project ../../../../.. --nav /api --out ../../../../assets/api)
 externals_deps = {
     "mkdocs-ts": "^0.5.1",
-    "@mkdocs-ts/code-api": "^0.2.0",
-    "@mkdocs-ts/notebook": "^0.1.1",
+    "@mkdocs-ts/code-api": "^0.2.3",
+    "@mkdocs-ts/notebook": "^0.1.5",
     "@w3nest/webpm-client": f"^{pkg_json_webpm['version'].replace('-wip', '')}",
     "rxjs": "^7.8.2",
     "@w3nest/http-clients": "^0.1.7",
@@ -61,7 +61,6 @@ config = ProjectConfig(
     inPackageJson={
         "scripts": {"doc": "npx tsx .w3nest/doc.ts"},
     },
-    userGuide=False,
     devServer=DevServer(port=3029),
 )
 
@@ -72,7 +71,6 @@ generate_template(config=config, dst_folder=template_folder)
 files = [
     "README.md",
     ".gitignore",
-    ".npmignore",
     ".prettierignore",
     "package.json",
     "webpack.config.ts",
