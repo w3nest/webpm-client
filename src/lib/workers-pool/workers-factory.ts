@@ -50,9 +50,9 @@ export class NoContext implements ContextTrait {
     withChild<T>(_name: string, cb: (ctx: ContextTrait) => T): T {
         return cb(this)
     }
-    info(text: string, data?: unknown) {
+    info() {
         /** no op*/
-        console.log(text, data)
+        //console.log(text, data)
     }
 }
 
@@ -495,6 +495,39 @@ export function entryPointWorker(messageEvent: MessageEvent) {
                 workerId: data.workerId,
             },
         })
+
+        const postError = (e: unknown) => {
+            console.error(
+                `worker '${data.workerId}': tasks '${data.taskId}' failed`,
+                e,
+            )
+            if (e instanceof Error) {
+                postMessage({
+                    type: 'Exit',
+                    data: {
+                        taskId: data.taskId,
+                        workerId: data.workerId,
+                        error: true,
+                        result: {
+                            name: e.name,
+                            message: e.message,
+                            stack: e.stack,
+                        },
+                    },
+                })
+            } else {
+                // For non-Error throwables (string, number, etc.)
+                postMessage({
+                    type: 'Exit',
+                    data: {
+                        taskId: data.taskId,
+                        workerId: data.workerId,
+                        error: true,
+                        result: { message: String(e) },
+                    },
+                })
+            }
+        }
         try {
             const resultOrPromise = entryPoint({
                 args: data.args,
@@ -516,16 +549,8 @@ export function entryPointWorker(messageEvent: MessageEvent) {
                             },
                         })
                     })
-                    .catch((error: unknown) => {
-                        postMessage({
-                            type: 'Exit',
-                            data: {
-                                taskId: data.taskId,
-                                workerId: data.workerId,
-                                error: true,
-                                result: error,
-                            },
-                        })
+                    .catch((e: unknown) => {
+                        postError(e)
                     })
                 return
             }
@@ -540,16 +565,7 @@ export function entryPointWorker(messageEvent: MessageEvent) {
                 },
             })
         } catch (e: unknown) {
-            postMessage({
-                type: 'Exit',
-                data: {
-                    taskId: data.taskId,
-                    workerId: data.workerId,
-                    error: true,
-                    result: e,
-                },
-            })
-            return
+            postError(e)
         }
     }
 }
@@ -627,7 +643,7 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
         self as unknown as WorkerGlobalScope
     ).importScripts
 
-    console.log('Install environment in worker', input)
+    console.log(`Worker '${input.workerId}': Install environment`, input)
 
     // @ts-expect-error need refactoring
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -650,26 +666,35 @@ function entryPointInstall(input: EntryPointArguments<MessageInstall>) {
     log(`Start install in worker ${input.workerId}`)
 
     return install
-        .then((aliases) => {
-            log(`Expose ${String(Object.keys(aliases))} aliases.`)
-            Object.entries(aliases).forEach(
-                ([k, v]: [k: string, v: unknown]) => {
-                    self[k] = v
-                },
-            )
-            log(
-                `Expose ${String(input.args.functions.length)} functions & ${String(input.args.variables.length)} variables.`,
-            )
+        .then(
+            (aliases) => {
+                log(`Expose ${String(Object.keys(aliases))} aliases.`)
+                Object.entries(aliases).forEach(
+                    ([k, v]: [k: string, v: unknown]) => {
+                        self[k] = v
+                    },
+                )
+                log(
+                    `Expose ${String(input.args.functions.length)} functions & ${String(input.args.variables.length)} variables.`,
+                )
 
-            input.args.functions.forEach((f) => {
-                self[f.id] = deserializeFunction(f.target)
-            })
-            // @ts-expect-error need refactoring
-            self.deserializeFunction = deserializeFunction
-            input.args.variables.forEach((v) => {
-                self[v.id] = v.value
-            })
-        })
+                input.args.functions.forEach((f) => {
+                    self[f.id] = deserializeFunction(f.target)
+                })
+                // @ts-expect-error need refactoring
+                self.deserializeFunction = deserializeFunction
+                input.args.variables.forEach((v) => {
+                    self[v.id] = v.value
+                })
+            },
+            (e: unknown) => {
+                console.error(
+                    `Worker '${input.workerId}': Installation failed`,
+                    e,
+                )
+                throw e
+            },
+        )
         .then(() => {
             const donePromises = input.args.postInstallTasks.map((task) => {
                 log(`Execute post-install task '${task.title}'`)
