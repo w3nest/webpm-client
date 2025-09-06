@@ -47,10 +47,7 @@ The <api-link target='queryLoadingGraph'></api-link> function allows to query de
 
 <js-cell>  
 const graph = await webpm.queryLoadingGraph({modules:['bootstrap#^5.3.3']})  
-
-graph.lock.forEach((m) => {  
-    display(new Views.Text(`* Module \`${m.name}\` at version \`${m.version}\``))  
-})  
+display(graph)
 </js-cell>  
 
 Each installation request triggers **graph resolution**: if a compatible version of `@popperjs/core` is published, 

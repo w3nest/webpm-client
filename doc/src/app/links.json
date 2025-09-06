@@ -226,7 +226,7 @@
             "href": "https://github.com/w3nest/webpm-externals"
         },
         "publish-package": {
-            "href": "https://github.com/youwol/cdn-externals/issues/new?template=request_package_integration.yml"
+            "href": "https://github.com/w3nest/webpm-externals/issues/new?template=request_package_integration.yml"
         }
     },
     "crossLinks": {

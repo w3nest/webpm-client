@@ -35,8 +35,8 @@ Our goal is to fully automate the process of publishing NPM packages directly to
 
 For other cases, usually your own projects, the regular process for publishing a resource is through 
 the **W3Nest Local server**. 
-To do this, you need to provide a `.w3nest/ci.py` file in your project that defines the publication steps. 
-You can find detailed instructions and videos <ext-link target="w3nest/how-to/publish">here</ext-link>.
+It essentially requires a `.w3nest/webpm.py` file in your project that defines the publication step. 
+You can find detailed instructions <ext-link target="w3nest/how-to/publish">here</ext-link>.
 
 
 
