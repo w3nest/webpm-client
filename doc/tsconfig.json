@@ -2,6 +2,7 @@
     "compileOnSave": false,
     "compilerOptions": {
         "outDir": "./dist",
+        "rootDir": ".",
         "sourceMap": true,
         "declaration": true,
         "downlevelIteration": true,
@@ -11,17 +12,18 @@
         "target": "es2020",
         "esModuleInterop": true,
         "preserveConstEnums": true,
-        "strictNullChecks": true,
         "lib": ["es5", "es6", "dom", "es2020"],
         "typeRoots": ["./node_modules/@types"],
         "paths": {
             "@rxVDomConfig": ["./rx-vdom.config"]
-        }
+        },
+        "resolveJsonModule": true,
+        "strictNullChecks": true
     },
     "ts-node": {
         "compilerOptions": {
             "module": "CommonJS"
         }
     },
-
+    "exclude": ["./assets","./doc"]
 }

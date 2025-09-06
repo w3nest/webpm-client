@@ -73,6 +73,9 @@ files = [
     ".gitignore",
     ".prettierignore",
     "package.json",
+    # "tsconfig.json", added strictNullChecks
+    "typedoc.js",
+    "jest.config.ts",
     "webpack.config.ts",
 ]
 for file in files:

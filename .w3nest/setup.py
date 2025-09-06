@@ -75,7 +75,10 @@ generate_template(config=config, dst_folder=template_folder)
 files = [
     "README.md",
     "package.json",
-    # "tsconfig.json",  added '"exclude": ["./webpm-client-doc"]'
+    ".gitignore",
+    "jest.config.ts",
+    # "typedoc.js", added entry points & custom readme
+    # "tsconfig.json",  added "strictNullChecks" and exclude "./src/tests"
     "webpack.config.ts",
 ]
 for file in files:

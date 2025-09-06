@@ -8,6 +8,7 @@ module.exports = {
     ],
     exclude: ['src/tests'],
     readme: './assets/indexAPIdoc.md',
-    out: 'dist/docs',
+    out: 'tooling/typedoc-html',
     theme: 'default',
+    categorizeByGroup: false,
 }

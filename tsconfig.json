@@ -2,6 +2,7 @@
     "compileOnSave": false,
     "compilerOptions": {
         "outDir": "./dist",
+        "rootDir": ".",
         "sourceMap": true,
         "declaration": true,
         "downlevelIteration": true,
@@ -11,11 +12,12 @@
         "target": "es2020",
         "esModuleInterop": true,
         "preserveConstEnums": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
+        "lib": ["es5", "es6", "dom", "es2020"],
+        "typeRoots": ["./node_modules/@types"],
         "paths": {
-            "@rxVDomConfig": ["./rx-vdom.config"],
+            "@rxVDomConfig": ["./rx-vdom.config"]
         },
+        "resolveJsonModule": true,
         "strictNullChecks": true
     },
     "ts-node": {
@@ -23,5 +25,5 @@
             "module": "CommonJS"
         }
     },
-    "exclude": ["./doc" ,"./src/tests"]
+    "exclude": ["./assets","./doc","./src/tests"]
 }
