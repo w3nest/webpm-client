@@ -83,7 +83,7 @@ function isNotFound(resp: unknown): boolean {
 }
 export class ResultsView implements VirtualDOM<'div'> {
     public readonly tag = 'div'
-    public readonly class = 'w-100 flex-grow-1 overflow-auto px-2'
+    public readonly class = 'w-100 flex-grow-1 overflow-auto'
 
     public readonly children: ChildrenLike
 
@@ -161,7 +161,7 @@ export class PackageView implements VirtualDOM<'div'> {
                     'The package is found in the database, the following releases are available:',
             },
             {
-                tag: 'div',
+                tag: 'ul',
                 children: versions
                     .filter((v) => !v.endsWith('-wip'))
                     .map((v) => ({ tag: 'li', innerText: v })),
