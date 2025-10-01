@@ -253,7 +253,7 @@ export interface BackendConfig {
      *
      * The available keys and values are backend specifics and should be documented by them.
      */
-    buildArgs: Record<string, string>
+    build: Record<string, string>
 }
 
 /**
