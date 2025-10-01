@@ -4,7 +4,7 @@ Library for dynamic npm's libraries installation from W3 Nest ecosystem.
 
 ## Links 
 
-* <a href='https://w3nest.org/apps/@webpm-client/doc/0.1.13' target='_blank'>Documentation</a>
+* <a href='https://w3nest.org/apps/@webpm-client/doc/0.1.14-wip' target='_blank'>Documentation</a>
 * <a href='https://w3nest.org' target='_blank'>W3Nest</a>
 
 ## Installation, Build, Test
@@ -30,8 +30,6 @@ yarn build:prod
 ```
 
 ---
-
-Tests require [w3nest](https://w3nest.org) local server to run on port 2001 using the configuration defined [here](https://github.com/youwol/integration-tests-conf).
 
 To run tests:
 
