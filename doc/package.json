@@ -1,7 +1,7 @@
 {
     "name": "@webpm-client/doc",
     "description": "Doc. app for WebPM client usage",
-    "version": "0.1.13",
+    "version": "0.1.15",
     "author": "reinisch.gui@gmail.com",
     "license": "MIT",
     "homepage": "https://github.com/webpm-client/doc#README.md",
@@ -53,7 +53,7 @@
         "@mkdocs-ts/notebook": "^0.1.5",
         "@w3nest/http-clients": "^0.1.7",
         "@w3nest/ui-tk": "^0.1.5",
-        "@w3nest/webpm-client": "^0.1.13",
+        "@w3nest/webpm-client": "^0.1.15",
         "mkdocs-ts": "^0.5.1",
         "rx-vdom": "^0.1.6",
         "rxjs": "^7.8.2"
@@ -96,7 +96,7 @@
             "@mkdocs-ts/notebook": "^0.1.5",
             "@w3nest/http-clients": "^0.1.7",
             "@w3nest/ui-tk": "^0.1.5",
-            "@w3nest/webpm-client": "^0.1.13",
+            "@w3nest/webpm-client": "^0.1.15",
             "mkdocs-ts": "^0.5.1",
             "rx-vdom": "^0.1.6",
             "rxjs": "^7.8.2"
@@ -109,35 +109,35 @@
         "main": "app/main.ts",
         "additionalEntries": {},
         "externals": {
+            "@mkdocs-ts/code-api": [
+                "@mkdocs-ts/code-api_APIv02"
+            ],
+            "@mkdocs-ts/notebook": [
+                "@mkdocs-ts/notebook_APIv01"
+            ],
             "@w3nest/http-clients": [
                 "@w3nest/http-clients_APIv01"
             ],
             "@w3nest/ui-tk": [
                 "@w3nest/ui-tk_APIv01"
             ],
-            "@w3nest/ui-tk/Mkdocs": [
-                "@w3nest/ui-tk_APIv01/Mkdocs"
-            ],
-            "mkdocs-ts": [
-                "mkdocs-ts_APIv05"
-            ],
-            "@mkdocs-ts/code-api": [
-                "@mkdocs-ts/code-api_APIv02"
-            ],
-            "rxjs": [
-                "rxjs_APIv7"
-            ],
             "@w3nest/ui-tk/Badges": [
                 "@w3nest/ui-tk_APIv01/Badges"
+            ],
+            "@w3nest/ui-tk/Mkdocs": [
+                "@w3nest/ui-tk_APIv01/Mkdocs"
             ],
             "@w3nest/webpm-client": [
                 "@w3nest/webpm-client_APIv01"
             ],
-            "@mkdocs-ts/notebook": [
-                "@mkdocs-ts/notebook_APIv01"
+            "mkdocs-ts": [
+                "mkdocs-ts_APIv05"
             ],
             "rx-vdom": [
                 "rx-vdom_APIv01"
+            ],
+            "rxjs": [
+                "rxjs_APIv7"
             ]
         }
     }

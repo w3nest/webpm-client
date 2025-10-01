@@ -2,7 +2,8 @@
 
 Doc. app for WebPM client usage
 
-<!-- no links provided -->
+## Links 
+
 
 ## Installation, Build, Test
 
@@ -27,8 +28,6 @@ yarn build:prod
 ```
 
 ---
-
-<!-- no specific test configuration documented -->
 
 To run tests:
 
