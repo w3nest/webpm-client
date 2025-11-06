@@ -68,6 +68,10 @@
             "href": "@nav/api/ViewsModule.installWithUI",
             "withClass": "mkapi-role-function"
         },
+        "BackendConfig": {
+            "href": "@nav/api/MainModule.BackendConfig",
+            "withClass": "mkapi-role-interface"
+        },
         "BackendClient": {
             "href": "@nav/api/MainModule.BackendClient",
             "withClass": "mkapi-role-interface"

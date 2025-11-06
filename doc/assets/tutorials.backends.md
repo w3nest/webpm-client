@@ -139,8 +139,12 @@ This example configures `pyrun_backend` to use python 3.10 and include `numpy` i
 exposed through the JavaScript variable `pyRunner`.
 
 <note level="hint">
-You can run multiple versions of the same backend with different configurations by using **partitions**,
+*  You can run multiple versions of the same backend with different configurations by using **partitions**,
 as explained in the next section. 
+*  For containerized backends (the usual setup), you can override the default `Dockerfile` using the user-provided
+`dockerfile` option (see <api-link target="BackendConfig"></api-link>).  
+This is particularly useful for interpreter-style backends, such as `pyrun_backend`, where you may want finer
+control over the runtime environment.
 </note>
 
 Let's now exercise the backend using its client instance `pyRunner`:
