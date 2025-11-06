@@ -173,9 +173,21 @@ export async function installBackends({
         .pipe(rxjs.takeWhile((m) => !isDone(m)))
         .subscribe()
 
+    const resolvedConfigEntries: [string, BackendConfig][] = await Promise.all(
+        Object.entries(backendsConfig).map(async ([name, config]) => {
+            const dockerfile = config.dockerfile
+            if (dockerfile && !dockerfile.includes('\n')) {
+                config.dockerfile = await fetch(dockerfile).then((resp) =>
+                    resp.text(),
+                )
+            }
+            return [name, { ...config }]
+        }),
+    )
+    const resolvedConfig = Object.fromEntries(resolvedConfigEntries)
     const body = {
         ...graph,
-        backendsConfig,
+        backendsConfig: resolvedConfig,
         partitionId: backendsPartitionId,
     }
     await fetch(ywLocalCookie.webpm.pathBackendInstall, {
@@ -254,6 +266,8 @@ export interface BackendClient {
     config: {
         // Build configuration (command line options).
         build: Record<string, string>
+        // Custom Dockerfile content used to build the backend, if any.
+        dockerfile?: string
     }
 
     /**

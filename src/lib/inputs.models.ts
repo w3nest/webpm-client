@@ -254,6 +254,13 @@ export interface BackendConfig {
      * The available keys and values are backend specifics and should be documented by them.
      */
     build: Record<string, string>
+
+    /**
+     * URL to a dockerfile to override the default one, or content of the dockerfile.
+     *
+     * The string is interpreted as a URL if it does not contain any newline character.
+     */
+    dockerfile?: string
 }
 
 /**
